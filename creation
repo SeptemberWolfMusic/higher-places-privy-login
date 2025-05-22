@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Higher Places – Wallet Creation</title>
+  <style>
+    body {
+      background-color: #2b1f1a; /* rich brown */
+      color: #f9e3b1; /* goldish */
+      font-family: 'Helvetica Neue', sans-serif;
+      padding: 2rem;
+      max-width: 700px;
+      margin: auto;
+      line-height: 1.8;
+    }
+    h1, h2, h3 {
+      font-weight: 600;
+      color: #66d4cf; /* turquoise */
+    }
+    button, input {
+      padding: 0.75rem 1rem;
+      margin-top: 1rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+    button {
+      background-color: #66d4cf; /* turquoise */
+      color: #2b1f1a;
+      cursor: pointer;
+    }
+    input {
+      width: 100%;
+      background-color: #3b2a24;
+      color: #f9e3b1;
+      border: 1px solid #5d4b44;
+      border-radius: 8px;
+    }
+    .section {
+      margin-bottom: 2.5rem;
+    }
+    .wallet-box, .seed-box {
+      background-color: #3b2a24;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 0.5rem;
+      word-break: break-word;
+    }
+    .footer {
+      margin-top: 3rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #a58e6f;
+    }
+  </style>
+</head>
+<body>
+  <div class="section">
+    <h2>You're now entering Web3 — welcome!</h2>
+    <p>Now let's get to generating your new wallet ✨</p>
+    <p>Click below to get started.</p>
+    <button onclick="generateWallet()">Generate My Wallet</button>
+  </div>
+
+  <div class="section" id="wallet-section" style="display:none;">
+    <h3>Your new wallet has been created.</h3>
+    <p>Here’s your wallet address:</p>
+    <div class="wallet-box" id="wallet-address"></div>
+    <button onclick="copyWalletAddress()">Copy Address</button>
+
+    <div class="section">
+      <h3>✧ Save Your Wallet</h3>
+      <p>This wallet belongs to you — and only you.</p>
+      <p>Here’s your secret recovery phrase:</p>
+      <div class="seed-box" id="seed-phrase"></div>
+      <button onclick="copySeedPhrase()">Copy Phrase</button>
+      <button onclick="downloadBackup()">Download Backup</button>
+      <p><strong>Keep this safe. If you ever lose access to your wallet, <b>this phrase is the only way to get it back.</b></strong></p>
+    </div>
+
+    <div class="section">
+      <h3>✧ Enter Your Email</h3>
+      <p>We use this to deliver your NFT and unlockables after purchase.</p>
+      <input type="email" id="email" placeholder="you@example.com" />
+      <button onclick="submitEmail()">Submit Email</button>
+    </div>
+
+    <div class="section" id="purchase-section" style="display:none;">
+      <p>You’re all set!</p>
+      <p><strong>LFG! 🚀</strong></p>
+      <button onclick="continueToPurchase()">Continue to Purchase</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    Powered by September Wolf Music ✦ Made with LOVE
+  </div>
+
+  <script>
+    let walletAddress = '';
+    let seedPhrase = '';
+
+    function generateWallet() {
+      // Placeholder generator
+      walletAddress = '9xA1...dummyWalletAddress123';
+      seedPhrase = 'bring crisp salad element hollow genius novel burst reflect dance round canyon';
+
+      document.getElementById('wallet-address').innerText = walletAddress;
+      document.getElementById('seed-phrase').innerText = seedPhrase;
+      document.getElementById('wallet-section').style.display = 'block';
+    }
+
+    function copyWalletAddress() {
+      navigator.clipboard.writeText(walletAddress);
+      alert('Wallet address copied to clipboard!');
+    }
+
+    function copySeedPhrase() {
+      navigator.clipboard.writeText(seedPhrase);
+      alert('Seed phrase copied to clipboard!');
+    }
+
+    function downloadBackup() {
+      const blob = new Blob([`Wallet Address: ${walletAddress}\nSeed Phrase: ${seedPhrase}`], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'wallet-backup.txt';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function submitEmail() {
+      const email = document.getElementById('email').value;
+      if (email) {
+        console.log(`Email submitted: ${email}`);
+        document.getElementById('purchase-section').style.display = 'block';
+      } else {
+        alert('Please enter a valid email address.');
+      }
+    }
+
+    function continueToPurchase() {
+      window.location.href = 'https://your-stripe-checkout-link.com';
+    }
+  </script>
+</body>
+</html>
