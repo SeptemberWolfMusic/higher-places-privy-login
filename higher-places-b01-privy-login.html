@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Higher Places – Genesis NFT B01 Access</title>
+  <script src="https://auth.privy.io/embed.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+      margin: 0;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    h2 {
+      font-size: 1.5em;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    #continue-to-purchase {
+      margin-top: 30px;
+      display: none;
+    }
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      background: #00d1ff;
+      border: none;
+      color: black;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    footer {
+      margin-top: 60px;
+      font-size: 0.8em;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+  <h2>Sign in to Access Your Higher Places – Genesis NFT – Batch B01</h2>
+  <div id="privy-login"></div>
+
+  <div id="continue-to-purchase">
+    <button onclick="alert('Stripe checkout will go here')">Continue to Purchase</button>
+  </div>
+
+  <footer>Powered by September Wolf Music ✦ Made with LOVE</footer>
+
+  <script>
+    const privy = new Privy({
+      appId: "cmayq0wzc01ghl10mju8abshf",
+      showWalletLoginFirst: false,
+      embedded: true,
+      onSuccess: async (user) => {
+        const email = user?.email?.address || null;
+        const wallet = user?.wallet?.address || null;
+
+        console.log("✅ Signed in via Privy");
+        console.log("Email:", email);
+        console.log("Wallet:", wallet);
+
+        if (!email || !wallet) {
+          alert("We need both your email and wallet to continue.");
+          return;
+        }
+
+        document.getElementById("continue-to-purchase").style.display = "block";
+      }
+    });
+
+    privy.mount("#privy-login");
+  </script>
+</body>
+</html>
