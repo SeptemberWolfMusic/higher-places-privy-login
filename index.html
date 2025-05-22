@@ -6,20 +6,20 @@
   <title>Higher Places – Wallet Creation</title>
   <style>
     body {
-      background-color: #6a4f3c; /* even lighter brown */
-      color: #f9e3b1; /* goldish */
+      background-color: #6a4f3c;
+      color: #f9e3b1;
       font-family: 'Helvetica Neue', sans-serif;
-      padding: 4rem 2rem 2rem; /* added top spacing */
+      padding: 6rem 2rem 2rem; /* more top spacing */
       max-width: 700px;
       margin: auto;
       line-height: 1.8;
     }
     h1, h2, h3 {
       font-weight: 600;
-      color: #8df2ea; /* brighter turquoise */
+      color: #65d8d0; /* one shade darker turquoise */
     }
     h2 {
-      font-size: 2rem; /* larger header */
+      font-size: 2rem;
     }
     button, input {
       padding: 0.75rem 1rem;
@@ -30,7 +30,7 @@
       font-weight: 600;
     }
     button {
-      background-color: #8df2ea; /* turquoise */
+      background-color: #65d8d0;
       color: #2b1f1a;
       cursor: pointer;
     }
@@ -55,7 +55,10 @@
       margin-top: 3rem;
       text-align: center;
       font-size: 0.9rem;
-      color: #a58e6f;
+      color: #f9e3b1; /* match creamy text color */
+    }
+    .footer span {
+      color: #ffd700; /* sparkly gold */
     }
   </style>
 </head>
@@ -76,7 +79,7 @@
     <div class="section">
       <h3>✧ Save Your Wallet</h3>
       <p>This wallet belongs to you — and only you.</p>
-      <p>Here’s your secret recovery phrase:</p>
+      <p>Here’s your 12-word secret recovery phrase (in order):</p>
       <div class="seed-box" id="seed-phrase"></div>
       <button onclick="copySeedPhrase()">Copy Phrase</button>
       <button onclick="downloadBackup()">Download Backup</button>
@@ -98,7 +101,7 @@
   </div>
 
   <div class="footer">
-    Powered by September Wolf Music ✦ Made with LOVE
+    Powered by September Wolf Music <span>✦</span> Made with LOVE
   </div>
 
   <script>
@@ -106,7 +109,6 @@
     let seedPhrase = '';
 
     function generateWallet() {
-      // Placeholder generator
       walletAddress = '9xA1...dummyWalletAddress123';
       seedPhrase = 'bring crisp salad element hollow genius novel burst reflect dance round canyon';
 
