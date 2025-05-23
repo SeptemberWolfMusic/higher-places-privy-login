@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Higher Places – Create Wallet</title>
-  <script src="https://cdn.jsdelivr.net/npm/bip39@3.0.4/browser/bip39.min.js" onload="bip39Ready()"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bip39@3.0.4/browser/bip39.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.95.2/lib/index.iife.min.js"></script>
   <style>
     body {
@@ -88,12 +88,15 @@
   </div>
 
   <script>
-    function bip39Ready() {
-      window.generateWallet = function () {
-        const mnemonic = bip39.generateMnemonic();
-        console.log("Your new wallet seed phrase:", mnemonic);
-        // You can expand this with QR export, JSON backup, or user export here
-      };
+    function generateWallet() {
+      if (typeof bip39 === 'undefined') {
+        alert("Wallet generator is still loading... please wait a moment and try again.");
+        return;
+      }
+
+      const mnemonic = bip39.generateMnemonic();
+      console.log("Your new wallet seed phrase:", mnemonic);
+      // You can expand this with QR export, JSON backup, or user export here
     }
   </script>
 </body>
