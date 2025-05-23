@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Higher Places – Connect Wallet</title>
+  <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.95.2/lib/index.iife.min.js"></script>
+  <style>
+    body {
+      background-color: #FAF7F7;
+      color: #FAF7F7;
+      font-family: 'Helvetica Neue', sans-serif;
+      padding: 6rem 2rem 2rem;
+      margin: 0;
+      line-height: 1.8;
+    }
+    .content {
+      background-color: #97948F;
+      max-width: 700px;
+      margin: auto;
+      padding: 2rem;
+      border-radius: 12px;
+    }
+    h1, h2, h3 {
+      font-weight: 600;
+      color: #CAF5FA;
+    }
+    h2 {
+      font-size: 2.1rem;
+    }
+    h3 span {
+      color: #ffd700;
+    }
+    h3 {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .highlight {
+      font-size: 1.7rem;
+    }
+    .important-line {
+      color: #FFFFFF;
+      font-weight: bold;
+    }
+    .purchase-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    .purchase-wrapper span {
+      font-size: 0.75rem;
+    }
+    button, input {
+      padding: 0.75rem 1rem;
+      margin-top: 1rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+    button {
+      background-color: #50c7c0;
+      color: #2b1f1a;
+      cursor: pointer;
+    }
+    input {
+      width: 100%;
+      background-color: #3b2a24;
+      color: #FAF7F7;
+      border: 1px solid #5d4b44;
+      border-radius: 8px;
+    }
+    .section {
+      margin-bottom: 2.5rem;
+    }
+    .wallet-box {
+      background-color: #3b2a24;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 0.5rem;
+      word-break: break-word;
+    }
+    .footer {
+      margin-top: 3rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #FAF7F7;
+    }
+    .footer span {
+      color: #ffd700;
+    }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <div class="section">
+      <h2>Welcome back to Web3 ✦ Connect your wallet below</h2>
+      <p class="highlight">Then drop your email so we can deliver your NFT + unlockables</p>
+      <button onclick="connectWallet()">Connect My Wallet</button>
+      <div id="wallet-display" class="wallet-box" style="display:none;"></div>
+    </div>
+
+    <div class="section" id="email-section" style="display:none;">
+      <h3><span>✧</span> Enter Your Email</h3>
+      <p>We use this to deliver your NFT and unlockables after purchase.</p>
+      <input type="text" id="name" placeholder="Your Name (optional)" />
+      <input type="email" id="email" placeholder="you@example.com" />
+      <button onclick="submitEmail()">Submit Email</button>
+    </div>
+
+    <div class="section" id="purchase-section" style="display:none;">
+      <div class="purchase-wrapper">
+        <span>LFG! 🚀</span>
+        <button onclick="continueToPurchase()">Continue to Purchase</button>
+      </div>
+    </div>
+
+    <div class="footer">
+      Powered by September Wolf Music <span>✦</span> Made with LOVE
+    </div>
+  </div>
+
+  <script>
+    let walletAddress = '';
+
+    async function connectWallet() {
+      try {
+        const provider = window.solana;
+        if (!provider || !provider.isPhantom) {
+          alert('Please install Phantom Wallet to continue.');
+          return;
+        }
+
+        const resp = await provider.connect();
+        walletAddress = resp.publicKey.toString();
+
+        document.getElementById('wallet-display').innerText = walletAddress;
+        document.getElementById('wallet-display').style.display = 'block';
+        document.getElementById('email-section').style.display = 'block';
+      } catch (err) {
+        console.error('Wallet connection error:', err);
+        alert('Failed to connect wallet.');
+      }
+    }
+
+    function submitEmail() {
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      if (email && walletAddress) {
+        const data = {
+          Timestamp: new Date().toISOString(),
+          Name: name,
+          Email: email,
+          "Wallet address": walletAddress,
+          "Flow type": "Connected wallet"
+        };
+
+        fetch("https://api.sheetbest.com/sheets/e9382b74-9428-4073-94c3-72dbb3c002ed", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(() => {
+          document.getElementById('purchase-section').style.display = 'block';
+        })
+        .catch(err => {
+          console.error('Error sending to Google Sheet:', err);
+          alert('Something went wrong while saving your info.');
+        });
+      } else {
+        alert('Please connect your wallet and enter a valid email.');
+      }
+    }
+
+    function continueToPurchase() {
+      window.location.href = 'https://your-stripe-checkout-link.com';
+    }
+  </script>
+</body>
+</html>
