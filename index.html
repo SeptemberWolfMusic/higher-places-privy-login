@@ -6,17 +6,17 @@
   <title>Higher Places – Wallet Creation</title>
   <style>
     body {
-      background-color: #6a4f3c;
+      background: linear-gradient(to bottom, #f2e9dc 0%, #6a4f3c 25%, #6a4f3c 75%, #f2e9dc 100%); /* light beige edges with center brown */
       color: #f9e3b1;
       font-family: 'Helvetica Neue', sans-serif;
-      padding: 6rem 2rem 2rem; /* more top spacing */
+      padding: 6rem 2rem 2rem;
       max-width: 700px;
       margin: auto;
       line-height: 1.8;
     }
     h1, h2, h3 {
       font-weight: 600;
-      color: #65d8d0; /* one shade darker turquoise */
+      color: #50c7c0; /* even deeper turquoise */
     }
     h2 {
       font-size: 2rem;
@@ -30,7 +30,7 @@
       font-weight: 600;
     }
     button {
-      background-color: #65d8d0;
+      background-color: #50c7c0;
       color: #2b1f1a;
       cursor: pointer;
     }
@@ -55,10 +55,10 @@
       margin-top: 3rem;
       text-align: center;
       font-size: 0.9rem;
-      color: #f9e3b1; /* match creamy text color */
+      color: #f9e3b1;
     }
     .footer span {
-      color: #ffd700; /* sparkly gold */
+      color: #ffd700;
     }
   </style>
 </head>
@@ -79,7 +79,7 @@
     <div class="section">
       <h3>✧ Save Your Wallet</h3>
       <p>This wallet belongs to you — and only you.</p>
-      <p>Here’s your 12-word secret recovery phrase (in order):</p>
+      <p>Here’s your secret recovery phrase. Be sure to copy all 12 words in order:</p>
       <div class="seed-box" id="seed-phrase"></div>
       <button onclick="copySeedPhrase()">Copy Phrase</button>
       <button onclick="downloadBackup()">Download Backup</button>
