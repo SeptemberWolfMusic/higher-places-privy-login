@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Higher Places – Wallet Creation</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Higher Places – Create Wallet</title>
   <script src="https://cdn.jsdelivr.net/npm/bip39@3.0.4/browser/bip39.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/ed25519-hd-key@1.1.5/dist/index.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.95.2/lib/index.iife.min.js"></script>
   <style>
     body {
       background-color: #FAF7F7;
-      color: #FAF7F7;
       font-family: 'Helvetica Neue', sans-serif;
+      color: #FAF7F7;
       padding: 6rem 2rem 2rem;
       margin: 0;
       line-height: 1.8;
@@ -23,73 +22,40 @@
       padding: 2rem;
       border-radius: 12px;
     }
-    h1, h2, h3 {
-      font-weight: 600;
-      color: #CAF5FA;
-    }
     h2 {
-      font-size: 2.1rem;
+      font-size: 2.8rem;
+      text-align: center;
+      color: #CAF5FA;
+      margin-bottom: 0.5rem;
     }
-    h3 span {
-      color: #ffd700;
+    .subtext {
+      font-size: 1.2rem;
+      text-align: center;
+      color: #CAF5FA;
+      margin-bottom: 0.25rem;
     }
-    h3 {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .highlight {
-      font-size: 1.7rem;
-    }
-    .important-line {
-      color: #FFFFFF;
-      font-weight: bold;
-    }
-    .purchase-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      justify-content: center;
-      margin-top: 1rem;
-    }
-    .purchase-wrapper span {
-      font-size: 0.75rem;
+    .btn-container {
+      text-align: center;
+      margin-top: 0.5rem;
     }
     button, input {
       padding: 0.75rem 1rem;
-      margin-top: 1rem;
       font-size: 1rem;
+      font-weight: 600;
       border: none;
       border-radius: 8px;
-      font-weight: 600;
+      margin-top: 0.5rem;
     }
     button {
       background-color: #50c7c0;
       color: #2b1f1a;
       cursor: pointer;
     }
-    input {
-      width: 100%;
-      background-color: #3b2a24;
-      color: #FAF7F7;
-      border: 1px solid #5d4b44;
-      border-radius: 8px;
-    }
-    .section {
-      margin-bottom: 2.5rem;
-    }
-    .wallet-box, .seed-box {
-      background-color: #3b2a24;
-      padding: 1rem;
-      border-radius: 8px;
-      margin-top: 0.5rem;
-      word-break: break-word;
-    }
     .footer {
-      margin-top: 3rem;
       text-align: center;
-      font-size: 0.9rem;
+      margin-top: 3rem;
       color: #FAF7F7;
+      font-size: 0.9rem;
     }
     .footer span {
       color: #ffd700;
@@ -98,50 +64,14 @@
 </head>
 <body>
   <div class="content">
-    <div class="section">
-      <h2>You're now entering Web3 — welcome!</h2>
-      <p class="highlight">Now let's get to generating your new wallet ✨</p>
-      <p>Click below to get started.</p>
+    <h2>Welcome ✨</h2>
+    <div class="subtext">Now let’s get to generating your new wallet</div>
+    <div class="subtext" style="font-size: 0.95rem; margin-top: -0.5rem;">click below</div>
+    <div class="btn-container">
       <button onclick="generateWallet()">Generate My Wallet</button>
-      <p style="margin-top: 1rem;">
-        Already have a wallet? 
-        <a href="#" style="color: #CAF5FA; text-decoration: underline;">
-          Connect Wallet instead
-        </a>
-      </p>
     </div>
 
-    <div class="section" id="wallet-section" style="display:none;">
-      <h3>Your new wallet has been created.</h3>
-      <p>Here’s your wallet address:</p>
-      <div class="wallet-box" id="wallet-address"></div>
-      <button onclick="copyWalletAddress()">Copy Address</button>
-
-      <div class="section">
-        <h3><span>✧</span> Save Your Wallet</h3>
-        <p>This wallet belongs to you — and only you.</p>
-        <p class="important-line">Here’s your secret recovery phrase. Be sure to copy all 12 words in order:</p>
-        <div class="seed-box" id="seed-phrase"></div>
-        <button onclick="copySeedPhrase()">Copy Phrase</button>
-        <button onclick="downloadBackup()">Download Backup</button>
-        <p class="important-line">Keep this safe. If you ever lose access to your wallet, <strong>this phrase is the only way to get it back.</strong></p>
-      </div>
-
-      <div class="section">
-        <h3><span>✧</span> Enter Your Email</h3>
-        <p>We use this to deliver your NFT and unlockables after purchase.</p>
-        <input type="text" id="name" placeholder="Your Name (optional)" />
-        <input type="email" id="email" placeholder="you@example.com" />
-        <button onclick="submitEmail()">Submit Email</button>
-      </div>
-
-      <div class="section" id="purchase-section" style="display:none;">
-        <div class="purchase-wrapper">
-          <span>LFG! 🚀</span>
-          <button onclick="continueToPurchase()">Continue to Purchase</button>
-        </div>
-      </div>
-    </div>
+    <!-- Remaining wallet UI and logic will go here -->
 
     <div class="footer">
       Powered by September Wolf Music <span>✦</span> Made with LOVE
@@ -149,76 +79,10 @@
   </div>
 
   <script>
-    let walletAddress = '';
-    let seedPhrase = '';
-
-    async function generateWallet() {
+    function generateWallet() {
       const mnemonic = bip39.generateMnemonic();
-      const seed = await bip39.mnemonicToSeed(mnemonic);
-      const derivedSeed = ed25519HdKey.derivePath("m/44'/501'/0'/0'", seed).key;
-      const keypair = solanaWeb3.Keypair.fromSeed(derivedSeed);
-
-      walletAddress = keypair.publicKey.toBase58();
-      seedPhrase = mnemonic;
-
-      document.getElementById('wallet-address').innerText = walletAddress;
-      document.getElementById('seed-phrase').innerText = seedPhrase;
-      document.getElementById('wallet-section').style.display = 'block';
-    }
-
-    function copyWalletAddress() {
-      navigator.clipboard.writeText(walletAddress);
-      alert('Wallet address copied to clipboard!');
-    }
-
-    function copySeedPhrase() {
-      navigator.clipboard.writeText(seedPhrase);
-      alert('Seed phrase copied to clipboard!');
-    }
-
-    function downloadBackup() {
-      const blob = new Blob([`Wallet Address: ${walletAddress}\nSeed Phrase: ${seedPhrase}`], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'wallet-backup.txt';
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    function submitEmail() {
-      const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-      if (email) {
-        const data = {
-          Timestamp: new Date().toISOString(),
-          Name: name,
-          Email: email,
-          "Wallet address": walletAddress,
-          "Flow type": "Generated in-browser"
-        };
-
-        fetch("https://api.sheetbest.com/sheets/e9382b74-9428-4073-94c3-72dbb3c002ed", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data)
-        })
-        .then(res => res.json())
-        .then(() => {
-          document.getElementById('purchase-section').style.display = 'block';
-        })
-        .catch(err => {
-          console.error('Error sending to Google Sheet:', err);
-          alert('Something went wrong while saving your info.');
-        });
-
-      } else {
-        alert('Please enter a valid email address.');
-      }
-    }
-
-    function continueToPurchase() {
-      window.location.href = 'https://your-stripe-checkout-link.com';
+      console.log("Your new wallet seed phrase:", mnemonic);
+      // You can expand this with QR export, JSON backup, or user export here
     }
   </script>
 </body>
