@@ -25,13 +25,15 @@
       color: #CAF5FA;
     }
     h2 {
-      font-size: 2.1rem; /* slightly smaller for one-line fit */
+      font-size: 2.1rem;
+      text-align: center;
     }
     .highlight {
-      font-size: 1.7rem; /* increased for more emphasis */
+      font-size: 1.7rem;
+      text-align: center;
     }
     .important-line {
-      color: #FFFFFF; /* switched to white for contrast */
+      color: #FFFFFF;
       font-weight: bold;
     }
     button, input {
@@ -73,6 +75,9 @@
     .footer span {
       color: #ffd700;
     }
+    .btn-center {
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -80,8 +85,9 @@
     <div class="section">
       <h2>You're now entering Web3 — welcome!</h2>
       <p class="highlight">Now let's get to generating your new wallet ✨</p>
-      <p>Click below to get started.</p>
-      <button onclick="generateWallet()">Generate My Wallet</button>
+      <div class="btn-center">
+        <button onclick="generateWallet()">Generate My Wallet</button>
+      </div>
     </div>
 
     <div class="section" id="wallet-section" style="display:none;">
@@ -110,7 +116,9 @@
       <div class="section" id="purchase-section" style="display:none;">
         <p>You’re all set!</p>
         <p><strong>LFG! 🚀</strong></p>
-        <button onclick="continueToPurchase()">Continue to Purchase</button>
+        <div class="btn-center">
+          <button onclick="continueToPurchase()">Continue to Purchase</button>
+        </div>
       </div>
     </div>
 
