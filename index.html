@@ -27,6 +27,14 @@
     h2 {
       font-size: 2.1rem;
     }
+    h3 span {
+      color: #ffd700; /* gold star */
+    }
+    h3 {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
     .highlight {
       font-size: 1.7rem;
     }
@@ -37,7 +45,7 @@
     .purchase-wrapper {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 0.5rem;
       justify-content: center;
       margin-top: 1rem;
     }
@@ -98,7 +106,7 @@
       <button onclick="copyWalletAddress()">Copy Address</button>
 
       <div class="section">
-        <h3>✧ Save Your Wallet</h3>
+        <h3><span>✧</span> Save Your Wallet</h3>
         <p>This wallet belongs to you — and only you.</p>
         <p class="important-line">Here’s your secret recovery phrase. Be sure to copy all 12 words in order:</p>
         <div class="seed-box" id="seed-phrase"></div>
@@ -108,7 +116,7 @@
       </div>
 
       <div class="section">
-        <h3>✧ Enter Your Email</h3>
+        <h3><span>✧</span> Enter Your Email</h3>
         <p>We use this to deliver your NFT and unlockables after purchase.</p>
         <input type="email" id="email" placeholder="you@example.com" />
         <button onclick="submitEmail()">Submit Email</button>
@@ -116,9 +124,7 @@
 
       <div class="section" id="purchase-section" style="display:none;">
         <div class="purchase-wrapper">
-          <span>LFG! 🚀</span>
-          <button onclick="continueToPurchase()">Continue to Purchase</button>
-          <span>🚀 LFG!</span>
+          <span>LFG! 🚀</span><button onclick="continueToPurchase()">Continue to Purchase</button>
         </div>
       </div>
     </div>
