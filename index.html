@@ -23,10 +23,10 @@
       border-radius: 12px;
     }
     h2 {
-      font-size: 2.8rem;
+      font-size: 2.2rem;
       text-align: center;
       color: #CAF5FA;
-      margin-bottom: 0.5rem;
+      margin-bottom: 1rem;
     }
     .subtext {
       font-size: 1.2rem;
@@ -34,9 +34,22 @@
       color: #CAF5FA;
       margin-bottom: 0.25rem;
     }
+    .subtext.small {
+      font-size: 0.95rem;
+      margin-top: -0.25rem;
+      margin-bottom: 0.5rem;
+    }
     .btn-container {
       text-align: center;
+    }
+    .link-line {
+      font-size: 0.95rem;
+      text-align: center;
       margin-top: 0.5rem;
+    }
+    .link-line a {
+      color: #CAF5FA;
+      text-decoration: underline;
     }
     button, input {
       padding: 0.75rem 1rem;
@@ -64,14 +77,15 @@
 </head>
 <body>
   <div class="content">
-    <h2>Welcome ✨</h2>
-    <div class="subtext">Now let’s get to generating your new wallet</div>
-    <div class="subtext" style="font-size: 0.95rem; margin-top: -0.5rem;">click below</div>
+    <h2>You're now entering Web3 — welcome!</h2>
+    <div class="subtext">Now let's get to generating your new wallet ✨</div>
+    <div class="subtext small">Click below</div>
     <div class="btn-container">
       <button onclick="generateWallet()">Generate My Wallet</button>
     </div>
-
-    <!-- Remaining wallet UI and logic will go here -->
+    <p class="link-line">
+      Already have a wallet? <a href="https://septemberwolfmusic.github.io/higher-places-wallet-portal/connect-wallet.html">Connect Wallet instead</a>
+    </p>
 
     <div class="footer">
       Powered by September Wolf Music <span>✦</span> Made with LOVE
