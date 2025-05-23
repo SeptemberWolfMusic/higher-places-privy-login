@@ -37,6 +37,16 @@
     .btn-container {
       text-align: center;
     }
+    .wallet-box {
+      margin-top: 1rem;
+      background-color: #3b2a24;
+      color: #FAF7F7;
+      padding: 1rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      text-align: center;
+      white-space: pre-line;
+    }
     .link-line {
       font-size: 0.95rem;
       text-align: center;
@@ -86,6 +96,7 @@
     <div class="btn-container">
       <button id="wallet-btn" onclick="generateWallet()" disabled>Generate My Wallet</button>
     </div>
+    <div id="mnemonic-box" class="wallet-box" style="display:none;"></div>
     <p class="link-line">
       Already have a wallet? <a href="https://septemberwolfmusic.github.io/higher-places-wallet-portal/connect-wallet.html">Connect Wallet instead</a>
     </p>
@@ -94,7 +105,6 @@
     </div>
   </div>
 
-  <!-- Inline bip39 wordlist + generateMnemonic -->
   <script>
     var bip39 = {
       wordlists: {
@@ -127,6 +137,9 @@
       }
       const mnemonic = bip39.generateMnemonic();
       console.log("Your new wallet seed phrase:", mnemonic);
+      const box = document.getElementById('mnemonic-box');
+      box.innerText = 'Your wallet seed phrase:\n' + mnemonic;
+      box.style.display = 'block';
     }
   </script>
 </body>
