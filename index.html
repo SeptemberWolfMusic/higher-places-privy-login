@@ -33,8 +33,8 @@
       text-align: center;
     }
     .important-line {
-      color: #FFFFFF;
-      font-weight: bold;
+      color: #FAF7F7;
+      font-weight: normal;
     }
     button, input {
       padding: 0.75rem 1rem;
@@ -107,6 +107,12 @@
     .all-set {
       text-align: center;
     }
+    .purchase-btn-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+    }
   </style>
 </head>
 <body>
@@ -131,11 +137,11 @@
       <div class="section">
         <h3><span class="gold-star">✧</span>Save Your Wallet</h3>
         <p>This wallet belongs to you — and only you.<br><span style="color:#3b2a24">We don't save your seed phrase.</span></p>
-        <p class="important-line">Here’s your secret recovery phrase. Be sure to copy all 12 words in order:</p>
+        <p class="important-line">Here's your recovery seed phrase. Be sure to copy All 12 Words In Order:</p>
         <div class="seed-box" id="seed-phrase"></div>
         <button onclick="copySeedPhrase()">Copy Phrase</button>
         <button onclick="downloadBackup()">Download Backup</button>
-        <p class="important-line">Keep this safe. If you ever lose access to your wallet, <strong>this phrase is the only way to get it back.</strong></p>
+        <p class="important-line">Keep this safe. If you ever lose access to your wallet, this phrase is the only way to get it back.</p>
       </div>
 
       <div class="section">
@@ -147,7 +153,7 @@
 
       <div class="section" id="purchase-section" style="display:none;">
         <p class="all-set">You’re all set!</p>
-        <div class="btn-center">
+        <div class="purchase-btn-wrapper">
           <span class="rocket-label">LFG! 🚀</span><button onclick="continueToPurchase()">Continue to Purchase</button>
         </div>
       </div>
