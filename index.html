@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Higher Places – Create Wallet</title>
-  <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.95.2/lib/index.iife.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Higher Places – Wallet Creation</title>
   <style>
     body {
       background-color: #FAF7F7;
-      font-family: 'Helvetica Neue', sans-serif;
       color: #FAF7F7;
+      font-family: 'Helvetica Neue', sans-serif;
       padding: 6rem 2rem 2rem;
       margin: 0;
       line-height: 1.8;
@@ -21,73 +20,55 @@
       padding: 2rem;
       border-radius: 12px;
     }
+    h1, h2, h3 {
+      font-weight: 600;
+      color: #CAF5FA;
+    }
     h2 {
-      font-size: 2.2rem;
-      text-align: center;
-      color: #CAF5FA;
-      margin-bottom: 1rem;
+      font-size: 2.1rem; /* slightly smaller for one-line fit */
     }
-    .subtext {
-      font-size: 1.6rem;
-      text-align: center;
-      color: #FAF7F7;
-      margin-top: -0.25rem;
-      margin-bottom: 1rem;
+    .highlight {
+      font-size: 1.7rem; /* increased for more emphasis */
     }
-    .btn-container {
-      text-align: center;
-    }
-    .wallet-section {
-      display: none;
-      margin-top: 2rem;
-      background-color: #3b2a24;
-      padding: 2rem;
-      border-radius: 10px;
-    }
-    .wallet-section p, .wallet-section label {
-      color: #FAF7F7;
-      margin-bottom: 0.75rem;
-    }
-    .wallet-section input[type="text"] {
-      width: 100%;
-      padding: 0.5rem;
-      border-radius: 6px;
-      border: none;
-      margin-bottom: 1rem;
-    }
-    .wallet-section button.copy {
-      margin-bottom: 1rem;
-      background-color: #50c7c0;
-      color: #2b1f1a;
-    }
-    .wallet-section textarea {
-      width: 100%;
-      padding: 0.75rem;
-      border-radius: 6px;
-      border: none;
-      margin-bottom: 1rem;
-    }
-    .highlight-label {
-      color: #CAF5FA;
+    .important-line {
+      color: #FFFFFF; /* switched to white for contrast */
       font-weight: bold;
     }
-    .gold-star {
-      color: #FFD700;
+    button, input {
+      padding: 0.75rem 1rem;
+      margin-top: 1rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
     }
-    .link-line {
-      font-size: 0.95rem;
-      text-align: center;
+    button {
+      background-color: #50c7c0;
+      color: #2b1f1a;
+      cursor: pointer;
+    }
+    input {
+      width: 100%;
+      background-color: #3b2a24;
+      color: #FAF7F7;
+      border: 1px solid #5d4b44;
+      border-radius: 8px;
+    }
+    .section {
+      margin-bottom: 2.5rem;
+    }
+    .wallet-box, .seed-box {
+      background-color: #3b2a24;
+      padding: 1rem;
+      border-radius: 8px;
       margin-top: 0.5rem;
-    }
-    .link-line a {
-      color: #CAF5FA;
-      text-decoration: underline;
+      word-break: break-word;
     }
     .footer {
-      text-align: center;
       margin-top: 3rem;
-      color: #FAF7F7;
+      text-align: center;
       font-size: 0.9rem;
+      color: #FAF7F7;
     }
     .footer span {
       color: #ffd700;
@@ -96,78 +77,93 @@
 </head>
 <body>
   <div class="content">
-    <h2>You're now entering Web3 — welcome!</h2>
-    <div class="subtext">Now let's get to generating your new wallet ✨</div>
-    <div class="btn-container">
-      <button id="wallet-btn" onclick="generateWallet()" disabled>Generate My Wallet</button>
+    <div class="section">
+      <h2>You're now entering Web3 — welcome!</h2>
+      <p class="highlight">Now let's get to generating your new wallet ✨</p>
+      <p>Click below to get started.</p>
+      <button onclick="generateWallet()">Generate My Wallet</button>
     </div>
 
-    <div id="wallet-section" class="wallet-section">
-      <p><strong>Your new wallet has been created.</strong></p>
-      <label>Here’s your wallet address:</label>
-      <input type="text" id="wallet-address" readonly>
-      <button class="copy" onclick="copyToClipboard('wallet-address')">Copy Address</button>
+    <div class="section" id="wallet-section" style="display:none;">
+      <h3>Your new wallet has been created.</h3>
+      <p>Here’s your wallet address:</p>
+      <div class="wallet-box" id="wallet-address"></div>
+      <button onclick="copyWalletAddress()">Copy Address</button>
 
-      <p class="highlight-label"><span class="gold-star">✧</span> Save Your Wallet</p>
-      <p>This wallet belongs to you — and only you.</p>
+      <div class="section">
+        <h3>✧ Save Your Wallet</h3>
+        <p>This wallet belongs to you — and only you.</p>
+        <p class="important-line">Here’s your secret recovery phrase. Be sure to copy all 12 words in order:</p>
+        <div class="seed-box" id="seed-phrase"></div>
+        <button onclick="copySeedPhrase()">Copy Phrase</button>
+        <button onclick="downloadBackup()">Download Backup</button>
+        <p class="important-line">Keep this safe. If you ever lose access to your wallet, <strong>this phrase is the only way to get it back.</strong></p>
+      </div>
 
-      <label>Here’s your secret recovery phrase. Be sure to copy all 12 words in order:</label>
-      <textarea id="mnemonic-display" rows="2" readonly></textarea>
-      <button class="copy" onclick="copyToClipboard('mnemonic-display')">Copy Phrase</button>
+      <div class="section">
+        <h3>✧ Enter Your Email</h3>
+        <p>We use this to deliver your NFT and unlockables after purchase.</p>
+        <input type="email" id="email" placeholder="you@example.com" />
+        <button onclick="submitEmail()">Submit Email</button>
+      </div>
 
-      <p><strong>Keep this safe.</strong> If you ever lose access to your wallet, <strong>this phrase is the only way to get it back.</strong></p>
-
-      <p class="highlight-label"><span class="gold-star">✧</span> Enter Your Email</p>
-      <p>We use this to deliver your NFT and unlockables after purchase.</p>
-      <input type="text" id="user-email" placeholder="you@example.com">
+      <div class="section" id="purchase-section" style="display:none;">
+        <p>You’re all set!</p>
+        <p><strong>LFG! 🚀</strong></p>
+        <button onclick="continueToPurchase()">Continue to Purchase</button>
+      </div>
     </div>
 
-    <p class="link-line">
-      Already have a wallet? <a href="https://septemberwolfmusic.github.io/higher-places-wallet-portal/connect-wallet.html">Connect Wallet instead</a>
-    </p>
     <div class="footer">
       Powered by September Wolf Music <span>✦</span> Made with LOVE
     </div>
   </div>
 
   <script>
-    var bip39 = {
-      wordlists: {
-        english: ["abandon","ability","able","about","above","absent","absorb","abstract","absurd","abuse","access","accident","account","accuse","achieve","acid","acoustic","acquire","across","act","action","actor","actress","actual","adapt","add","addict","address","adjust","admit","adult","advance","advice","aerobic","affair","afford","afraid","again","age","agent","agree","ahead","aim","air","airport","aisle","alarm","album","alcohol","alert","alien","all","alley","allow","almost","alone","alpha","already","also","alter","always","amateur","amazing","among","amount","amused","analyst","anchor","ancient","anger","angle","angry","animal","ankle","announce","annual","another","answer","antenna","antique","anxiety","any","apart","apology","appear","apple","approve","april","arch","arctic","area","arena","argue","arm","armed","armor","army","around","arrange","arrest","arrive","arrow","art","artefact","artist","artwork","ask","aspect","assault","asset","assist","assume","asthma","athlete","atom","attack","attend","attitude","attract","auction","audit","august","aunt","author","auto","autumn","average","avocado","avoid","awake","aware","away","awesome","awful","awkward","axis","baby","bachelor","bacon","badge","bag"]
-      }
-    };
-    bip39.generateMnemonic = function () {
-      const wordlist = bip39.wordlists.english;
-      const words = [];
-      for (let i = 0; i < 12; i++) {
-        const index = Math.floor(Math.random() * wordlist.length);
-        words.push(wordlist[index]);
-      }
-      return words.join(" ");
-    };
-  </script>
-
-  <script>
-    const checkInterval = setInterval(() => {
-      if (typeof bip39 !== 'undefined' && typeof bip39.generateMnemonic === 'function') {
-        document.getElementById('wallet-btn').disabled = false;
-        clearInterval(checkInterval);
-      }
-    }, 300);
+    let walletAddress = '';
+    let seedPhrase = '';
 
     function generateWallet() {
-      const mnemonic = bip39.generateMnemonic();
-      const address = '9xA1...dummyWalletAddress123';
-      document.getElementById('wallet-address').value = address;
-      document.getElementById('mnemonic-display').value = mnemonic;
+      walletAddress = '9xA1...dummyWalletAddress123';
+      seedPhrase = 'bring crisp salad element hollow genius novel burst reflect dance round canyon';
+
+      document.getElementById('wallet-address').innerText = walletAddress;
+      document.getElementById('seed-phrase').innerText = seedPhrase;
       document.getElementById('wallet-section').style.display = 'block';
     }
 
-    function copyToClipboard(elementId) {
-      const copyText = document.getElementById(elementId);
-      copyText.select();
-      copyText.setSelectionRange(0, 99999);
-      document.execCommand("copy");
+    function copyWalletAddress() {
+      navigator.clipboard.writeText(walletAddress);
+      alert('Wallet address copied to clipboard!');
+    }
+
+    function copySeedPhrase() {
+      navigator.clipboard.writeText(seedPhrase);
+      alert('Seed phrase copied to clipboard!');
+    }
+
+    function downloadBackup() {
+      const blob = new Blob([`Wallet Address: ${walletAddress}\nSeed Phrase: ${seedPhrase}`], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'wallet-backup.txt';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function submitEmail() {
+      const email = document.getElementById('email').value;
+      if (email) {
+        console.log(`Email submitted: ${email}`);
+        document.getElementById('purchase-section').style.display = 'block';
+      } else {
+        alert('Please enter a valid email address.');
+      }
+    }
+
+    function continueToPurchase() {
+      window.location.href = 'https://your-stripe-checkout-link.com';
     }
   </script>
 </body>
