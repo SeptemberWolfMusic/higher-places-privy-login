@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Higher Places – Create Wallet</title>
-  <script src="https://cdn.jsdelivr.net/npm/bip39@3.0.4/browser/bip39.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bip39@3.0.4/browser/bip39.min.js" onload="bip39Ready()"></script>
   <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.95.2/lib/index.iife.min.js"></script>
   <style>
     body {
@@ -31,7 +31,7 @@
     .subtext {
       font-size: 1.6rem;
       text-align: center;
-      color: #CAF5FA;
+      color: #FAF7F7;
       margin-top: -0.25rem;
       margin-bottom: 1rem;
     }
@@ -74,7 +74,7 @@
 <body>
   <div class="content">
     <h2>You're now entering Web3 — welcome!</h2>
-    <div class="subtext" style="color: #FAF7F7;">Now let's get to generating your new wallet ✨</div>
+    <div class="subtext">Now let's get to generating your new wallet ✨</div>
     <div class="btn-container">
       <button onclick="generateWallet()">Generate My Wallet</button>
     </div>
@@ -88,10 +88,12 @@
   </div>
 
   <script>
-    function generateWallet() {
-      const mnemonic = bip39.generateMnemonic();
-      console.log("Your new wallet seed phrase:", mnemonic);
-      // You can expand this with QR export, JSON backup, or user export here
+    function bip39Ready() {
+      window.generateWallet = function () {
+        const mnemonic = bip39.generateMnemonic();
+        console.log("Your new wallet seed phrase:", mnemonic);
+        // You can expand this with QR export, JSON backup, or user export here
+      };
     }
   </script>
 </body>
