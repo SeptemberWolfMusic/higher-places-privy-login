@@ -37,15 +37,35 @@
     .btn-container {
       text-align: center;
     }
-    .wallet-box {
-      margin-top: 1rem;
+    .wallet-section {
+      display: none;
+      margin-top: 2rem;
       background-color: #3b2a24;
-      color: #FAF7F7;
-      padding: 1rem;
+      padding: 2rem;
       border-radius: 10px;
-      font-size: 1rem;
-      text-align: center;
-      white-space: pre-line;
+    }
+    .wallet-section p, .wallet-section label {
+      color: #FAF7F7;
+      margin-bottom: 0.75rem;
+    }
+    .wallet-section input[type="text"] {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 6px;
+      border: none;
+      margin-bottom: 1rem;
+    }
+    .wallet-section button.copy {
+      margin-bottom: 1rem;
+      background-color: #50c7c0;
+      color: #2b1f1a;
+    }
+    .wallet-section textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 6px;
+      border: none;
+      margin-bottom: 1rem;
     }
     .link-line {
       font-size: 0.95rem;
@@ -55,28 +75,6 @@
     .link-line a {
       color: #CAF5FA;
       text-decoration: underline;
-    }
-    button, input {
-      padding: 0.75rem 1rem;
-      font-size: 1rem;
-      font-weight: 600;
-      border: none;
-      border-radius: 8px;
-      margin-top: 0.5rem;
-    }
-    button {
-      background-color: #50c7c0;
-      color: #2b1f1a;
-      cursor: pointer;
-      transition: transform 0.1s ease, background-color 0.3s ease;
-    }
-    button:active {
-      transform: scale(0.96);
-      background-color: #45b2ad;
-    }
-    button:disabled {
-      background-color: #9ecfcc;
-      cursor: not-allowed;
     }
     .footer {
       text-align: center;
@@ -96,7 +94,27 @@
     <div class="btn-container">
       <button id="wallet-btn" onclick="generateWallet()" disabled>Generate My Wallet</button>
     </div>
-    <div id="mnemonic-box" class="wallet-box" style="display:none;"></div>
+
+    <div id="wallet-section" class="wallet-section">
+      <p><strong>Your new wallet has been created.</strong></p>
+      <label>Here’s your wallet address:</label>
+      <input type="text" id="wallet-address" readonly>
+      <button class="copy" onclick="copyToClipboard('wallet-address')">Copy Address</button>
+
+      <p><strong>✧ Save Your Wallet</strong></p>
+      <p>This wallet belongs to you — and only you.</p>
+
+      <label>Here’s your secret recovery phrase. Be sure to copy all 12 words in order:</label>
+      <textarea id="mnemonic-display" rows="2" readonly></textarea>
+      <button class="copy" onclick="copyToClipboard('mnemonic-display')">Copy Phrase</button>
+
+      <p><strong>Keep this safe.</strong> If you ever lose access to your wallet, <strong>this phrase is the only way to get it back.</strong></p>
+
+      <p><strong>✧ Enter Your Email</strong></p>
+      <p>We use this to deliver your NFT and unlockables after purchase.</p>
+      <input type="text" id="user-email" placeholder="you@example.com">
+    </div>
+
     <p class="link-line">
       Already have a wallet? <a href="https://septemberwolfmusic.github.io/higher-places-wallet-portal/connect-wallet.html">Connect Wallet instead</a>
     </p>
@@ -131,15 +149,18 @@
     }, 300);
 
     function generateWallet() {
-      if (typeof bip39 === 'undefined' || typeof bip39.generateMnemonic !== 'function') {
-        alert("Wallet generator is still loading... please wait a moment and try again.");
-        return;
-      }
       const mnemonic = bip39.generateMnemonic();
-      console.log("Your new wallet seed phrase:", mnemonic);
-      const box = document.getElementById('mnemonic-box');
-      box.innerText = 'Your wallet seed phrase:\n' + mnemonic;
-      box.style.display = 'block';
+      const address = '9xA1...dummyWalletAddress123';
+      document.getElementById('wallet-address').value = address;
+      document.getElementById('mnemonic-display').value = mnemonic;
+      document.getElementById('wallet-section').style.display = 'block';
+    }
+
+    function copyToClipboard(elementId) {
+      const copyText = document.getElementById(elementId);
+      copyText.select();
+      copyText.setSelectionRange(0, 99999);
+      document.execCommand("copy");
     }
   </script>
 </body>
