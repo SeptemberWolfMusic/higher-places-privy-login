@@ -67,6 +67,13 @@
       border: none;
       margin-bottom: 1rem;
     }
+    .highlight-label {
+      color: #CAF5FA;
+      font-weight: bold;
+    }
+    .gold-star {
+      color: #FFD700;
+    }
     .link-line {
       font-size: 0.95rem;
       text-align: center;
@@ -101,7 +108,7 @@
       <input type="text" id="wallet-address" readonly>
       <button class="copy" onclick="copyToClipboard('wallet-address')">Copy Address</button>
 
-      <p><strong>✧ Save Your Wallet</strong></p>
+      <p class="highlight-label"><span class="gold-star">✧</span> Save Your Wallet</p>
       <p>This wallet belongs to you — and only you.</p>
 
       <label>Here’s your secret recovery phrase. Be sure to copy all 12 words in order:</label>
@@ -110,7 +117,7 @@
 
       <p><strong>Keep this safe.</strong> If you ever lose access to your wallet, <strong>this phrase is the only way to get it back.</strong></p>
 
-      <p><strong>✧ Enter Your Email</strong></p>
+      <p class="highlight-label"><span class="gold-star">✧</span> Enter Your Email</p>
       <p>We use this to deliver your NFT and unlockables after purchase.</p>
       <input type="text" id="user-email" placeholder="you@example.com">
     </div>
