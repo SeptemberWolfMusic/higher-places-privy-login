@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Higher Places – Wallet Creation</title>
+  <script src="https://cdn.jsdelivr.net/npm/bip39@3.0.4/browser/bip39.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ed25519-hd-key@1.1.5/dist/index.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.95.2/lib/index.iife.min.js"></script>
   <style>
     body {
       background-color: #FAF7F7;
@@ -28,7 +31,7 @@
       font-size: 2.1rem;
     }
     h3 span {
-      color: #ffd700; /* gold star */
+      color: #ffd700;
     }
     h3 {
       display: flex;
@@ -142,9 +145,14 @@
     let walletAddress = '';
     let seedPhrase = '';
 
-    function generateWallet() {
-      walletAddress = '9xA1...dummyWalletAddress123';
-      seedPhrase = 'bring crisp salad element hollow genius novel burst reflect dance round canyon';
+    async function generateWallet() {
+      const mnemonic = bip39.generateMnemonic();
+      const seed = await bip39.mnemonicToSeed(mnemonic);
+      const derivedSeed = ed25519HdKey.derivePath("m/44'/501'/0'/0'", seed).key;
+      const keypair = solanaWeb3.Keypair.fromSeed(derivedSeed);
+
+      walletAddress = keypair.publicKey.toBase58();
+      seedPhrase = mnemonic;
 
       document.getElementById('wallet-address').innerText = walletAddress;
       document.getElementById('seed-phrase').innerText = seedPhrase;
@@ -174,7 +182,7 @@
     function submitEmail() {
       const email = document.getElementById('email').value;
       if (email) {
-        console.log(`Email submitted: ${email}`);
+        console.log(`Email submitted: ${email}\nWallet: ${walletAddress}`);
         document.getElementById('purchase-section').style.display = 'block';
       } else {
         alert('Please enter a valid email address.');
