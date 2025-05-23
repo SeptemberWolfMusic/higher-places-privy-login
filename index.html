@@ -43,6 +43,10 @@
       border: none;
       border-radius: 8px;
       font-weight: 600;
+      transition: all 0.2s ease-in-out;
+    }
+    button:hover, input:hover {
+      transform: scale(1.02);
     }
     button {
       background-color: #50c7c0;
@@ -55,6 +59,7 @@
       color: #FAF7F7;
       border: 1px solid #5d4b44;
       border-radius: 8px;
+      box-sizing: border-box;
     }
     .section {
       margin-bottom: 2.5rem;
@@ -82,10 +87,12 @@
       text-align: center;
       margin-top: 1rem;
       font-size: 1rem;
-      color: #CAF5FA;
+    }
+    .connect-link {
+      color: #FAF7F7;
     }
     .connect-link a {
-      color: #CAF5FA;
+      color: #FAF7F7;
       text-decoration: underline;
     }
     .gold-star {
@@ -96,6 +103,9 @@
       font-size: 0.85rem;
       margin-right: 0.5rem;
       font-weight: normal;
+    }
+    .all-set {
+      text-align: center;
     }
   </style>
 </head>
@@ -120,7 +130,7 @@
 
       <div class="section">
         <h3><span class="gold-star">✧</span>Save Your Wallet</h3>
-        <p>This wallet belongs to you — and only you.</p>
+        <p>This wallet belongs to you — and only you.<br><span style="color:#3b2a24">We don't save your seed phrase.</span></p>
         <p class="important-line">Here’s your secret recovery phrase. Be sure to copy all 12 words in order:</p>
         <div class="seed-box" id="seed-phrase"></div>
         <button onclick="copySeedPhrase()">Copy Phrase</button>
@@ -136,10 +146,9 @@
       </div>
 
       <div class="section" id="purchase-section" style="display:none;">
-        <p>You’re all set!</p>
+        <p class="all-set">You’re all set!</p>
         <div class="btn-center">
-          <span class="rocket-label">LFG! 🚀</span>
-          <button onclick="continueToPurchase()">Continue to Purchase</button>
+          <span class="rocket-label">LFG! 🚀</span><button onclick="continueToPurchase()">Continue to Purchase</button>
         </div>
       </div>
     </div>
