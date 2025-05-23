@@ -48,26 +48,30 @@
     }
     .purchase-wrapper {
       display: flex;
+      flex-direction: column;
       align-items: center;
       gap: 0.5rem;
       justify-content: center;
-      margin-top: 1rem;
+      margin-top: 3rem;
     }
     .purchase-wrapper span {
       font-size: 0.75rem;
     }
     button, input {
-      padding: 0.75rem 1rem;
-      margin-top: 1rem;
-      font-size: 1rem;
-      border: none;
+      width: calc(100% - 2px);
+      background-color: #3b2a24;
+      color: #FAF7F7;
+      border: 1px solid #5d4b44;
       border-radius: 8px;
-      font-weight: 600;
+      box-sizing: border-box;
     }
     button {
       background-color: #50c7c0;
       color: #2b1f1a;
       cursor: pointer;
+    }
+    button:hover {
+      transform: scale(1.02);
     }
     input {
       width: 100%;
@@ -111,7 +115,7 @@
   <div class="content">
     <div class="section">
       <h2>Welcome ✨</h2>
-      <button onclick="connectWallet()">Connect My Wallet</button>
+      <button onclick="connectWallet()" title="Connect your wallet to continue">Connect My Wallet</button>
       <p class="link-line">
         Don’t have a wallet? <a href="https://septemberwolfmusic.github.io/higher-places-wallet-portal/">Create One Instead</a>
       </p>
@@ -123,7 +127,7 @@
 
     <div class="section" id="email-section">
       <h3><span>✧</span> Enter Your Email</h3>
-      <p>We use this to deliver your NFT and unlockables after purchase.</p>
+      <p>We use this to deliver your unlockable content after purchase.</p>
       <input type="text" id="name" placeholder="Your Name (optional)" />
       <input type="email" id="email" placeholder="you@example.com" />
       <button onclick="submitEmail()">Submit Email</button>
@@ -132,7 +136,7 @@
     <div class="section" id="purchase-section">
       <div class="purchase-wrapper">
         <span>LFG! 🚀</span>
-        <button onclick="continueToPurchase()">Continue to Purchase</button>
+        <button onclick="continueToPurchase()" title="Continue to purchase NFT">Continue to Purchase</button>
       </div>
     </div>
 
