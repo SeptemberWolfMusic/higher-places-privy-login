@@ -124,6 +124,7 @@
       <div class="section">
         <h3><span>✧</span> Enter Your Email</h3>
         <p>We use this to deliver your NFT and unlockables after purchase.</p>
+        <input type="text" id="name" placeholder="Your Name (optional)" />
         <input type="email" id="email" placeholder="you@example.com" />
         <button onclick="submitEmail()">Submit Email</button>
       </div>
@@ -180,10 +181,31 @@
     }
 
     function submitEmail() {
+      const name = document.getElementById('name').value;
       const email = document.getElementById('email').value;
       if (email) {
-        console.log(`Email submitted: ${email}\nWallet: ${walletAddress}`);
-        document.getElementById('purchase-section').style.display = 'block';
+        const data = {
+          Timestamp: new Date().toISOString(),
+          Name: name,
+          Email: email,
+          "Wallet address": walletAddress,
+          "Flow type": "Generated in-browser"
+        };
+
+        fetch("https://api.sheetbest.com/sheets/e9382b74-9428-4073-94c3-72dbb3c002ed", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(() => {
+          document.getElementById('purchase-section').style.display = 'block';
+        })
+        .catch(err => {
+          console.error('Error sending to Google Sheet:', err);
+          alert('Something went wrong while saving your info.');
+        });
+
       } else {
         alert('Please enter a valid email address.');
       }
