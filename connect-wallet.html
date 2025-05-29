@@ -26,8 +26,10 @@
       color: #CAF5FA;
     }
     h2 {
-      font-size: 2.1rem;
+      font-size: 3.5rem;
+      margin: 2rem 0 1rem;
       text-align: center;
+      padding-left: 1ch;
     }
     h3 span {
       color: #ffd700;
@@ -111,13 +113,21 @@
       color: #CAF5FA;
       text-decoration: underline;
     }
+    video {
+      width: 100%;
+      border-radius: 12px;
+      margin-top: 1.5rem;
+    }
   </style>
 </head>
 <body>
   <div class="content">
     <div class="section">
       <h2>Welcome ✨</h2>
-      <button onclick="connectWallet()" title="Connect your wallet to continue">Connect My Wallet</button>
+      <p class="highlight">Connect your existing wallet to continue to purchase</p>
+      <div class="btn-center">
+        <button onclick="connectWallet()" title="Connect your wallet to continue">Connect My Wallet</button>
+      </div>
       <p class="link-line">
         Don’t have a wallet? <a href="https://septemberwolfmusic.github.io/higher-places-wallet-portal/">Create One Instead</a>
       </p>
@@ -134,6 +144,11 @@
       <input type="text" id="name" placeholder="Your Name (optional)" />
       <input type="email" id="email" placeholder="you@example.com" />
       <button onclick="submitEmail()" title="Submit your email for unlockables">Submit Email</button>
+
+      <video controls poster="https://gateway.lighthouse.storage/ipfs/bafybeiddcho7nzz2z6isfa77deakaalbgj3s6ats3yxpzrk5nslz5sjyui">
+        <source src="https://gateway.lighthouse.storage/ipfs/bafybeihdjezqw7v5457dfyhj63roz4tazygdax3edxq2vpjwoyaivqj35a" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
     </div>
 
     <div class="section" id="purchase-section" style="display:none;">
