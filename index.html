@@ -1,4 +1,3 @@
-<!-- start of code block -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -119,8 +118,7 @@
     }
     video {
       width: 100%;
-      max-width: 400px;
-      aspect-ratio: 1 / 1;
+      max-width: 600px;
       display: block;
       margin: 1.5rem auto 0;
       border-radius: 12px;
@@ -157,6 +155,12 @@
       </div>
 
       <div class="section">
+        <h3>Enter your email</h3>
+        <p class="important-line">This is how we’ll send your NFT unlockables after purchase.</p>
+        <input type="email" id="user-email" placeholder="your@email.com" required />
+      </div>
+
+      <div class="section">
         <p class="important-brown" style="margin-top: 1rem;">* This wallet becomes active once your purchase is complete.</p>
         <video id="preview-video" controls poster="https://gateway.lighthouse.storage/ipfs/bafybeiddcho7nzz2z6isfa77deakaalbgj3s6ats3yxpzrk5nslz5sjyui">
           <source src="https://gateway.lighthouse.storage/ipfs/bafybeietdnlxd5o2tol3hmckhyjww273tezoc5yzaf2ghqaokp3hhihtdu" type="video/mp4" />
@@ -190,7 +194,6 @@
       document.getElementById('seed-phrase').innerText = seedPhrase;
       document.getElementById('wallet-section').style.display = 'block';
 
-      // Set volume on video when it's shown
       const video = document.getElementById('preview-video');
       if (video) {
         video.volume = 0.7;
@@ -218,9 +221,14 @@
     }
 
     function continueToPurchase() {
-      window.location.href = 'https://your-stripe-checkout-link.com';
+      const email = document.getElementById('user-email').value;
+      if (!email || !email.includes('@')) {
+        alert('Please enter a valid email before continuing.');
+        return;
+      }
+      // Add to query param if needed
+      window.location.href = 'https://your-stripe-checkout-link.com?email=' + encodeURIComponent(email);
     }
   </script>
 </body>
 </html>
-<!-- end of code block -->
