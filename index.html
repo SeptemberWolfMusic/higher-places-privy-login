@@ -112,6 +112,11 @@
       flex-direction: column;
       align-items: center;
     }
+    .note {
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      color: #CAF5FA;
+    }
   </style>
 </head>
 <body>
@@ -132,6 +137,7 @@
       <p>Here’s your wallet address:</p>
       <div class="wallet-box" id="wallet-address"></div>
       <button onclick="copyWalletAddress()" title="copy and paste this somewhere safe">Copy Address</button>
+      <p class="note">This wallet becomes active once your purchase is complete.</p>
 
       <div class="section">
         <h3><span class="gold-star">✧</span>Save Your Wallet</h3>
@@ -143,7 +149,17 @@
         <p class="important-line">Keep this safe. If you ever lose access to your wallet, this phrase is the only way to get it back.</p>
       </div>
 
-      <div class="section">
+      <div class="section" id="validation-section" style="display:none;">
+        <h3>Wallet Validation Challenge</h3>
+        <p>To confirm you’ve saved your recovery phrase, please enter:</p>
+        <label for="word2">Word #2:</label>
+        <input type="text" id="word2" placeholder="Enter word 2" />
+        <label for="word8">Word #8:</label>
+        <input type="text" id="word8" placeholder="Enter word 8" />
+        <button onclick="validateWords()">Validate</button>
+      </div>
+
+      <div class="section" id="email-section" style="display:none;">
         <h3><span class="gold-star">✧</span>Enter Your Email</h3>
         <p>We use this to deliver your NFT and unlockable content after purchase.</p>
         <input type="email" id="email" placeholder="you@example.com" />
@@ -167,14 +183,17 @@
   <script>
     let walletAddress = '';
     let seedPhrase = '';
+    let seedWords = [];
 
     function generateWallet() {
       walletAddress = '9xA1...dummyWalletAddress123';
       seedPhrase = 'bring crisp salad element hollow genius novel burst reflect dance round canyon';
+      seedWords = seedPhrase.split(' ');
 
       document.getElementById('wallet-address').innerText = walletAddress;
       document.getElementById('seed-phrase').innerText = seedPhrase;
       document.getElementById('wallet-section').style.display = 'block';
+      document.getElementById('validation-section').style.display = 'block';
     }
 
     function copyWalletAddress() {
@@ -195,6 +214,18 @@
       a.download = 'wallet-backup.txt';
       a.click();
       URL.revokeObjectURL(url);
+    }
+
+    function validateWords() {
+      const word2 = document.getElementById('word2').value.trim().toLowerCase();
+      const word8 = document.getElementById('word8').value.trim().toLowerCase();
+      if (word2 === seedWords[1] && word8 === seedWords[7]) {
+        alert('✅ Validation successful!');
+        document.getElementById('validation-section').style.display = 'none';
+        document.getElementById('email-section').style.display = 'block';
+      } else {
+        alert('❌ Incorrect words. Please try again.');
+      }
     }
 
     function submitEmail() {
