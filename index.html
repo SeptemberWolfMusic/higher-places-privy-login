@@ -92,6 +92,9 @@
       margin-top: 1rem;
       font-size: 1rem;
     }
+    .connect-link {
+      color: #FAF7F7;
+    }
     .connect-link a {
       color: #FAF7F7;
       text-decoration: underline;
@@ -115,8 +118,7 @@
     }
     video {
       width: 100%;
-      max-width: 400px;
-      aspect-ratio: 1 / 1;
+      max-width: 600px;
       display: block;
       margin: 1.5rem auto 0;
       border-radius: 12px;
@@ -150,6 +152,12 @@
         <button onclick="copySeedPhrase()" title="Copy seed phrase to clipboard">Copy Phrase</button>
         <button onclick="downloadBackup()" title="Download a backup .txt file of your wallet info">Download Backup</button>
         <p class="important-line">Keep this safe. If you ever lose access to your wallet, this phrase is the only way to get it back.</p>
+      </div>
+
+      <div class="section">
+        <h3>Enter your email</h3>
+        <p class="important-line">This is how we’ll send your NFT unlockables after purchase.</p>
+        <input type="email" id="user-email" placeholder="your@email.com" required />
       </div>
 
       <div class="section">
@@ -213,7 +221,12 @@
     }
 
     function continueToPurchase() {
-      window.location.href = 'https://your-stripe-checkout-link.com';
+      const email = document.getElementById('user-email').value;
+      if (!email || !email.includes('@')) {
+        alert('Please enter a valid email before continuing.');
+        return;
+      }
+      window.location.href = 'https://your-stripe-checkout-link.com?email=' + encodeURIComponent(email);
     }
   </script>
 </body>
