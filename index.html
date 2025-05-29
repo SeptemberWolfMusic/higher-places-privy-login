@@ -112,10 +112,11 @@
       flex-direction: column;
       align-items: center;
     }
-    .note {
-      font-size: 0.9rem;
-      margin-top: 0.5rem;
-      color: #CAF5FA;
+    .validation-line {
+      margin-top: 1rem;
+      font-style: italic;
+      color: #FAF7F7;
+      text-align: center;
     }
   </style>
 </head>
@@ -136,41 +137,44 @@
       <h3>Your new wallet has been created.</h3>
       <p>Here’s your wallet address:</p>
       <div class="wallet-box" id="wallet-address"></div>
-      <button onclick="copyWalletAddress()" title="copy and paste this somewhere safe">Copy Address</button>
-      <p class="note">This wallet becomes active once your purchase is complete.</p>
+      <button onclick="copyWalletAddress()">Copy Address</button>
 
       <div class="section">
         <h3><span class="gold-star">✧</span>Save Your Wallet</h3>
         <p>This wallet belongs to you — and only you.<br><span style="color:#3b2a24">We don't save your seed phrase.</span></p>
         <p class="important-line">Here's your recovery seed phrase. Be sure to copy All 12 Words In Order:</p>
         <div class="seed-box" id="seed-phrase"></div>
-        <button onclick="copySeedPhrase()" title="copy and paste this somewhere safe">Copy Phrase</button>
-        <button onclick="downloadBackup()" title="Downloads a .txt file to your device – keep it in a secure place">Download Backup</button>
+        <button onclick="copySeedPhrase()">Copy Phrase</button>
+        <button onclick="downloadBackup()">Download Backup</button>
         <p class="important-line">Keep this safe. If you ever lose access to your wallet, this phrase is the only way to get it back.</p>
+
+        <div class="section">
+          <h3><span class="gold-star">✧</span>Wallet Validation Challenge</h3>
+          <p>To make sure you've saved your wallet, enter the 2nd and 8th words of your seed phrase below:</p>
+          <input type="text" id="word2" placeholder="Word 2" />
+          <input type="text" id="word8" placeholder="Word 8" />
+          <button onclick="validateSeedWords()">Validate Wallet</button>
+        </div>
+
+        <div id="validation-result" class="validation-line"></div>
       </div>
 
-      <div class="section" id="validation-section" style="display:none;">
-        <h3>Wallet Validation Challenge</h3>
-        <p>To confirm you’ve saved your recovery phrase, please enter:</p>
-        <label for="word2">Word #2:</label>
-        <input type="text" id="word2" placeholder="Enter word 2" />
-        <label for="word8">Word #8:</label>
-        <input type="text" id="word8" placeholder="Enter word 8" />
-        <button onclick="validateWords()">Validate</button>
-      </div>
+      <div class="section" id="post-validation" style="display:none;">
+        <p class="validation-line">* This wallet becomes active once your purchase is complete.</p>
 
-      <div class="section" id="email-section" style="display:none;">
-        <h3><span class="gold-star">✧</span>Enter Your Email</h3>
-        <p>We use this to deliver your NFT and unlockable content after purchase.</p>
-        <input type="email" id="email" placeholder="you@example.com" />
-        <button onclick="submitEmail()">Submit Email</button>
-      </div>
+        <div class="section">
+          <h3><span class="gold-star">✧</span>Enter Your Email</h3>
+          <p>We use this to deliver your NFT and unlockable content after purchase.</p>
+          <input type="email" id="email" placeholder="you@example.com" />
+          <button onclick="submitEmail()">Submit Email</button>
+        </div>
 
-      <div class="section" id="purchase-section" style="display:none;">
-        <p class="all-set">You’re all set!</p>
-        <div class="purchase-btn-wrapper">
-          <div class="rocket-label">LFG! 🚀</div>
-          <button onclick="continueToPurchase()" title="Continue to purchase NFT">Continue to Purchase</button>
+        <div class="section" id="purchase-section" style="display:none;">
+          <p class="all-set">You’re all set!</p>
+          <div class="purchase-btn-wrapper">
+            <div class="rocket-label">LFG! 🚀</div>
+            <button onclick="continueToPurchase()" title="Continue to purchase NFT">Continue to Purchase</button>
+          </div>
         </div>
       </div>
     </div>
@@ -182,18 +186,13 @@
 
   <script>
     let walletAddress = '';
-    let seedPhrase = '';
-    let seedWords = [];
+    let seedPhrase = 'bring crisp salad element hollow genius novel burst reflect dance round canyon';
 
     function generateWallet() {
       walletAddress = '9xA1...dummyWalletAddress123';
-      seedPhrase = 'bring crisp salad element hollow genius novel burst reflect dance round canyon';
-      seedWords = seedPhrase.split(' ');
-
       document.getElementById('wallet-address').innerText = walletAddress;
       document.getElementById('seed-phrase').innerText = seedPhrase;
       document.getElementById('wallet-section').style.display = 'block';
-      document.getElementById('validation-section').style.display = 'block';
     }
 
     function copyWalletAddress() {
@@ -216,15 +215,16 @@
       URL.revokeObjectURL(url);
     }
 
-    function validateWords() {
+    function validateSeedWords() {
+      const words = seedPhrase.split(' ');
       const word2 = document.getElementById('word2').value.trim().toLowerCase();
       const word8 = document.getElementById('word8').value.trim().toLowerCase();
-      if (word2 === seedWords[1] && word8 === seedWords[7]) {
-        alert('✅ Validation successful!');
-        document.getElementById('validation-section').style.display = 'none';
-        document.getElementById('email-section').style.display = 'block';
+
+      if (word2 === words[1] && word8 === words[7]) {
+        document.getElementById('validation-result').innerText = '✅ Wallet validated successfully!';
+        document.getElementById('post-validation').style.display = 'block';
       } else {
-        alert('❌ Incorrect words. Please try again.');
+        document.getElementById('validation-result').innerText = '❌ Incorrect words. Please check your phrase.';
       }
     }
 
