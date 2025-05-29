@@ -125,19 +125,19 @@
     <div class="section">
       <h2>Welcome ✨</h2>
       <div class="btn-center">
-        <button onclick="connectWallet()" title="Connect your wallet to continue">Connect Wallet</button>
+        <button title="Connect your wallet to continue">Connect Wallet</button>
       </div>
       <p class="link-line">
         Don’t have a wallet? <a href="https://septemberwolfmusic.github.io/higher-places-wallet-portal/">Create One Instead</a>
       </p>
     </div>
 
-    <div class="section" id="wallet-display" style="display:none;">
+    <div class="section" id="wallet-display">
       <h3><span>✧</span> Wallet Connected</h3>
-      <div class="wallet-box"></div>
+      <div class="wallet-box">temp-wallet-for-design</div>
     </div>
 
-    <div class="section" id="email-section" style="display:none;">
+    <div class="section" id="email-section">
       <h3><span>✧</span> Enter Your Email</h3>
       <p>We use this to deliver your unlockable content after purchase.</p>
       <input type="text" id="name" placeholder="Your Name (optional)" />
@@ -150,7 +150,7 @@
       </video>
     </div>
 
-    <div class="section" id="purchase-section" style="display:none;">
+    <div class="section" id="purchase-section">
       <div class="purchase-wrapper">
         <span>LFG! 🚀</span>
         <button onclick="continueToPurchase()" title="Continue to purchase NFT">Continue to Purchase</button>
@@ -163,20 +163,6 @@
   </div>
 
   <script>
-  let walletAddress = 'temp-wallet-for-design';
-
-  // TEMP UNLOCK: Show all sections by default for design preview
-  window.onload = () => {
-    document.getElementById('wallet-display').style.display = 'block';
-    document.getElementById('email-section').style.display = 'block';
-    document.getElementById('purchase-section').style.display = 'block';
-    document.querySelector('#wallet-display .wallet-box').innerText = walletAddress;
-  };
-
-  function connectWallet() {
-    alert('Wallet connect is disabled in design preview mode.');
-  }
-
   function submitEmail() {
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
@@ -185,7 +171,7 @@
         Timestamp: new Date().toISOString(),
         Name: name,
         Email: email,
-        "Wallet address": walletAddress,
+        "Wallet address": 'temp-wallet-for-design',
         "Flow type": "connect"
       };
 
