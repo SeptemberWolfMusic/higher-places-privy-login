@@ -1,16 +1,16 @@
+<!-- FULL UPDATED CODE BLOCK FOR WALLET CREATION PAGE -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Wolf Machine – Wallet Creation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Higher Places – Create Wallet</title>
   <style>
     body {
       background-color: #FAF7F7;
-      color: #FAF7F7;
       font-family: 'Helvetica Neue', sans-serif;
-      padding: 6rem 2rem 2rem;
       margin: 0;
+      padding: 6rem 2rem 2rem;
       line-height: 1.8;
     }
     .content {
@@ -20,25 +20,15 @@
       padding: 2rem;
       border-radius: 12px;
     }
-    h1, h2, h3 {
-      font-weight: 600;
-      color: #CAF5FA;
-    }
     h2 {
       font-size: 2.1rem;
       text-align: center;
+      color: #CAF5FA;
     }
     .highlight {
       font-size: 1.7rem;
       text-align: center;
-    }
-    .important-line {
       color: #FAF7F7;
-      font-weight: normal;
-    }
-    .important-brown {
-      color: #3b2a24;
-      font-weight: normal;
     }
     button, input {
       padding: 0.75rem 1rem;
@@ -75,14 +65,16 @@
       margin-top: 0.5rem;
       word-break: break-word;
     }
-    .footer {
-      margin-top: 3rem;
-      text-align: center;
-      font-size: 0.9rem;
+    .gold-star {
+      color: #FFD700;
+      margin-right: 0.3rem;
+    }
+    .important-line {
       color: #FAF7F7;
     }
-    .footer span {
-      color: #ffd700;
+    .important-brown {
+      color: #3b2a24;
+      font-weight: normal;
     }
     .btn-center {
       text-align: center;
@@ -91,30 +83,30 @@
       text-align: center;
       margin-top: 1rem;
       font-size: 1rem;
-    }
-    .connect-link {
       color: #FAF7F7;
     }
     .connect-link a {
-      color: #FAF7F7;
+      color: #CAF5FA;
       text-decoration: underline;
     }
-    .gold-star {
-      color: #FFD700;
-      margin-right: 0.3rem;
-    }
-    .rocket-label {
-      font-size: 0.85rem;
-      font-weight: normal;
-      margin-bottom: 0.5rem;
-    }
-    .all-set {
+    .footer {
+      margin-top: 3rem;
       text-align: center;
+      font-size: 0.9rem;
+      color: #FAF7F7;
+    }
+    .footer span {
+      color: #FFD700;
     }
     .purchase-btn-wrapper {
       display: flex;
       flex-direction: column;
       align-items: center;
+    }
+    .rocket-label {
+      font-size: 0.85rem;
+      font-weight: normal;
+      margin-bottom: 0.5rem;
     }
     video {
       width: 100%;
@@ -142,21 +134,21 @@
       <h3>Your new wallet has been created.</h3>
       <p>Here’s your wallet address:</p>
       <div class="wallet-box" id="wallet-address"></div>
-      <button onclick="copyWalletAddress()" title="Copy wallet address to clipboard">Copy Address</button>
+      <button onclick="copyWalletAddress()" title="Save this in a safe place">Copy Address</button>
 
       <div class="section">
         <h3><span class="gold-star">✧</span>Save Your Wallet</h3>
         <p>This wallet belongs to you — and only you.<br><span style="color:#3b2a24">We don't save your seed phrase.</span></p>
         <p class="important-line">Here's your recovery seed phrase. Be sure to copy All 12 Words In Order:</p>
         <div class="seed-box" id="seed-phrase"></div>
-        <button onclick="copySeedPhrase()" title="Copy seed phrase to clipboard">Copy Phrase</button>
+        <button onclick="copySeedPhrase()" title="Save this in a safe place">Copy Phrase</button>
         <button onclick="downloadBackup()" title="Download a backup .txt file of your wallet info">Download Backup</button>
         <p class="important-line">Keep this safe. If you ever lose access to your wallet, this phrase is the only way to get it back.</p>
       </div>
 
       <div class="section">
-        <h3>Enter your email</h3>
-        <p class="important-line">This is how we’ll send your NFT unlockables after purchase.</p>
+        <h3><span class="gold-star">✧</span>Enter your email</h3>
+        <p class="important-line">We use this to deliver your unlockable content after purchase.</p>
         <input type="email" id="user-email" placeholder="your@email.com" required />
       </div>
 
@@ -169,7 +161,7 @@
       </div>
 
       <div class="section" id="purchase-section">
-        <p class="all-set">You’re all set!</p>
+        <p class="highlight">You’re all set!</p>
         <div class="purchase-btn-wrapper">
           <div class="rocket-label">LFG! 🚀</div>
           <button onclick="continueToPurchase()" title="Continue to purchase NFT">Continue to Purchase</button>
@@ -211,7 +203,7 @@
     }
 
     function downloadBackup() {
-      const blob = new Blob([`Wallet Address: ${walletAddress}\nSeed Phrase: ${seedPhrase}`], { type: 'text/plain' });
+      const blob = new Blob([`Wallet Address: ${walletAddress}\\nSeed Phrase: ${seedPhrase}`], { type: 'text/plain' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -226,7 +218,6 @@
         alert('Please enter a valid email before continuing.');
         return;
       }
-      // Add to query param if needed
       window.location.href = 'https://your-stripe-checkout-link.com?email=' + encodeURIComponent(email);
     }
   </script>
