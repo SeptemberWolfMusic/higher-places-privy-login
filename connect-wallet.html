@@ -164,61 +164,53 @@
   </div>
 
   <script>
-    let walletAddress = '';
+  let walletAddress = 'temp-wallet-for-design';
 
-    async function connectWallet() {
-      try {
-        const provider = window.solana;
-        if (!provider || !provider.isPhantom) {
-          alert('Please install Phantom Wallet to continue.');
-          return;
-        }
+  // TEMP UNLOCK: Show all sections by default for design preview
+  window.onload = () => {
+    document.getElementById('wallet-display').style.display = 'block';
+    document.getElementById('email-section').style.display = 'block';
+    document.getElementById('purchase-section').style.display = 'block';
+    document.querySelector('#wallet-display .wallet-box').innerText = walletAddress;
+  };
 
-        const resp = await provider.connect();
-        walletAddress = resp.publicKey.toString();
+  function connectWallet() {
+    alert('Wallet connect is disabled in design preview mode.');
+  }
 
-        document.querySelector('#wallet-display .wallet-box').innerText = walletAddress;
-        document.getElementById('wallet-display').style.display = 'block';
-        document.getElementById('email-section').style.display = 'block';
-      } catch (err) {
-        console.error('Wallet connection error:', err);
-        alert('Failed to connect wallet.');
-      }
+  function submitEmail() {
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    if (email) {
+      const data = {
+        Timestamp: new Date().toISOString(),
+        Name: name,
+        Email: email,
+        "Wallet address": walletAddress,
+        "Flow type": "connect"
+      };
+
+      fetch("https://api.sheetbest.com/sheets/e9382b74-9428-4073-94c3-72dbb3c002ed", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      })
+      .then(res => res.json())
+      .then(() => {
+        alert('Email submitted successfully!');
+      })
+      .catch(err => {
+        console.error('Error sending to Google Sheet:', err);
+        alert('Something went wrong while saving your info.');
+      });
+    } else {
+      alert('Please enter a valid email.');
     }
+  }
 
-    function submitEmail() {
-      const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-      if (email && walletAddress) {
-        const data = {
-          Timestamp: new Date().toISOString(),
-          Name: name,
-          Email: email,
-          "Wallet address": walletAddress,
-          "Flow type": "connect"
-        };
-
-        fetch("https://api.sheetbest.com/sheets/e9382b74-9428-4073-94c3-72dbb3c002ed", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data)
-        })
-        .then(res => res.json())
-        .then(() => {
-          document.getElementById('purchase-section').style.display = 'block';
-        })
-        .catch(err => {
-          console.error('Error sending to Google Sheet:', err);
-          alert('Something went wrong while saving your info.');
-        });
-      } else {
-        alert('Please connect your wallet and enter a valid email.');
-      }
-    }
-
-    function continueToPurchase() {
-      window.location.href = 'https://your-stripe-checkout-link.com';
-    }
-  </script>
+  function continueToPurchase() {
+    window.location.href = 'https://your-stripe-checkout-link.com';
+  }
+</script>
 </body>
 </html>
