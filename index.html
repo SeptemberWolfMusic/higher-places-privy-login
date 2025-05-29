@@ -2,15 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Wolf Machine – Wallet Creation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Higher Places – Create Wallet</title>
   <style>
     body {
       background-color: #FAF7F7;
-      color: #FAF7F7;
       font-family: 'Helvetica Neue', sans-serif;
-      padding: 6rem 2rem 2rem;
       margin: 0;
+      padding: 6rem 2rem 2rem;
       line-height: 1.8;
     }
     .content {
@@ -19,153 +18,154 @@
       margin: auto;
       padding: 2rem;
       border-radius: 12px;
-    }
-    h1, h2, h3 {
-      font-weight: 600;
-      color: #CAF5FA;
+      color: #FAF7F7;
     }
     h2 {
-      font-size: 2.1rem;
+      font-size: 2.2rem;
       text-align: center;
+      color: #CAF5FA;
+      margin-bottom: 0.5rem;
     }
-    .highlight {
-      font-size: 1.7rem;
+    .subtext {
+      font-size: 1.5rem;
       text-align: center;
-    }
-    .important-line {
       color: #FAF7F7;
-      font-weight: normal;
+      margin-bottom: 2rem;
     }
-    .important-brown {
-      color: #3b2a24;
-      font-weight: normal;
+    .video-preview {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
     }
-    button, input {
-      padding: 0.75rem 1rem;
-      margin-top: 1rem;
-      font-size: 1rem;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      transition: all 0.2s ease-in-out;
+    .video-preview video {
+      width: 100%;
+      max-width: 600px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
-    button:hover, input:hover {
-      transform: scale(1.02);
+    .btn-container {
+      text-align: center;
+      margin-bottom: 2rem;
     }
-    button {
+    .btn-container button {
       background-color: #50c7c0;
       color: #2b1f1a;
+      padding: 0.75rem 1.25rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.1s ease, background-color 0.3s ease;
+    }
+    .btn-container button:active {
+      transform: scale(0.96);
+      background-color: #45b2ad;
+    }
+    .wallet-section {
+      display: none;
+      background-color: #623E10;
+      padding: 2rem;
+      border-radius: 10px;
+    }
+    .wallet-section p {
+      margin-bottom: 0.75rem;
+    }
+    .highlight-label {
+      font-weight: bold;
+      color: #CAF5FA;
+    }
+    .gold-star {
+      color: #FFD700;
+    }
+    .wallet-section input,
+    .wallet-section textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+    .wallet-section button.copy {
+      background-color: #50c7c0;
+      color: #2b1f1a;
+      font-weight: bold;
+      border: none;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
       cursor: pointer;
     }
-    input {
-      width: 100%;
-      background-color: #3b2a24;
-      color: #FAF7F7;
-      border: 1px solid #5d4b44;
-      border-radius: 8px;
-      box-sizing: border-box;
-    }
-    .section {
-      margin-bottom: 2.5rem;
-    }
-    .wallet-box, .seed-box {
-      background-color: #3b2a24;
-      padding: 1rem;
-      border-radius: 8px;
-      margin-top: 0.5rem;
-      word-break: break-word;
+    .email-line {
+      margin-top: 2rem;
     }
     .footer {
-      margin-top: 3rem;
       text-align: center;
+      margin-top: 3rem;
       font-size: 0.9rem;
       color: #FAF7F7;
     }
     .footer span {
-      color: #ffd700;
-    }
-    .btn-center {
-      text-align: center;
-    }
-    .connect-link {
-      text-align: center;
-      margin-top: 1rem;
-      font-size: 1rem;
-    }
-    .connect-link {
-      color: #FAF7F7;
-    }
-    .connect-link a {
-      color: #FAF7F7;
-      text-decoration: underline;
-    }
-    .gold-star {
       color: #FFD700;
-      margin-right: 0.3rem;
     }
-    .rocket-label {
-      font-size: 0.85rem;
-      font-weight: normal;
-      margin-bottom: 0.5rem;
-    }
-    .all-set {
-      text-align: center;
-    }
-    .purchase-btn-wrapper {
+    .continue-btn {
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
+      margin-top: 2rem;
     }
-    video {
-      width: 100%;
-      border-radius: 12px;
-      margin-top: 1.5rem;
+    .continue-btn button {
+      background-color: #50c7c0;
+      color: #2b1f1a;
+      padding: 0.7rem 1.2rem;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .rocket {
+      font-size: 0.9rem;
+      margin-right: 0.5rem;
     }
   </style>
 </head>
 <body>
   <div class="content">
-    <div class="section">
-      <h2>You're now entering Web3 — welcome!</h2>
-      <p class="highlight">Now let's get to generating your new wallet ✨</p>
-      <div class="btn-center">
-        <button onclick="generateWallet()" title="Click to create your free wallet now">Generate My Wallet</button>
-      </div>
-      <div class="connect-link">
-        Already have a wallet? <a href="connect-wallet.html">Connect Wallet instead</a>
-      </div>
+    <h2>You're now entering Web3 — welcome!</h2>
+    <div class="subtext">Now let's get to generating your new wallet ✨</div>
+
+    <div class="video-preview">
+      <video controls autoplay muted loop>
+        <source src="https://gateway.lighthouse.storage/ipfs/bafybeietdnlxd5o2tol3hmckhyjww273tezoc5yzaf2ghqaokp3hhihtdu" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
     </div>
 
-    <div class="section" id="wallet-section" style="display:none;">
-      <h3>Your new wallet has been created.</h3>
-      <p>Here’s your wallet address:</p>
-      <div class="wallet-box" id="wallet-address"></div>
-      <button onclick="copyWalletAddress()">Copy Address</button>
+    <div class="btn-container">
+      <button id="wallet-btn" onclick="generateWallet()" disabled>Generate My Wallet</button>
+    </div>
 
-      <div class="section">
-        <h3><span class="gold-star">✧</span>Save Your Wallet</h3>
-        <p>This wallet belongs to you — and only you.<br><span style="color:#3b2a24">We don't save your seed phrase.</span></p>
-        <p class="important-line">Here's your recovery seed phrase. Be sure to copy All 12 Words In Order:</p>
-        <div class="seed-box" id="seed-phrase"></div>
-        <button onclick="copySeedPhrase()">Copy Phrase</button>
-        <button onclick="downloadBackup()">Download Backup</button>
-        <p class="important-line">Keep this safe. If you ever lose access to your wallet, this phrase is the only way to get it back.</p>
+    <div id="wallet-section" class="wallet-section">
+      <p><strong>Your new wallet has been created.</strong></p>
+      <p>This wallet will become active <strong>once your purchase is complete.</strong></p>
+      <p class="highlight-label">Here’s your wallet address:</p>
+      <input type="text" id="wallet-address" readonly>
+      <button class="copy" onclick="copyToClipboard('wallet-address')">Copy Address</button>
+      <p class="highlight-label"><span class="gold-star">✧</span> Save Your Wallet</p>
+      <p>This wallet belongs to you — and only you.</p>
+      <p class="highlight-label">Here’s your secret recovery phrase. Be sure to copy all 12 words in order:</p>
+      <textarea id="mnemonic-display" rows="2" readonly></textarea>
+      <button class="copy" onclick="copyToClipboard('mnemonic-display')">Copy Phrase</button>
+      <p><strong>Keep this safe.</strong> If you ever lose access to your wallet, <strong>this phrase is the only way to get it back.</strong></p>
+      <div class="email-line">
+        <p class="highlight-label"><span class="gold-star">✧</span> Enter Your Email</p>
+        <p>We use this to deliver your NFT and unlockables after purchase.</p>
+        <input type="text" id="user-email" placeholder="you@example.com">
       </div>
-
-      <div class="section">
-        <p class="important-brown" style="margin-top: 1rem;">* This wallet becomes active once your purchase is complete.</p>
-        <video controls poster="https://gateway.lighthouse.storage/ipfs/bafybeiddcho7nzz2z6isfa77deakaalbgj3s6ats3yxpzrk5nslz5sjyui">
-          <source src="https://gateway.lighthouse.storage/ipfs/bafybeihdjezqw7v5457dfyhj63roz4tazygdax3edxq2vpjwoyaivqj35a" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-      </div>
-
-      <div class="section" id="purchase-section">
-        <p class="all-set">You’re all set!</p>
-        <div class="purchase-btn-wrapper">
-          <div class="rocket-label">LFG! 🚀</div>
-          <button onclick="continueToPurchase()" title="Continue to purchase NFT">Continue to Purchase</button>
-        </div>
+      <div class="continue-btn">
+        <span class="rocket">LFG! 🚀</span>
+        <button>Continue to Purchase</button>
       </div>
     </div>
 
@@ -175,40 +175,38 @@
   </div>
 
   <script>
-    let walletAddress = '';
-    let seedPhrase = '';
-
+    var bip39 = {
+      wordlists: {
+        english: ["abandon", "ability", "able", "about", "above", "absent", "absorb", "abstract", "absurd", "abuse", "access", "accident", "account", "accuse", "achieve", "acid", "acoustic", "acquire", "across", "act", "action", "actor", "actress", "actual", "adapt", "add", "addict", "address", "adjust", "admit", "adult", "advance", "advice", "aerobic", "affair", "afford", "afraid", "again", "age", "agent", "agree", "ahead", "aim", "air", "airport", "aisle", "alarm", "album", "alcohol", "alert", "alien", "all", "alley", "allow", "almost", "alone", "alpha", "already", "also", "alter", "always", "amateur", "amazing", "among", "amount", "amused", "analyst", "anchor", "ancient", "anger", "angle", "angry", "animal", "ankle", "announce", "annual", "another", "answer", "antenna", "antique", "anxiety", "any", "apart", "apology", "appear", "apple", "approve", "april", "arch", "arctic", "area", "arena", "argue", "arm", "armed", "armor", "army", "around", "arrange", "arrest", "arrive", "arrow", "art", "artefact", "artist", "artwork", "ask", "aspect", "assault", "asset", "assist", "assume", "asthma", "athlete", "atom", "attack", "attend", "attitude", "attract", "auction", "audit", "august", "aunt", "author", "auto", "autumn", "average", "avocado", "avoid", "awake", "aware", "away", "awesome", "awful", "awkward", "axis", "baby", "bachelor", "bacon", "badge", "bag"]
+      }
+    };
+    bip39.generateMnemonic = function () {
+      const wordlist = bip39.wordlists.english;
+      const words = [];
+      for (let i = 0; i < 12; i++) {
+        const index = Math.floor(Math.random() * wordlist.length);
+        words.push(wordlist[index]);
+      }
+      return words.join(" ");
+    };
+    const checkInterval = setInterval(() => {
+      if (typeof bip39 !== 'undefined' && typeof bip39.generateMnemonic === 'function') {
+        document.getElementById('wallet-btn').disabled = false;
+        clearInterval(checkInterval);
+      }
+    }, 300);
     function generateWallet() {
-      walletAddress = '9xA1...dummyWalletAddress123';
-      seedPhrase = 'bring crisp salad element hollow genius novel burst reflect dance round canyon';
-
-      document.getElementById('wallet-address').innerText = walletAddress;
-      document.getElementById('seed-phrase').innerText = seedPhrase;
+      const mnemonic = bip39.generateMnemonic();
+      const address = '9xA1...dummyWalletAddress123';
+      document.getElementById('wallet-address').value = address;
+      document.getElementById('mnemonic-display').value = mnemonic;
       document.getElementById('wallet-section').style.display = 'block';
     }
-
-    function copyWalletAddress() {
-      navigator.clipboard.writeText(walletAddress);
-      alert('Wallet address copied to clipboard!');
-    }
-
-    function copySeedPhrase() {
-      navigator.clipboard.writeText(seedPhrase);
-      alert('Seed phrase copied to clipboard!');
-    }
-
-    function downloadBackup() {
-      const blob = new Blob([`Wallet Address: ${walletAddress}\nSeed Phrase: ${seedPhrase}`], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'wallet-backup.txt';
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    function continueToPurchase() {
-      window.location.href = 'https://your-stripe-checkout-link.com';
+    function copyToClipboard(elementId) {
+      const copyText = document.getElementById(elementId);
+      copyText.select();
+      copyText.setSelectionRange(0, 99999);
+      document.execCommand("copy");
     }
   </script>
 </body>
