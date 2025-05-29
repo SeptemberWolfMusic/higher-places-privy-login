@@ -29,7 +29,7 @@
       font-size: 3.5rem;
       margin: 2rem 0 1rem;
       text-align: center;
-      padding-left: 1ch;
+      padding-left: 2ch;
     }
     h3 span {
       color: #ffd700;
@@ -76,12 +76,6 @@
       color: #2b1f1a;
       cursor: pointer;
     }
-    button#submit-email:hover::after {
-      content: " – Receive your unlockable content";
-      font-size: 0.8rem;
-      margin-left: 0.3rem;
-      color: #2b1f1a;
-    }
     input {
       width: 100%;
       background-color: #3b2a24;
@@ -118,6 +112,23 @@
     .link-line a {
       color: #CAF5FA;
       text-decoration: underline;
+    }
+    button#submit-email {
+      position: relative;
+    }
+    button#submit-email:hover::after {
+      content: 'Receive your unlockable content';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #FAF7F7;
+      color: #2b1f1a;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+      margin-top: 0.3rem;
     }
     video {
       width: 100%;
