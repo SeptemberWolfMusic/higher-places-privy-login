@@ -26,10 +26,8 @@
       color: #CAF5FA;
     }
     h2 {
-      font-size: 3.5rem;
-      margin: 2rem 0 1rem;
+      font-size: 2.1rem;
       text-align: center;
-      padding-left: 1ch;
     }
     h3 span {
       color: #ffd700;
@@ -38,9 +36,11 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      justify-content: center;
     }
     .highlight {
       font-size: 1.7rem;
+      text-align: center;
     }
     .important-line {
       color: #FFFFFF;
@@ -55,23 +55,24 @@
       margin-top: 3rem;
     }
     .purchase-wrapper span {
-      font-size: 0.75rem;
+      font-size: 0.85rem;
     }
     button, input {
-      width: 100%;
-      background-color: #3b2a24;
-      color: #FAF7F7;
-      border: 1px solid #5d4b44;
+      padding: 0.75rem 1rem;
+      margin-top: 1rem;
+      font-size: 1rem;
+      border: none;
       border-radius: 8px;
-      box-sizing: border-box;
+      font-weight: 600;
+      transition: all 0.2s ease-in-out;
+    }
+    button:hover, input:hover {
+      transform: scale(1.02);
     }
     button {
       background-color: #50c7c0;
       color: #2b1f1a;
       cursor: pointer;
-    }
-    button:hover {
-      transform: scale(1.02);
     }
     input {
       width: 100%;
@@ -79,6 +80,7 @@
       color: #FAF7F7;
       border: 1px solid #5d4b44;
       border-radius: 8px;
+      box-sizing: border-box;
     }
     .section {
       margin-bottom: 2.5rem;
@@ -121,19 +123,20 @@
       </p>
     </div>
 
-    <div class="section" id="wallet-display">
+    <div class="section" id="wallet-display" style="display:none;">
+      <h3><span>✧</span> Wallet Connected</h3>
       <div class="wallet-box"></div>
     </div>
 
-    <div class="section" id="email-section">
+    <div class="section" id="email-section" style="display:none;">
       <h3><span>✧</span> Enter Your Email</h3>
       <p>We use this to deliver your unlockable content after purchase.</p>
       <input type="text" id="name" placeholder="Your Name (optional)" />
       <input type="email" id="email" placeholder="you@example.com" />
-      <button onclick="submitEmail()">Submit Email</button>
+      <button onclick="submitEmail()" title="Submit your email for unlockables">Submit Email</button>
     </div>
 
-    <div class="section" id="purchase-section">
+    <div class="section" id="purchase-section" style="display:none;">
       <div class="purchase-wrapper">
         <span>LFG! 🚀</span>
         <button onclick="continueToPurchase()" title="Continue to purchase NFT">Continue to Purchase</button>
@@ -177,7 +180,7 @@
           Name: name,
           Email: email,
           "Wallet address": walletAddress,
-          "Flow type": "Connected wallet"
+          "Flow type": "connect"
         };
 
         fetch("https://api.sheetbest.com/sheets/e9382b74-9428-4073-94c3-72dbb3c002ed", {
