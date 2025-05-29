@@ -32,6 +32,17 @@
       color: #FAF7F7;
       margin-bottom: 2rem;
     }
+    .video-preview {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .video-preview video {
+      width: 100%;
+      max-width: 600px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
     .btn-container {
       text-align: center;
       margin-bottom: 2rem;
@@ -123,9 +134,18 @@
   <div class="content">
     <h2>You're now entering Web3 — welcome!</h2>
     <div class="subtext">Now let's get to generating your new wallet ✨</div>
+
+    <div class="video-preview">
+      <video controls autoplay muted loop>
+        <source src="https://gateway.lighthouse.storage/ipfs/bafybeietdnlxd5o2tol3hmckhyjww273tezoc5yzaf2ghqaokp3hhihtdu" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
     <div class="btn-container">
       <button id="wallet-btn" onclick="generateWallet()" disabled>Generate My Wallet</button>
     </div>
+
     <div id="wallet-section" class="wallet-section">
       <p><strong>Your new wallet has been created.</strong></p>
       <p>This wallet will become active <strong>once your purchase is complete.</strong></p>
@@ -148,6 +168,7 @@
         <button>Continue to Purchase</button>
       </div>
     </div>
+
     <div class="footer">
       Powered by September Wolf Music <span>✦</span> Made with LOVE
     </div>
