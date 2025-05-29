@@ -1,3 +1,4 @@
+<!-- start of code block -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -118,8 +119,11 @@
     }
     video {
       width: 100%;
+      max-width: 400px;
+      aspect-ratio: 1 / 1;
+      display: block;
+      margin: 1.5rem auto 0;
       border-radius: 12px;
-      margin-top: 1.5rem;
     }
   </style>
 </head>
@@ -154,7 +158,7 @@
 
       <div class="section">
         <p class="important-brown" style="margin-top: 1rem;">* This wallet becomes active once your purchase is complete.</p>
-        <video controls poster="https://gateway.lighthouse.storage/ipfs/bafybeiddcho7nzz2z6isfa77deakaalbgj3s6ats3yxpzrk5nslz5sjyui">
+        <video id="preview-video" controls poster="https://gateway.lighthouse.storage/ipfs/bafybeiddcho7nzz2z6isfa77deakaalbgj3s6ats3yxpzrk5nslz5sjyui">
           <source src="https://gateway.lighthouse.storage/ipfs/bafybeietdnlxd5o2tol3hmckhyjww273tezoc5yzaf2ghqaokp3hhihtdu" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
@@ -185,6 +189,12 @@
       document.getElementById('wallet-address').innerText = walletAddress;
       document.getElementById('seed-phrase').innerText = seedPhrase;
       document.getElementById('wallet-section').style.display = 'block';
+
+      // Set volume on video when it's shown
+      const video = document.getElementById('preview-video');
+      if (video) {
+        video.volume = 0.7;
+      }
     }
 
     function copyWalletAddress() {
@@ -213,3 +223,4 @@
   </script>
 </body>
 </html>
+<!-- end of code block -->
