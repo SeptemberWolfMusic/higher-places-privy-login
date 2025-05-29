@@ -128,6 +128,7 @@
     </div>
     <div id="wallet-section" class="wallet-section">
       <p><strong>Your new wallet has been created.</strong></p>
+      <p>This wallet will become active <strong>once your purchase is complete.</strong></p>
       <p class="highlight-label">Here’s your wallet address:</p>
       <input type="text" id="wallet-address" readonly>
       <button class="copy" onclick="copyToClipboard('wallet-address')">Copy Address</button>
