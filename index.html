@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Wallet Creation – Wolf Machine</title>
+  <title>Wolf Machine – Wallet Creation</title>
   <style>
     body {
       background-color: #FAF7F7;
@@ -113,9 +113,9 @@
       align-items: center;
     }
     video {
-      max-width: 100%;
+      width: 100%;
       border-radius: 12px;
-      margin-top: 1rem;
+      margin-top: 1.5rem;
     }
   </style>
 </head>
@@ -136,39 +136,27 @@
       <h3>Your new wallet has been created.</h3>
       <p>Here’s your wallet address:</p>
       <div class="wallet-box" id="wallet-address"></div>
-      <button onclick="copyWalletAddress()" title="copy and paste this somewhere safe">Copy Address</button>
+      <button onclick="copyWalletAddress()">Copy Address</button>
 
       <div class="section">
         <h3><span class="gold-star">✧</span>Save Your Wallet</h3>
         <p>This wallet belongs to you — and only you.<br><span style="color:#3b2a24">We don't save your seed phrase.</span></p>
         <p class="important-line">Here's your recovery seed phrase. Be sure to copy All 12 Words In Order:</p>
         <div class="seed-box" id="seed-phrase"></div>
-        <button onclick="copySeedPhrase()" title="copy and paste this somewhere safe">Copy Phrase</button>
-        <button onclick="downloadBackup()" title="Downloads a .txt file to your device – keep it in a secure place">Download Backup</button>
+        <button onclick="copySeedPhrase()">Copy Phrase</button>
+        <button onclick="downloadBackup()">Download Backup</button>
         <p class="important-line">Keep this safe. If you ever lose access to your wallet, this phrase is the only way to get it back.</p>
       </div>
 
-      <div class="section" id="validation-section">
-        <h3><span class="gold-star">✧</span>Wallet Validation</h3>
-        <p>Please enter word <strong>2</strong> and word <strong>8</strong> from your recovery phrase to verify:</p>
-        <input type="text" id="word2" placeholder="Word 2" />
-        <input type="text" id="word8" placeholder="Word 8" />
-        <button onclick="validateWallet()">Validate Wallet</button>
-      </div>
-
-      <div class="section" id="email-section" style="display:none;">
-        <h3><span class="gold-star">✧</span>Enter Your Email</h3>
-        <p>We use this to deliver your NFT and unlockable content after purchase.</p>
-        <input type="email" id="email" placeholder="you@example.com" />
-        <button onclick="submitEmail()">Submit Email</button>
-      </div>
-
-      <div class="section" id="purchase-section" style="display:none;">
-        <video controls autoplay loop muted>
+      <div class="section">
+        <p class="important-line" style="margin-top: 1rem;">* This wallet becomes active once your purchase is complete.</p>
+        <video controls poster="https://gateway.lighthouse.storage/ipfs/bafybeiddcho7nzz2z6isfa77deakaalbgj3s6ats3yxpzrk5nslz5sjyui">
           <source src="https://gateway.lighthouse.storage/ipfs/bafybeihdjezqw7v5457dfyhj63roz4tazygdax3edxq2vpjwoyaivqj35a" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
-        <p class="important-line" style="margin-top:1rem;">* This wallet becomes active once your purchase is complete.</p>
+      </div>
+
+      <div class="section" id="purchase-section">
         <p class="all-set">You’re all set!</p>
         <div class="purchase-btn-wrapper">
           <div class="rocket-label">LFG! 🚀</div>
@@ -185,12 +173,10 @@
   <script>
     let walletAddress = '';
     let seedPhrase = '';
-    const words = [];
 
     function generateWallet() {
       walletAddress = '9xA1...dummyWalletAddress123';
       seedPhrase = 'bring crisp salad element hollow genius novel burst reflect dance round canyon';
-      words.push(...seedPhrase.split(' '));
 
       document.getElementById('wallet-address').innerText = walletAddress;
       document.getElementById('seed-phrase').innerText = seedPhrase;
@@ -215,27 +201,6 @@
       a.download = 'wallet-backup.txt';
       a.click();
       URL.revokeObjectURL(url);
-    }
-
-    function validateWallet() {
-      const word2 = document.getElementById('word2').value.trim().toLowerCase();
-      const word8 = document.getElementById('word8').value.trim().toLowerCase();
-      if (word2 === words[1] && word8 === words[7]) {
-        alert('Wallet successfully validated!');
-        document.getElementById('email-section').style.display = 'block';
-      } else {
-        alert('Validation failed. Please double-check the words and try again.');
-      }
-    }
-
-    function submitEmail() {
-      const email = document.getElementById('email').value;
-      if (email) {
-        console.log(`Email submitted: ${email}`);
-        document.getElementById('purchase-section').style.display = 'block';
-      } else {
-        alert('Please enter a valid email address.');
-      }
     }
 
     function continueToPurchase() {
