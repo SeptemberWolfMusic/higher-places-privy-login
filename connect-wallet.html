@@ -242,10 +242,10 @@
       })
       .then(res => res.json())
       .then(() => {
-        const target = document.getElementById('purchase-section');
-        const offset = 180; // Final happy-medium scroll value
-        const topPos = target.getBoundingClientRect().top + window.pageYOffset - offset;
-        window.scrollTo({ top: topPos, behavior: 'smooth' });
+        const video = document.querySelector("video");
+        const videoTop = video.getBoundingClientRect().top + window.pageYOffset;
+        const scrollTarget = videoTop + video.clientHeight * 0.25;
+        window.scrollTo({ top: scrollTarget, behavior: "smooth" });
       })
       .catch(err => {
         console.error('Error sending to Google Sheet:', err);
