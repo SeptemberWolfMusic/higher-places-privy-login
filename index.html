@@ -1,4 +1,4 @@
-PAGE 1 WALLET CREATION  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -61,14 +61,18 @@ PAGE 1 WALLET CREATION  <!DOCTYPE html>
     button::after {
       content: attr(data-hover);
       position: absolute;
-      top: -1.6rem;
+      bottom: -2.2rem;
       left: 50%;
       transform: translateX(-50%);
       font-size: 0.85rem;
-      color: white;
-      background: transparent;
+      color: #3b2a24;
+      background: white;
+      padding: 0.4rem 0.6rem;
+      border-radius: 6px;
       white-space: nowrap;
       display: none;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+      z-index: 10;
     }
     button:hover::after {
       display: block;
