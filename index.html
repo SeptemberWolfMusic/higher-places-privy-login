@@ -58,8 +58,9 @@
       cursor: pointer;
       position: relative;
     }
-    button[title]:hover::after {
+    button[title]::after {
       content: attr(title);
+      display: none;
       position: absolute;
       top: 100%;
       left: 50%;
@@ -71,6 +72,10 @@
       font-size: 0.8rem;
       white-space: nowrap;
       margin-top: 0.3rem;
+      z-index: 10;
+    }
+    button:hover::after {
+      display: block;
     }
     input {
       width: 100%;
