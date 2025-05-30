@@ -85,6 +85,11 @@
       border-radius: 8px;
       box-sizing: border-box;
     }
+    .half-input {
+      width: 45%;
+      display: inline-block;
+      margin-right: 5%;
+    }
     .section {
       margin-bottom: 2.5rem;
     }
@@ -186,6 +191,15 @@
           <button onclick="downloadBackup()" data-hover="Download a backup .txt file of your wallet info">Download Backup</button>
         </div>
         <p class="important-line">Keep this safe. If you ever lose access to your wallet, this phrase is the only way to get it back.</p>
+
+        <p class="important-line" style="margin-top: 2rem;">To continue, confirm word #2 and word #8 from your seed phrase:</p>
+        <div>
+          <input class="half-input" type="text" id="word-2" placeholder="Word #2" />
+          <input class="half-input" type="text" id="word-8" placeholder="Word #8" />
+        </div>
+        <div class="btn-center">
+          <button onclick="validateSeedWords()" data-hover="Validate your seed phrase is correct">Validate</button>
+        </div>
       </div>
 
       <div class="section spaced-above">
@@ -221,11 +235,13 @@
 
   <script>
     let walletAddress = '';
-    let seedPhrase = '';
+    let seedPhrase = 'bring crisp salad element hollow genius novel burst reflect dance round canyon';
+    let seedArray = [];
 
     function generateWallet() {
       walletAddress = '9xA1...dummyWalletAddress123';
       seedPhrase = 'bring crisp salad element hollow genius novel burst reflect dance round canyon';
+      seedArray = seedPhrase.split(" ");
 
       document.getElementById('wallet-address').innerText = walletAddress;
       document.getElementById('seed-phrase').innerText = seedPhrase;
@@ -255,6 +271,16 @@
       a.download = 'wallet-backup.txt';
       a.click();
       URL.revokeObjectURL(url);
+    }
+
+    function validateSeedWords() {
+      const word2 = document.getElementById('word-2').value.trim().toLowerCase();
+      const word8 = document.getElementById('word-8').value.trim().toLowerCase();
+      if (word2 === seedArray[1] && word8 === seedArray[7]) {
+        alert('✅ Seed phrase validated!');
+      } else {
+        alert('❌ Incorrect words. Please double-check your seed phrase.');
+      }
     }
 
     function continueToPurchase() {
