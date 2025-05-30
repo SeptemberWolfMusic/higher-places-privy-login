@@ -331,10 +331,16 @@
         alert('Please enter a valid email.');
         return;
       }
-      const target = document.getElementById('purchase-section');
-      const yOffset = -window.innerHeight * 0.25;
-      const y = target.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
+
+      const video = document.getElementById('preview-video');
+      const videoRect = video.getBoundingClientRect();
+      const scrollOffset = videoRect.top + window.pageYOffset + (video.offsetHeight * 0.25);
+
+      window.scrollTo({
+        top: scrollOffset,
+        behavior: 'smooth'
+      });
+
       alert('Email saved successfully!');
     }
   </script>
