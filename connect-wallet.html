@@ -26,7 +26,7 @@
       color: #CAF5FA;
     }
     h2 {
-      font-size: 4.5rem;
+      font-size: 2.5rem; /* smaller welcome */
       margin: 2rem 0 1rem;
       text-align: center;
     }
@@ -77,12 +77,14 @@
       cursor: pointer;
     }
     input {
-      width: 100%;
+      width: 80%; /* reduced width */
       background-color: #3b2a24;
       color: #FAF7F7;
       border: 1px solid #5d4b44;
       border-radius: 8px;
       box-sizing: border-box;
+      display: block;
+      margin: 0.5rem auto 0;
     }
     .section {
       margin-bottom: 2.5rem;
@@ -169,6 +171,12 @@
       border-radius: 12px;
       margin-top: 2.5rem;
     }
+    .all-set {
+      text-align: center;
+      font-size: 1.2rem;
+      margin-top: 2rem;
+      color: #FAF7F7;
+    }
   </style>
 </head>
 <body>
@@ -193,7 +201,7 @@
       <p>We use this to deliver your unlockable content after purchase.</p>
       <input type="text" id="name" placeholder="Your Name (optional)" />
       <input type="email" id="email" placeholder="you@example.com" />
-      <button id="submit-email" onclick="submitEmail()" title="Receive your unlockable content">Submit Email</button>
+      <button id="submit-email" onclick="submitEmailAndScroll()" title="Receive your unlockable content">Submit Email</button>
 
       <video controls volume="1.0" poster="https://gateway.lighthouse.storage/ipfs/bafybeiddcho7nzz2z6isfa77deakaalbgj3s6ats3yxpzrk5nslz5sjyui">
         <source src="https://gateway.lighthouse.storage/ipfs/bafybeietdnlxd5o2tol3hmckhyjww273tezoc5yzaf2ghqaokp3hhihtdu" type="video/mp4" />
@@ -202,6 +210,7 @@
     </div>
 
     <div class="section" id="purchase-section">
+      <p class="all-set">You’re all set!</p>
       <div class="purchase-wrapper">
         <span>LFG! 🚀</span>
         <button id="continue-purchase" onclick="continueToPurchase()" title="Continue to purchase NFT">Continue to Purchase</button>
@@ -214,7 +223,7 @@
   </div>
 
   <script>
-  function submitEmail() {
+  function submitEmailAndScroll() {
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
     if (email) {
@@ -233,7 +242,7 @@
       })
       .then(res => res.json())
       .then(() => {
-        alert('Email submitted successfully!');
+        document.getElementById('purchase-section').scrollIntoView({ behavior: 'smooth' });
       })
       .catch(err => {
         console.error('Error sending to Google Sheet:', err);
