@@ -56,6 +56,21 @@
       background-color: #50c7c0;
       color: #2b1f1a;
       cursor: pointer;
+      position: relative;
+    }
+    button[title]:hover::after {
+      content: attr(title);
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #FAF7F7;
+      color: #2b1f1a;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+      margin-top: 0.3rem;
     }
     input {
       width: 100%;
@@ -118,7 +133,7 @@
       width: 100%;
       max-width: 600px;
       display: block;
-      margin: 1.5rem auto 0;
+      margin: 2.5rem auto 0;
       border-radius: 12px;
     }
   </style>
@@ -140,14 +155,14 @@
       <h3>Your new wallet has been created.</h3>
       <p>Here’s your wallet address:</p>
       <div class="wallet-box" id="wallet-address"></div>
-      <button onclick="copyWalletAddress()" title="save this in a safe place">Copy Address</button>
+      <button onclick="copyWalletAddress()" title="Save in a safe place">Copy Address</button>
 
       <div class="section">
         <h3><span class="gold-star">✧</span>Save Your Wallet</h3>
         <p>This wallet belongs to you — and only you.<br><span style="color:#3b2a24">We don't save your seed phrase.</span></p>
         <p class="important-line">Here's your recovery seed phrase. Be sure to copy All 12 Words In Order:</p>
         <div class="seed-box" id="seed-phrase"></div>
-        <button onclick="copySeedPhrase()" title="save this in a safe place">Copy Phrase</button>
+        <button onclick="copySeedPhrase()" title="Save in a safe place">Copy Phrase</button>
         <button onclick="downloadBackup()" title="Download a backup .txt file of your wallet info">Download Backup</button>
         <p class="important-line">Keep this safe. If you ever lose access to your wallet, this phrase is the only way to get it back.</p>
       </div>
@@ -167,7 +182,7 @@
       </div>
 
       <div class="section" id="purchase-section">
-        <p class="all-set">You’re all set!</p>
+        <p class="all-set" style="text-align:center;">You’re all set!</p>
         <div class="purchase-btn-wrapper">
           <div class="rocket-label">LFG! 🚀</div>
           <button onclick="continueToPurchase()" title="Continue to purchase NFT">Continue to Purchase</button>
@@ -194,7 +209,7 @@
 
       const video = document.getElementById('preview-video');
       if (video) {
-        video.volume = 0.7;
+        video.volume = 1.0;
       }
     }
 
