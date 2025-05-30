@@ -121,6 +121,17 @@
       margin: 2.5rem auto 0;
       border-radius: 12px;
     }
+    .inline-btns {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .hover-info {
+      text-align: left;
+      font-size: 0.9rem;
+      color: #FAF7F7;
+      margin-top: 0.3rem;
+    }
   </style>
 </head>
 <body>
@@ -128,8 +139,9 @@
     <div class="section">
       <h2>You're now entering Web3 — welcome!</h2>
       <p class="highlight">Now let's get to generating your new wallet ✨</p>
-      <div>
-        <button onclick="generateWallet()" title="Click to create your free wallet now">Generate My Wallet</button>
+      <div class="btn-center">
+        <button onclick="generateWallet()">Generate My Wallet</button>
+        <div class="hover-info">Click to create your free wallet now</div>
       </div>
       <div class="connect-link">
         Already have a wallet? <a href="connect-wallet.html" style="color:#CAF5FA">Connect Wallet instead</a>
@@ -141,7 +153,8 @@
       <p>Here’s your wallet address:</p>
       <div class="wallet-box" id="wallet-address"></div>
       <div>
-        <button onclick="copyWalletAddress()" title="Save in a safe place">Copy Address</button>
+        <button onclick="copyWalletAddress()">Copy Address</button>
+        <div class="hover-info">Save in a safe place</div>
       </div>
 
       <div class="section">
@@ -149,11 +162,15 @@
         <p>This wallet belongs to you — and only you.<br><span style="color:#3b2a24">We don't save your seed phrase.</span></p>
         <p class="important-line">Here's your recovery seed phrase. Be sure to copy All 12 Words In Order:</p>
         <div class="seed-box" id="seed-phrase"></div>
-        <div>
-          <button onclick="copySeedPhrase()" title="Save in a safe place">Copy Phrase</button>
-        </div>
-        <div>
-          <button onclick="downloadBackup()" title="Download a backup .txt file of your wallet info">Download Backup</button>
+        <div class="inline-btns">
+          <div>
+            <button onclick="copySeedPhrase()">Copy Phrase</button>
+            <div class="hover-info">Save in a safe place</div>
+          </div>
+          <div>
+            <button onclick="downloadBackup()">Download Backup</button>
+            <div class="hover-info">Download a backup .txt file of your wallet info</div>
+          </div>
         </div>
         <p class="important-line">Keep this safe. If you ever lose access to your wallet, this phrase is the only way to get it back.</p>
       </div>
@@ -163,7 +180,8 @@
         <p class="important-line">We use this to deliver your unlockable content after purchase.</p>
         <input type="email" id="user-email" placeholder="your@email.com" required />
         <div class="btn-center">
-          <button onclick="submitEmail()" title="Receive your unlockable content">Submit Email</button>
+          <button onclick="submitEmail()">Submit Email</button>
+          <div class="hover-info">Receive your unlockable content</div>
         </div>
       </div>
 
@@ -179,7 +197,8 @@
         <p class="all-set">You’re all set!</p>
         <div class="purchase-btn-wrapper">
           <div class="rocket-label">LFG! 🚀</div>
-          <button onclick="continueToPurchase()" title="Continue to purchase NFT">Continue to Purchase</button>
+          <button onclick="continueToPurchase()">Continue to Purchase</button>
+          <div class="hover-info">Continue to purchase NFT</div>
         </div>
       </div>
     </div>
