@@ -167,7 +167,7 @@
       width: 95%;
       max-width: 600px;
       border-radius: 12px;
-      margin: 3.5rem auto 0; /* extra headroom */
+      margin: 3.5rem auto 0;
       display: block;
     }
     .all-set {
@@ -242,9 +242,9 @@
       })
       .then(res => res.json())
       .then(() => {
-        const anchor = document.getElementById('preview-anchor');
-        const offset = 60;
-        const topPos = anchor.getBoundingClientRect().top + window.pageYOffset - offset;
+        const target = document.getElementById('purchase-section');
+        const offset = 30;
+        const topPos = target.getBoundingClientRect().top + window.pageYOffset - offset;
         window.scrollTo({ top: topPos, behavior: 'smooth' });
       })
       .catch(err => {
@@ -259,6 +259,6 @@
   function continueToPurchase() {
     window.location.href = 'https://your-stripe-checkout-link.com';
   }
-</script>
+  </script>
 </body>
 </html>
