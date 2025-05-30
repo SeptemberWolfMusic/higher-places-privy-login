@@ -167,7 +167,7 @@
       width: 95%;
       max-width: 600px;
       border-radius: 12px;
-      margin: 2.5rem auto 0;
+      margin: 3.5rem auto 0; /* extra headroom */
       display: block;
     }
     .all-set {
@@ -242,7 +242,10 @@
       })
       .then(res => res.json())
       .then(() => {
-        document.getElementById('preview-anchor').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const anchor = document.getElementById('preview-anchor');
+        const offset = 60;
+        const topPos = anchor.getBoundingClientRect().top + window.pageYOffset - offset;
+        window.scrollTo({ top: topPos, behavior: 'smooth' });
       })
       .catch(err => {
         console.error('Error sending to Google Sheet:', err);
