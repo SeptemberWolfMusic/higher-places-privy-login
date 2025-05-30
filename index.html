@@ -107,7 +107,7 @@
       margin-bottom: 0.5rem;
     }
     .all-set {
-      text-align: left;
+      text-align: center;
     }
     .purchase-btn-wrapper {
       display: flex;
@@ -128,7 +128,7 @@
     <div class="section">
       <h2>You're now entering Web3 — welcome!</h2>
       <p class="highlight">Now let's get to generating your new wallet ✨</p>
-      <div class="btn-center">
+      <div>
         <button onclick="generateWallet()" title="Click to create your free wallet now">Generate My Wallet</button>
       </div>
       <div class="connect-link">
@@ -140,7 +140,7 @@
       <h3>Your new wallet has been created.</h3>
       <p>Here’s your wallet address:</p>
       <div class="wallet-box" id="wallet-address"></div>
-      <div class="btn-center">
+      <div>
         <button onclick="copyWalletAddress()" title="Save in a safe place">Copy Address</button>
       </div>
 
@@ -149,10 +149,10 @@
         <p>This wallet belongs to you — and only you.<br><span style="color:#3b2a24">We don't save your seed phrase.</span></p>
         <p class="important-line">Here's your recovery seed phrase. Be sure to copy All 12 Words In Order:</p>
         <div class="seed-box" id="seed-phrase"></div>
-        <div class="btn-center">
+        <div>
           <button onclick="copySeedPhrase()" title="Save in a safe place">Copy Phrase</button>
         </div>
-        <div class="btn-center">
+        <div>
           <button onclick="downloadBackup()" title="Download a backup .txt file of your wallet info">Download Backup</button>
         </div>
         <p class="important-line">Keep this safe. If you ever lose access to your wallet, this phrase is the only way to get it back.</p>
