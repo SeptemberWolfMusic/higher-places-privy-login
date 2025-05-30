@@ -93,7 +93,6 @@
     .mini-input {
       width: 30%;
       display: inline-block;
-      margin-right: 2%;
     }
     .inline-group {
       display: flex;
@@ -162,6 +161,12 @@
       gap: 1rem;
       margin-top: 1rem;
     }
+    .flex-save-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2.5rem;
+    }
     .spaced-above {
       margin-top: 2.5rem;
     }
@@ -185,26 +190,27 @@
       <p>Here’s your wallet address:</p>
       <div class="wallet-box" id="wallet-address"></div>
 
-      <div class="section spaced-above">
+      <div class="flex-save-row">
         <h3><span class="gold-star">✧</span>Save Your Wallet</h3>
-        <div class="btn-center">
-          <button onclick="copyWalletAddress()" data-hover="Save in a safe place">Copy Address</button>
-        </div>
-        <p class="important-line">This wallet belongs to you — and only you. <span class="important-brown">We don't save your seed phrase.</span></p>
-        <p class="important-line">Here's your recovery seed phrase. Be sure to copy All 12 Words In Order:</p>
-        <div class="seed-box" id="seed-phrase"></div>
-        <div class="inline-btns">
-          <button onclick="copySeedPhrase()" data-hover="Save in a safe place">Copy Phrase</button>
-          <button onclick="downloadBackup()" data-hover="Download a backup .txt file of your wallet info">Download Backup</button>
-        </div>
-        <p class="important-line">Keep this safe. If you ever lose access to your wallet, this phrase is the only way to get it back.</p>
+        <button onclick="copyWalletAddress()" data-hover="Save in a safe place">Copy Address</button>
+      </div>
 
-        <p class="important-brown" style="margin-top: 2rem;">Validate your seed phrase — confirm word #2 & #8 below</p>
-        <div class="inline-group">
-          <input class="mini-input" type="text" id="word-2" placeholder="Word #2" />
-          <input class="mini-input" type="text" id="word-8" placeholder="Word #8" />
-          <button class="validate-btn" onclick="validateSeedWords()" data-hover="Validate your seed phrase is correct">Validate</button>
-        </div>
+      <p class="important-line">This wallet belongs to you — and only you.</p>
+      <p class="important-brown">We don't save your seed phrase.</p>
+
+      <p class="important-line">Here's your recovery seed phrase. Be sure to copy All 12 Words In Order:</p>
+      <div class="seed-box" id="seed-phrase"></div>
+      <div class="inline-btns">
+        <button onclick="copySeedPhrase()" data-hover="Save in a safe place">Copy Phrase</button>
+        <button onclick="downloadBackup()" data-hover="Download a backup .txt file of your wallet info">Download Backup</button>
+      </div>
+      <p class="important-line">Keep this safe. If you ever lose access to your wallet, this phrase is the only way to get it back.</p>
+
+      <p class="important-brown" style="margin-top: 2rem;">Validate your seed phrase — confirm word #2 & #8 below</p>
+      <div class="inline-group">
+        <input class="mini-input" type="text" id="word-2" placeholder="Word #2" />
+        <input class="mini-input" type="text" id="word-8" placeholder="Word #8" />
+        <button class="validate-btn" onclick="validateSeedWords()" data-hover="Validate your seed phrase is correct">Validate</button>
       </div>
 
       <div class="section spaced-above">
