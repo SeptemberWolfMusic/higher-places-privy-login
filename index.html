@@ -32,7 +32,7 @@
       font-size: 1.4rem;
       text-align: center;
       margin-top: -0.8rem;
-      padding-left: 1rem; /* moved slightly to the right */
+      padding-left: 1rem;
     }
     .important-line {
       color: #FAF7F7;
@@ -85,7 +85,6 @@
       transform: translateX(0);
     }
     input {
-      width: 100%;
       background-color: #3b2a24;
       color: #FAF7F7;
       border: 1px solid #5d4b44;
@@ -117,6 +116,10 @@
       text-align: center;
       font-size: 0.9rem;
       color: #FAF7F7;
+    }
+    .footer a {
+      color: inherit;
+      text-decoration: none;
     }
     .footer span {
       color: #ffd700;
@@ -174,7 +177,15 @@
     }
     .copy-wallet-row button {
       margin: 0 auto;
-      transform: translateX(-60%); /* shifted 4–5 spaces left */
+      transform: translateX(-60%);
+    }
+    .centered-input {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .centered-input input {
+      width: 85%;
     }
   </style>
 </head>
@@ -222,7 +233,10 @@
       <div class="section spaced-above">
         <h3><span class="gold-star">✧</span>Enter your email</h3>
         <p class="important-line">We use this to deliver your unlockable content after purchase.</p>
-        <input type="email" id="user-email" placeholder="your@email.com" required />
+        <div class="centered-input">
+          <input type="text" id="user-name" placeholder="Name (optional)" />
+          <input type="email" id="user-email" placeholder="your@email.com" required />
+        </div>
         <div class="btn-center">
           <button onclick="submitEmail()" data-hover="Receive your unlockable content">Submit Email</button>
         </div>
@@ -246,7 +260,9 @@
     </div>
 
     <div class="footer">
-      Powered by September Wolf Music <span>✦</span> Made with LOVE
+      <a href="https://www.septemberwolfmusic.com" target="_blank">
+        Powered by September Wolf Music <span>✦</span> Made with LOVE
+      </a>
     </div>
   </div>
 
@@ -315,6 +331,10 @@
         alert('Please enter a valid email.');
         return;
       }
+      const target = document.getElementById('purchase-section');
+      const yOffset = -window.innerHeight * 0.25;
+      const y = target.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
       alert('Email saved successfully!');
     }
   </script>
