@@ -167,6 +167,13 @@
       align-items: center;
       margin-top: 2.5rem;
     }
+    .save-title {
+      margin: 0;
+    }
+    .center-button {
+      margin-left: auto;
+      margin-right: auto;
+    }
     .spaced-above {
       margin-top: 2.5rem;
     }
@@ -175,8 +182,8 @@
 <body>
   <div class="content">
     <div class="section">
-      <h2>You're now entering Web3 — welcome!</h2>
-      <p class="highlight">Now let's get to generating your new wallet ✨</p>
+      <h2>You've entered Web3 – Welcome!</h2>
+      <p class="highlight">Let's get to generating your new wallet ✨</p>
       <div class="btn-center">
         <button onclick="generateWallet()" data-hover="Click to create your free wallet now">Generate My Wallet</button>
       </div>
@@ -191,8 +198,10 @@
       <div class="wallet-box" id="wallet-address"></div>
 
       <div class="flex-save-row">
-        <h3><span class="gold-star">✧</span>Save Your Wallet</h3>
-        <button onclick="copyWalletAddress()" data-hover="Save in a safe place">Copy Address</button>
+        <h3 class="save-title"><span class="gold-star">✧</span>Save Your Wallet</h3>
+        <div class="center-button">
+          <button onclick="copyWalletAddress()" data-hover="Save in a safe place">Copy Address</button>
+        </div>
       </div>
 
       <p class="important-line">This wallet belongs to you — and only you.</p>
