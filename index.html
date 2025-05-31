@@ -322,15 +322,6 @@
       }
     }
 
-    function continueToPurchase() {
-      const email = document.getElementById('user-email').value;
-      if (!email || !email.includes('@')) {
-        alert('Please enter a valid email before continuing.');
-        return;
-      }
-      window.location.href = 'https://your-stripe-checkout-link.com?email=' + encodeURIComponent(email);
-    }
-
     function submitEmail() {
       const email = document.getElementById('user-email').value;
       if (!email || !email.includes('@')) {
@@ -348,6 +339,15 @@
       });
 
       alert('Email saved successfully!');
+    }
+
+    function continueToPurchase() {
+      const email = document.getElementById('user-email').value;
+      if (!email || !email.includes('@')) {
+        alert('Please enter a valid email before continuing.');
+        return;
+      }
+      window.location.href = 'https://your-stripe-checkout-link.com?email=' + encodeURIComponent(email);
     }
   </script>
 </body>
