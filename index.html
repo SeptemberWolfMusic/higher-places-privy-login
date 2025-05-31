@@ -365,6 +365,9 @@
   // Log to Google Sheets
   fetch('https://script.google.com/macros/s/AKfycbzLz4Wt4RakTpfA3nIMlnomzU4GTzwit7flsPRR3gUVJPHlVmaGD3UWEuAeFu9U8FJX/exec', {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
     body: new URLSearchParams({
       email,
       wallet,
@@ -384,7 +387,5 @@
     console.error('Error logging to Google Sheets:', err);
     alert('Something went wrong. Please try again.');
   });
-}
-</script>
-</body>
-</html>
+
+
