@@ -350,13 +350,41 @@
     }
 
     function continueToPurchase() {
-      const email = document.getElementById('user-email').value;
-      if (!email || !email.includes('@')) {
-        alert('Please enter a valid email before continuing.');
-        return;
-      }
-      window.location.href = 'https://your-stripe-checkout-link.com?email=' + encodeURIComponent(email);
-    }
-  </script>
+  const email = document.getElementById('user-email').value.trim();
+  const name = document.getElementById('user-name').value.trim();
+  if (!email || !email.includes('@')) {
+    alert('Please enter a valid email before continuing.');
+    return;
+  }
+
+  const flowID = crypto.randomUUID(); // create unique session ID
+  const wallet = walletAddress || 'unknown';
+  const flowType = 'create';
+  const batch = 'B01';
+
+  // Log to Google Sheets
+  fetch('https://script.google.com/macros/s/AKfycbzLz4Wt4RakTpfA3nIMlnomzU4GTzwit7flsPRR3gUVJPHlVmaGD3UWEuAeFu9U8FJX/exec', {
+    method: 'POST',
+    body: new URLSearchParams({
+      email,
+      wallet,
+      name,
+      flow: flowType,
+      batch,
+      edition: '',
+      txn: '',
+      status: 'pending',
+      flowID
+    })
+  }).then(() => {
+    // Redirect to Stripe checkout with flowID included
+    const stripeURL = `https://buy.stripe.com/test_xyz123abc456?client_reference_id=${flowID}`;
+    window.location.href = stripeURL;
+  }).catch((err) => {
+    console.error('Error logging to Google Sheets:', err);
+    alert('Something went wrong. Please try again.');
+  });
+}
+</script>
 </body>
 </html>
