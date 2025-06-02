@@ -352,10 +352,10 @@
   const email = document.getElementById('email').value.trim();
   const wallet = document.getElementById('wallet-address').innerText.trim();
 
-  // ✅ Validate email format
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  // ✅ Strict email format
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   if (!emailRegex.test(email)) {
-    alert('Please enter a valid email address (e.g., your@email.com)');
+    alert('❌ Please enter a valid email address (e.g., your@email.com)');
     return;
   }
 
@@ -363,33 +363,33 @@
   const flowType = 'create';
   const batch = 'B01';
 
-   fetch('https://corsproxy.io/?https://script.google.com/macros/s/AKfycbzLz4Wt4RakTpfA3nIMlnomzU4GTzwit7flsPRR3gUVJPHlVmaGD3UWEuAeFu9U8FJX/exec', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded'
-  },
-  body: new URLSearchParams({
-    email,
-    wallet,
-    name,
-    flow: flowType,
-    batch,
-    edition: '',
-    txn: '',
-    status: 'pending',
-    flowID
-  })
-}).then(response => response.text()).then(result => {
-  console.log('✅ Log result:', result);
-  alert('✅ Wallet info logged. Redirecting to Stripe...');
+  // 🧪 Debug log before submission
+  console.log({ name, email, wallet, flowID });
 
-  const stripeURL = `https://buy.stripe.com/test_xyz123abc456?client_reference_id=${flowID}`;
-  window.location.href = stripeURL;
-}).catch((err) => {
-  console.error('❌ Logging error:', err);
-  alert('❌ Something went wrong. Please try again.');
-});
-    }
-  </script>
-</body>
-</html>
+  fetch('https://corsproxy.io/?https://script.google.com/macros/s/AKfycbzLz4Wt4RakTpfA3nIMlnomzU4GTzwit7flsPRR3gUVJPHlVmaGD3UWEuAeFu9U8FJX/exec', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: new URLSearchParams({
+      email,
+      wallet,
+      name,
+      flow: flowType,
+      batch,
+      edition: '',
+      txn: '',
+      status: 'pending',
+      flowID
+    })
+  }).then(response => response.text()).then(result => {
+    console.log('✅ Log result:', result);
+    alert('✅ Wallet info logged. Redirecting to Stripe...');
+
+    const stripeURL = `https://buy.stripe.com/test_xyz123abc456?client_reference_id=${flowID}`;
+    window.location.href = stripeURL;
+  }).catch((err) => {
+    console.error('❌ Logging error:', err);
+    alert('❌ Something went wrong. Please try again.');
+  });
+}
