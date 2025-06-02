@@ -197,37 +197,7 @@
 </head>
 <body>
 
-  <div class="content">
-    <div class="section">
-      <h2>&nbsp;Welcome✨</h2>
-      <div class="btn-center">
-        <button id="connect-wallet" onclick="connectWallet()">Connect Wallet</button>
-      </div>
-      <p class="link-line">
-        Don’t have a wallet? <a href="https://septemberwolfmusic.github.io/wolf-machine-wallet-portal/">Create One Instead</a>
-      </p>
-    </div>
-
-    <div class="section" id="wallet-display" style="display:none;">
-      <h3><span>✧</span> Wallet Connected</h3>
-      <div class="wallet-box" id="wallet-box">temp-wallet-for-design</div>
-    </div>
-
-    <div class="section" id="email-section" style="display:none;">
-      <h3><span>✧</span> Enter Your Email</h3>
-      <p>We use this to deliver your unlockable content after purchase.</p>
-      <input type="text" id="name" placeholder="Your Name (optional)" />
-      <input type="email" id="email" placeholder="you@example.com" />
-      <button id="submit-email" onclick="submitEmailAndScroll()">Submit Email</button>
-
-      <div id="preview-anchor"></div>
-      <video controls volume="1.0" poster="https://gateway.lighthouse.storage/ipfs/bafybeiddcho7nzz2z6isfa77deakaalbgj3s6ats3yxpzrk5nslz5sjyui">
-        <source src="https://gateway.lighthouse.storage/ipfs/bafybeietdnlxd5o2tol3hmckhyjww273tezoc5yzaf2ghqaokp3hhihtdu" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-    </div>
-
-    <div class="section" id="purchase-section" style="display:none;">
+   <div class="section" id="purchase-section" style="display:none;">
       <p class="all-set">You’re all set!</p>
       <div class="purchase-wrapper">
         <span>LFG! 🚀</span>
@@ -286,8 +256,11 @@
         email,
         wallet: walletAddress,
         name,
-        flow_type: "Self-Custody",
+        flow_type: "connect", // ✅ must match Supabase table
         batch: "B01",
+        edition: "",
+        txn_id: "",
+        status: "",
         flow_id: cachedFlowID
       };
 
@@ -322,7 +295,7 @@
         alert("Please connect wallet and submit your email first.");
         return;
       }
-      const stripeURL = `https://buy.stripe.com/test_xyz123?flowID=${cachedFlowID}`; // Replace with real URL
+      const stripeURL = `https://buy.stripe.com/test_xyz123?flowID=${cachedFlowID}`; // Replace with real Stripe link
       window.location.href = stripeURL;
     }
   </script>
