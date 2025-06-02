@@ -20,6 +20,7 @@
       margin: auto;
       padding: 2rem;
       border-radius: 12px;
+      position: relative;
     }
     h1, h2, h3 {
       font-weight: 600;
@@ -180,9 +181,22 @@
       margin-top: 0.5rem;
       color: #FAF7F7;
     }
+    .btn-center {
+      display: flex;
+      justify-content: center;
+    }
+    #connect-wallet {
+      position: fixed;
+      top: 1.2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999;
+      background-color: #50c7c0;
+    }
   </style>
 </head>
 <body>
+
   <div class="content">
     <div class="section">
       <h2>&nbsp;Welcome✨</h2>
@@ -314,4 +328,3 @@
   </script>
 </body>
 </html>
-
