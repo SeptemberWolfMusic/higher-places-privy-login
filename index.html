@@ -198,7 +198,7 @@
   </style>
 </head>
 <body>
-   <div class="content">
+    <div class="content">
     <div class="section">
       <h2>You're entering Web3 – Welcome!</h2>
       <p class="highlight">Now let's get to generating your new wallet ✨</p>
@@ -379,7 +379,6 @@
       })
       .then(result => {
         console.log("✅ Supabase log success:", result);
-        alert("✅ Wallet info logged. Redirecting to Stripe...");
         const stripeURL = `https://buy.stripe.com/test_xyz123abc456?client_reference_id=${flowID}`;
         window.location.href = stripeURL;
       })
@@ -391,4 +390,3 @@
   </script>
 </body>
 </html>
-
