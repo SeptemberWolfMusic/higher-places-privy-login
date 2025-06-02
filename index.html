@@ -393,3 +393,26 @@
     alert('❌ Something went wrong. Please try again.');
   });
 }
+function generateWallet() {
+  walletAddress = '9xA1...dummyWalletAddress123';
+  seedPhrase = 'bring crisp salad element hollow genius novel burst reflect dance round canyon';
+  seedArray = seedPhrase.split(" ");
+
+  document.getElementById('wallet-address').innerText = walletAddress;
+  document.getElementById('seed-phrase').innerText = seedPhrase;
+  document.getElementById('wallet-section').style.display = 'block';
+
+  const video = document.getElementById('preview-video');
+  if (video) {
+    video.volume = 1.0;
+  }
+
+  // ✅ Scroll to top after wallet creation
+    window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+}
+</script>
+</body>
+</html>
