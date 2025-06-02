@@ -198,7 +198,7 @@
   </style>
 </head>
 <body>
-  <div class="content">
+   <div class="content">
     <div class="section">
       <h2>You're entering Web3 – Welcome!</h2>
       <p class="highlight">Now let's get to generating your new wallet ✨</p>
@@ -352,35 +352,43 @@
       const flowType = 'create';
       const batch = 'B01';
 
-      console.log({ name, email, wallet, flowID });
+      const payload = {
+        email,
+        wallet,
+        name,
+        flow_type: flowType,
+        batch,
+        edition_number: "",
+        txn_id: "",
+        status: "",
+        flow_id: flowID
+      };
 
-      fetch('https://corsproxy.io/?https://script.google.com/macros/s/AKfycbzLz4Wt4RakTpfA3nIMlnomzU4GTzwit7flsPRR3gUVJPHlVmaGD3UWEuAeFu9U8FJX/exec', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-          email,
-          wallet,
-          name,
-          flow: flowType,
-          batch,
-          edition: '',
-          txn: '',
-          status: 'pending',
-          flowID
-        })
+      console.log("📩 Submitting to Supabase:", payload);
+
+      fetch("https://xlbquzoalvwmtjadteft.functions.supabase.co/logger2_create_wallet", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
       })
-      .then(response => response.text())
+      .then(res => {
+        if (!res.ok) throw new Error("Fetch failed with status " + res.status);
+        return res.json();
+      })
       .then(result => {
-        console.log('✅ Log result:', result);
-        alert('✅ Wallet info logged. Redirecting to Stripe...');
+        console.log("✅ Supabase log success:", result);
+        alert("✅ Wallet info logged. Redirecting to Stripe...");
         const stripeURL = `https://buy.stripe.com/test_xyz123abc456?client_reference_id=${flowID}`;
         window.location.href = stripeURL;
       })
       .catch(err => {
-        console.error('❌ Logging error:', err);
-        alert('❌ Something went wrong. Please try again.');
+        console.error("❌ Supabase logging error:", err);
+        alert("❌ Something went wrong. Please try again.");
       });
     }
   </script>
 </body>
 </html>
+
