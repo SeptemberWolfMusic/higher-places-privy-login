@@ -183,7 +183,7 @@
   </style>
 </head>
 <body>
-   <div class="content">
+     <div class="content">
     <div class="section">
       <h2>&nbsp;Welcome✨</h2>
       <div class="btn-center">
@@ -270,18 +270,26 @@
         email,
         wallet: walletAddress,
         name,
-        flow_type: "connect",
+        flow_type: "Self-Custody",
         batch: "B01",
         flow_id: cachedFlowID
       };
 
-      fetch("https://wolf-machine-logger-production.up.railway.app/log", {
+      console.log("Submitting payload to Supabase:", payload);
+
+      fetch("https://xlbquzoalvwmtjadteft.functions.supabase.co/logger2_connect_wallet", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       })
-      .then(res => res.json())
-      .then(() => {
+      .then(res => {
+        if (!res.ok) {
+          throw new Error("Fetch failed with status " + res.status);
+        }
+        return res.json();
+      })
+      .then(data => {
+        console.log("Success:", data);
         const video = document.querySelector("video");
         const videoTop = video.getBoundingClientRect().top + window.pageYOffset;
         const scrollTarget = videoTop + video.clientHeight * 0.25;
