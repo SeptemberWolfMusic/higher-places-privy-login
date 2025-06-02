@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Wolf Machine – Wallet Creation</title>
+  <!-- ✅ Silence favicon error -->
+  <link rel="icon" href="data:," />
+
   <style>
     body {
       background-color: #FAF7F7;
@@ -195,7 +198,6 @@
   </style>
 </head>
 <body>
-
   <div class="content">
     <div class="section">
       <h2>You're entering Web3 – Welcome!</h2>
@@ -291,11 +293,7 @@
         video.volume = 1.0;
       }
 
-      // ✅ Scroll to top after wallet creation
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function copyWalletAddress() {
@@ -330,89 +328,59 @@
 
     function submitEmail() {
       const email = document.getElementById('user-email').value;
+      const name = document.getElementById('user-name').value;
+      console.log("📩 Email entered:", email, name);
       if (!email || !email.includes('@')) {
         alert('Please enter a valid email.');
         return;
       }
-
-      const video = document.getElementById('preview-video');
-      const videoRect = video.getBoundingClientRect();
-      const scrollOffset = videoRect.top + window.pageYOffset + (video.offsetHeight * 0.25);
-
-      window.scrollTo({
-        top: scrollOffset,
-        behavior: 'smooth'
-      });
-
-      alert('Email saved successfully!');
+      alert('✅ Email saved!');
     }
 
     function continueToPurchase() {
-  const name = document.getElementById('name').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const wallet = document.getElementById('wallet-address').innerText.trim();
+      const name = document.getElementById('user-name').value.trim();
+      const email = document.getElementById('user-email').value.trim();
+      const wallet = document.getElementById('wallet-address').innerText.trim();
 
-  // ✅ Strict email format
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  if (!emailRegex.test(email)) {
-    alert('❌ Please enter a valid email address (e.g., your@email.com)');
-    return;
-  }
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(email)) {
+        alert('❌ Please enter a valid email address (e.g., your@email.com)');
+        return;
+      }
 
-  const flowID = crypto.randomUUID();
-  const flowType = 'create';
-  const batch = 'B01';
+      const flowID = crypto.randomUUID();
+      const flowType = 'create';
+      const batch = 'B01';
 
-  // 🧪 Debug log before submission
-  console.log({ name, email, wallet, flowID });
+      console.log({ name, email, wallet, flowID });
 
-  fetch('https://corsproxy.io/?https://script.google.com/macros/s/AKfycbzLz4Wt4RakTpfA3nIMlnomzU4GTzwit7flsPRR3gUVJPHlVmaGD3UWEuAeFu9U8FJX/exec', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    body: new URLSearchParams({
-      email,
-      wallet,
-      name,
-      flow: flowType,
-      batch,
-      edition: '',
-      txn: '',
-      status: 'pending',
-      flowID
-    })
-  }).then(response => response.text()).then(result => {
-    console.log('✅ Log result:', result);
-    alert('✅ Wallet info logged. Redirecting to Stripe...');
-
-    const stripeURL = `https://buy.stripe.com/test_xyz123abc456?client_reference_id=${flowID}`;
-    window.location.href = stripeURL;
-  }).catch((err) => {
-    console.error('❌ Logging error:', err);
-    alert('❌ Something went wrong. Please try again.');
-  });
-}
-function generateWallet() {
-  walletAddress = '9xA1...dummyWalletAddress123';
-  seedPhrase = 'bring crisp salad element hollow genius novel burst reflect dance round canyon';
-  seedArray = seedPhrase.split(" ");
-
-  document.getElementById('wallet-address').innerText = walletAddress;
-  document.getElementById('seed-phrase').innerText = seedPhrase;
-  document.getElementById('wallet-section').style.display = 'block';
-
-  const video = document.getElementById('preview-video');
-  if (video) {
-    video.volume = 1.0;
-  }
-
-  // ✅ Scroll to top after wallet creation
-    window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-  });
-}
-</script>
+      fetch('https://corsproxy.io/?https://script.google.com/macros/s/AKfycbzLz4Wt4RakTpfA3nIMlnomzU4GTzwit7flsPRR3gUVJPHlVmaGD3UWEuAeFu9U8FJX/exec', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          email,
+          wallet,
+          name,
+          flow: flowType,
+          batch,
+          edition: '',
+          txn: '',
+          status: 'pending',
+          flowID
+        })
+      })
+      .then(response => response.text())
+      .then(result => {
+        console.log('✅ Log result:', result);
+        alert('✅ Wallet info logged. Redirecting to Stripe...');
+        const stripeURL = `https://buy.stripe.com/test_xyz123abc456?client_reference_id=${flowID}`;
+        window.location.href = stripeURL;
+      })
+      .catch(err => {
+        console.error('❌ Logging error:', err);
+        alert('❌ Something went wrong. Please try again.');
+      });
+    }
+  </script>
 </body>
 </html>
