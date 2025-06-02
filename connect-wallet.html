@@ -98,6 +98,10 @@
       font-size: 0.95rem;
       word-break: break-word;
       line-height: 1.4;
+      width: 85%;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
     }
     .footer {
       margin-top: 3rem;
@@ -179,20 +183,20 @@
   </style>
 </head>
 <body>
-  <div class="content">
+   <div class="content">
     <div class="section">
       <h2>&nbsp;Welcome✨</h2>
       <div class="btn-center">
-        <button id="connect-wallet">Connect Wallet</button>
+        <button id="connect-wallet" onclick="connectWallet()">Connect Wallet</button>
       </div>
       <p class="link-line">
         Don’t have a wallet? <a href="https://septemberwolfmusic.github.io/wolf-machine-wallet-portal/">Create One Instead</a>
       </p>
     </div>
 
-    <div class="section" id="wallet-display">
+    <div class="section" id="wallet-display" style="display:none;">
       <h3><span>✧</span> Wallet Connected</h3>
-      <div class="wallet-box">temp-wallet-for-design</div>
+      <div class="wallet-box" id="wallet-box">temp-wallet-for-design</div>
     </div>
 
     <div class="section" id="email-section">
@@ -223,22 +227,58 @@
   </div>
 
   <script>
-  function submitEmailAndScroll() {
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    if (email) {
-      const data = {
-        Timestamp: new Date().toISOString(),
-        Name: name,
-        Email: email,
-        "Wallet address": 'temp-wallet-for-design',
-        "Flow type": "connect"
+    let walletAddress = "";
+
+    async function connectWallet() {
+      try {
+        const resp = await window.solana.connect();
+        walletAddress = resp.publicKey.toString();
+        document.getElementById("wallet-box").innerText = walletAddress;
+        document.getElementById("wallet-display").style.display = "block";
+      } catch (err) {
+        alert("Wallet connection failed. Please try again.");
+        console.error(err);
+      }
+    }
+
+    function generateFlowID() {
+      return ([1e7]+-1e3+-4e3+-8e3+-1e11)
+        .replace(/[018]/g, c =>
+          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        );
+    }
+
+    let cachedFlowID = "";
+
+    function submitEmailAndScroll() {
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+
+      if (!email) {
+        alert("Please enter a valid email.");
+        return;
+      }
+
+      if (!walletAddress) {
+        alert("Please connect your wallet before submitting.");
+        return;
+      }
+
+      cachedFlowID = generateFlowID();
+
+      const payload = {
+        email,
+        wallet: walletAddress,
+        name,
+        flow_type: "connect",
+        batch: "B01",
+        flow_id: cachedFlowID
       };
 
-      fetch("https://api.sheetbest.com/sheets/e9382b74-9428-4073-94c3-72dbb3c002ed", {
+      fetch("https://wolf-machine-logger-production.up.railway.app/log", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
+        body: JSON.stringify(payload)
       })
       .then(res => res.json())
       .then(() => {
@@ -248,17 +288,19 @@
         window.scrollTo({ top: scrollTarget, behavior: "smooth" });
       })
       .catch(err => {
-        console.error('Error sending to Google Sheet:', err);
+        console.error('Logging failed:', err);
         alert('Something went wrong while saving your info.');
       });
-    } else {
-      alert('Please enter a valid email.');
     }
-  }
 
-  function continueToPurchase() {
-    window.location.href = 'https://your-stripe-checkout-link.com';
-  }
+    function continueToPurchase() {
+      if (!cachedFlowID || !walletAddress) {
+        alert("Please connect wallet and submit your email first.");
+        return;
+      }
+      const stripeURL = `https://buy.stripe.com/test_xyz123?flowID=${cachedFlowID}`; // Replace with real URL
+      window.location.href = stripeURL;
+    }
   </script>
 </body>
 </html>
