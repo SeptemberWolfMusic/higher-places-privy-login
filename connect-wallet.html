@@ -185,20 +185,12 @@
       display: flex;
       justify-content: center;
     }
-   #connect-wallet {
-  position: fixed;
-  top: 1.2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 999;
-  background-color: #50c7c0;
-}
-/* ✅ Override fixed button and restore natural layout */
 #connect-wallet {
   position: static;
-  margin: 1rem auto;
   display: block;
-   }
+  margin: 1rem auto;
+  background-color: #50c7c0;
+}
   </style>
 </head>
 <body>
@@ -246,87 +238,92 @@
     </div>
   </div>
 
-  <script>
-    let walletAddress = "";
+ <script>
+  let walletAddress = "";
 
-    async function connectWallet() {
-      try {
-        const resp = await window.solana.connect();
-        walletAddress = resp.publicKey.toString();
-        document.getElementById("wallet-box").innerText = walletAddress;
-        document.getElementById("wallet-display").style.display = "block";
-        document.getElementById("email-section").style.display = "block";
-        document.getElementById("purchase-section").style.display = "block";
-      } catch (err) {
-        alert("Wallet connection failed. Please try again.");
-        console.error(err);
-      }
-    }
+  async function connectWallet() {
+    try {
+      const provider = window.solana;
 
-    function generateFlowID() {
-      return ([1e7]+-1e3+-4e3+-8e3+-1e11)
-        .replace(/[018]/g, c =>
-          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-        );
-    }
-
-    let cachedFlowID = "";
-
-    function submitEmailAndScroll() {
-      const name = document.getElementById("name").value.trim();
-      const email = document.getElementById("email").value.trim();
-
-      if (!email) {
-        alert("Please enter a valid email.");
+      if (!provider || !provider.isPhantom) {
+        alert("Phantom wallet not found. Please install it.");
         return;
       }
 
-      if (!walletAddress) {
-        alert("Please connect your wallet before submitting.");
-        return;
-      }
+      const resp = await provider.connect();
+      walletAddress = resp.publicKey.toString();
 
-      cachedFlowID = generateFlowID();
+      document.getElementById("wallet-box").innerText = walletAddress;
+      document.getElementById("wallet-display").style.display = "block";
+      document.getElementById("email-section").style.display = "block";
+      document.getElementById("purchase-section").style.display = "block";
+    } catch (err) {
+      alert("Wallet connection failed. Please try again.");
+      console.error(err);
+   }
+  function generateFlowID() {
+    return ([1e7]+-1e3+-4e3+-8e3+-1e11)
+      .replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+      );
+  }
 
-      const payload = {
-        email,
-        wallet: walletAddress,
-        name,
-        flow_type: "connect",
-        batch: "B01",
-        edition: "",
-        txn_id: "",
-        status: "",
-        flow_id: cachedFlowID
-      };
+  let cachedFlowID = "";
 
-      console.log("Submitting payload to Supabase:", payload);
+  function submitEmailAndScroll() {
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
 
-      fetch("https://xlbquzoalvwmtjadteft.functions.supabase.co/logger2_connect_wallet", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      })
-      .then(res => {
-        if (!res.ok) {
-          throw new Error("Fetch failed with status " + res.status);
-        }
-        return res.json();
-      })
-      .then(data => {
-        console.log("Success:", data);
-        const video = document.querySelector("video");
-        const videoTop = video.getBoundingClientRect().top + window.pageYOffset;
-        const scrollTarget = videoTop + video.clientHeight * 0.25;
-        window.scrollTo({ top: scrollTarget, behavior: "smooth" });
-      })
-      .catch(err => {
-        console.error('Logging failed:', err);
-        alert('Something went wrong while saving your info.');
-      });
+    if (!email) {
+      alert("Please enter a valid email.");
+      return;
     }
 
-    <script>
+    if (!walletAddress) {
+      alert("Please connect your wallet before submitting.");
+      return;
+    }
+
+    cachedFlowID = generateFlowID();
+
+    const payload = {
+      email,
+      wallet: walletAddress,
+      name,
+      flow_type: "connect",
+      batch: "B01",
+      edition: "",
+      txn_id: "",
+      status: "",
+      flow_id: cachedFlowID
+    };
+
+    console.log("Submitting payload to Supabase:", payload);
+
+    fetch("https://xlbquzoalvwmtjadteft.functions.supabase.co/logger2_connect_wallet", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    })
+    .then(res => {
+      if (!res.ok) {
+        throw new Error("Fetch failed with status " + res.status);
+      }
+      return res.json();
+    })
+    .then(data => {
+      console.log("Success:", data);
+      const video = document.querySelector("video");
+      const videoTop = video.getBoundingClientRect().top + window.pageYOffset;
+      const scrollTarget = videoTop + video.clientHeight * 0.25;
+      window.scrollTo({ top: scrollTarget, behavior: "smooth" });
+    })
+    .catch(err => {
+      console.error('Logging failed:', err);
+      alert('Something went wrong while saving your info.');
+    });
+  }
+
 function continueToPurchase() {
   if (!cachedFlowID || !walletAddress) {
     alert("Please connect wallet and submit your email first.");
