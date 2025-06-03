@@ -247,7 +247,10 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/buffer@6.0.3/index.min.js"></script>
 <script>
+  window.Buffer = buffer.Buffer;
+
   let walletAddress = "";
 
   async function connectWallet() {
@@ -324,10 +327,7 @@
     })
     .then(data => {
       console.log("Success:", data);
-      const video = document.querySelector("video");
-      const videoTop = video.getBoundingClientRect().top + window.pageYOffset;
-      const scrollTarget = videoTop + video.clientHeight * 0.25;
-      window.scrollTo({ top: scrollTarget, behavior: "smooth" });
+      // ✅ Removed scrollTo behavior — force user to stay on email input
     })
     .catch(err => {
       console.error('Logging failed:', err);
@@ -382,7 +382,6 @@
     }
   }
 
-  // ✅ Update SOL price label on load
   async function updateSolPriceLabel() {
     try {
       const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd");
@@ -394,6 +393,7 @@
       console.error("Failed to fetch SOL price:", err);
     }
   }
+
   updateSolPriceLabel();
 </script>
 </body>
