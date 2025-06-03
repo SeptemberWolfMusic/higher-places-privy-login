@@ -4,7 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Higher Places – Connect</title>
+
+  <!-- ✅ Buffer polyfill for Solana web3 -->
+  <script src="https://cdn.jsdelivr.net/npm/buffer@6.0.3/index.min.js"></script>
+  <script>
+    window.Buffer = buffer.Buffer;
+  </script>
+
   <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.95.2/lib/index.iife.min.js"></script>
+
   <style>
     body {
       background-color: #FAF7F7;
@@ -229,6 +237,7 @@
       <p class="all-set">You’re all set!</p>
       <div class="purchase-wrapper">
         <span>LFG! 🚀</span>
+        <span style="font-size: 0.9rem;">($7 USD ≈ 0.044 SOL)</span>
         <button id="continue-purchase" onclick="sendSol()">Purchase with SOL</button>
       </div>
     </div>
@@ -338,7 +347,7 @@
     async function sendSol() {
       const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl("mainnet-beta"));
       const recipient = "7aNhHdDx4VWWiCNgLK5euUqfHuQQFhF7ME5XKNTtPcTq";
-      const amountInSol = 0.33;
+      const amountInSol = 0.044;
       const lamports = amountInSol * solanaWeb3.LAMPORTS_PER_SOL;
 
       try {
