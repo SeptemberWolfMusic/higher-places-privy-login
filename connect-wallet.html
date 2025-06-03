@@ -184,18 +184,18 @@
     .btn-center {
       display: flex;
       justify-content: center;
+      position: relative;
     }
-#connect-wallet {
-  position: static;
-  display: block;
-  margin: 1rem auto;
-  background-color: #50c7c0;
-}
+    #connect-wallet {
+      position: static;
+      display: block;
+      margin: 1rem auto;
+      background-color: #50c7c0;
+    }
   </style>
 </head>
 <body>
-
-   <div class="content">
+  <div class="content">
     <div class="section">
       <h2>&nbsp;Welcome✨</h2>
       <div class="btn-center">
@@ -225,149 +225,151 @@
       </video>
     </div>
 
-<div class="section" id="purchase-section" style="display:none;">
-  <p class="all-set">You’re all set!</p>
-  <div class="purchase-wrapper">
-    <span>LFG! 🚀</span>
-    <button id="continue-purchase" onclick="sendSol()">Purchase with SOL</button>
-  </div>
-</div>
+    <div class="section" id="purchase-section" style="display:none;">
+      <p class="all-set">You’re all set!</p>
+      <div class="purchase-wrapper">
+        <span>LFG! 🚀</span>
+        <button id="continue-purchase" onclick="sendSol()">Purchase with SOL</button>
+      </div>
+    </div>
 
     <div class="footer">
       <a href="https://www.septemberwolfmusic.com" target="_blank">Powered by September Wolf Music <span>✦</span> Made with LOVE</a>
     </div>
   </div>
 
- <script>
-  let walletAddress = "";
+  <script>
+    let walletAddress = "";
 
-  async function connectWallet() {
-    try {
-      const provider = window.solana;
+    async function connectWallet() {
+      try {
+        const provider = window.solana;
 
-      if (!provider || !provider.isPhantom) {
-        alert("Phantom wallet not found. Please install it.");
+        if (!provider || !provider.isPhantom) {
+          alert("Phantom wallet not found. Please install it.");
+          return;
+        }
+
+        const resp = await provider.connect();
+        walletAddress = resp.publicKey.toString();
+
+        document.getElementById("wallet-box").innerText = walletAddress;
+        document.getElementById("wallet-display").style.display = "block";
+        document.getElementById("email-section").style.display = "block";
+        document.getElementById("purchase-section").style.display = "block";
+      } catch (err) {
+        alert("Wallet connection failed. Please try again.");
+        console.error(err);
+      }
+    }
+
+    function generateFlowID() {
+      return ([1e7]+-1e3+-4e3+-8e3+-1e11)
+        .replace(/[018]/g, c =>
+          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        );
+    }
+
+    let cachedFlowID = "";
+
+    function submitEmailAndScroll() {
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+
+      if (!email) {
+        alert("Please enter a valid email.");
         return;
       }
 
-      const resp = await provider.connect();
-      walletAddress = resp.publicKey.toString();
-
-      document.getElementById("wallet-box").innerText = walletAddress;
-      document.getElementById("wallet-display").style.display = "block";
-      document.getElementById("email-section").style.display = "block";
-      document.getElementById("purchase-section").style.display = "block";
-    } catch (err) {
-      alert("Wallet connection failed. Please try again.");
-      console.error(err);
-   }
-  function generateFlowID() {
-    return ([1e7]+-1e3+-4e3+-8e3+-1e11)
-      .replace(/[018]/g, c =>
-        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-      );
-  }
-
-  let cachedFlowID = "";
-
-  function submitEmailAndScroll() {
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-
-    if (!email) {
-      alert("Please enter a valid email.");
-      return;
-    }
-
-    if (!walletAddress) {
-      alert("Please connect your wallet before submitting.");
-      return;
-    }
-
-    cachedFlowID = generateFlowID();
-
-    const payload = {
-      email,
-      wallet: walletAddress,
-      name,
-      flow_type: "connect",
-      batch: "B01",
-      edition: "",
-      txn_id: "",
-      status: "",
-      flow_id: cachedFlowID
-    };
-
-    console.log("Submitting payload to Supabase:", payload);
-
-    fetch("https://xlbquzoalvwmtjadteft.functions.supabase.co/logger2_connect_wallet", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    })
-    .then(res => {
-      if (!res.ok) {
-        throw new Error("Fetch failed with status " + res.status);
+      if (!walletAddress) {
+        alert("Please connect your wallet before submitting.");
+        return;
       }
-      return res.json();
-    })
-    .then(data => {
-      console.log("Success:", data);
-      const video = document.querySelector("video");
-      const videoTop = video.getBoundingClientRect().top + window.pageYOffset;
-      const scrollTarget = videoTop + video.clientHeight * 0.25;
-      window.scrollTo({ top: scrollTarget, behavior: "smooth" });
-    })
-    .catch(err => {
-      console.error('Logging failed:', err);
-      alert('Something went wrong while saving your info.');
-    });
-  }
 
-function continueToPurchase() {
-  if (!cachedFlowID || !walletAddress) {
-    alert("Please connect wallet and submit your email first.");
-    return;
-  }
-  const stripeURL = `https://buy.stripe.com/test_xyz123?flowID=${cachedFlowID}`; // Replace with real URL
-  window.location.href = stripeURL;
-}
+      cachedFlowID = generateFlowID();
 
-async function sendSol() {
-  const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl("mainnet-beta"));
-  const recipient = "7aNhHdDx4VWWiCNgLK5euUqfHuQQFhF7ME5XKNTtPcTq";
-  const amountInSol = 0.33;
-  const lamports = amountInSol * solanaWeb3.LAMPORTS_PER_SOL;
+      const payload = {
+        email,
+        wallet: walletAddress,
+        name,
+        flow_type: "connect",
+        batch: "B01",
+        edition: "",
+        txn_id: "",
+        status: "",
+        flow_id: cachedFlowID
+      };
 
-  try {
-    const provider = window.solana;
-    if (!provider || !provider.isConnected) {
-      alert("Please connect your wallet first.");
-      return;
+      console.log("Submitting payload to Supabase:", payload);
+
+      fetch("https://xlbquzoalvwmtjadteft.functions.supabase.co/logger2_connect_wallet", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      })
+      .then(res => {
+        if (!res.ok) {
+          throw new Error("Fetch failed with status " + res.status);
+        }
+        return res.json();
+      })
+      .then(data => {
+        console.log("Success:", data);
+        const video = document.querySelector("video");
+        const videoTop = video.getBoundingClientRect().top + window.pageYOffset;
+        const scrollTarget = videoTop + video.clientHeight * 0.25;
+        window.scrollTo({ top: scrollTarget, behavior: "smooth" });
+      })
+      .catch(err => {
+        console.error('Logging failed:', err);
+        alert('Something went wrong while saving your info.');
+      });
     }
 
-    const senderPublicKey = provider.publicKey;
-    const transaction = new solanaWeb3.Transaction().add(
-      solanaWeb3.SystemProgram.transfer({
-        fromPubkey: senderPublicKey,
-        toPubkey: new solanaWeb3.PublicKey(recipient),
-        lamports: lamports,
-      })
-    );
+    function continueToPurchase() {
+      if (!cachedFlowID || !walletAddress) {
+        alert("Please connect wallet and submit your email first.");
+        return;
+      }
+      const stripeURL = `https://buy.stripe.com/test_xyz123?flowID=${cachedFlowID}`; // Replace with real URL
+      window.location.href = stripeURL;
+    }
 
-    const { blockhash } = await connection.getRecentBlockhash();
-    transaction.recentBlockhash = blockhash;
-    transaction.feePayer = senderPublicKey;
+    async function sendSol() {
+      const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl("mainnet-beta"));
+      const recipient = "7aNhHdDx4VWWiCNgLK5euUqfHuQQFhF7ME5XKNTtPcTq";
+      const amountInSol = 0.33;
+      const lamports = amountInSol * solanaWeb3.LAMPORTS_PER_SOL;
 
-    const signed = await provider.signTransaction(transaction);
-    const txid = await connection.sendRawTransaction(signed.serialize());
-    await connection.confirmTransaction(txid);
+      try {
+        const provider = window.solana;
+        if (!provider || !provider.isConnected) {
+          alert("Please connect your wallet first.");
+          return;
+        }
 
-    alert("✅ Payment successful! TXID: " + txid);
+        const senderPublicKey = provider.publicKey;
+        const transaction = new solanaWeb3.Transaction().add(
+          solanaWeb3.SystemProgram.transfer({
+            fromPubkey: senderPublicKey,
+            toPubkey: new solanaWeb3.PublicKey(recipient),
+            lamports: lamports,
+          })
+        );
 
-  } catch (err) {
-    console.error(err);
-    alert("❌ Payment failed: " + err.message);
-  }
-}
-</script>
+        const { blockhash } = await connection.getRecentBlockhash();
+        transaction.recentBlockhash = blockhash;
+        transaction.feePayer = senderPublicKey;
+
+        const signed = await provider.signTransaction(transaction);
+        const txid = await connection.sendRawTransaction(signed.serialize());
+        await connection.confirmTransaction(txid);
+
+        alert("✅ Payment successful! TXID: " + txid);
+
+      } catch (err) {
+        console.error(err);
+        alert("❌ Payment failed: " + err.message);
+      }
+    }
+  </script>
