@@ -185,14 +185,20 @@
       display: flex;
       justify-content: center;
     }
-    #connect-wallet {
-      position: fixed;
-      top: 1.2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 999;
-      background-color: #50c7c0;
-    }
+   #connect-wallet {
+  position: fixed;
+  top: 1.2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  background-color: #50c7c0;
+}
+/* ✅ Override fixed button and restore natural layout */
+#connect-wallet {
+  position: static;
+  margin: 1rem auto;
+  display: block;
+   }
   </style>
 </head>
 <body>
