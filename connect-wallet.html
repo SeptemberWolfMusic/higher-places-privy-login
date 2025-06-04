@@ -225,7 +225,7 @@
     <p>We use this to deliver your unlockable content after purchase.</p>
     <input type="text" id="name" placeholder="Your Name (optional)" />
     <input type="email" id="email" placeholder="you@example.com" />
-    <button id="submit-email" onclick="submitEmailAndScroll()">Submit Email</button>
+    <button id="submit-email" onclick="validateEmail()">Submit Email</button>
 
     <div id="preview-anchor"></div>
     <video controls volume="1.0" poster="https://gateway.lighthouse.storage/ipfs/bafybeiddcho7nzz2z6isfa77deakaalbgj3s6ats3yxpzrk5nslz5sjyui">
@@ -239,7 +239,7 @@
     <div class="purchase-wrapper">
       <span>LFG! 🚀</span>
       <span id="sol-price-label" style="font-size: 0.9rem;">($7 USD ≈ …)</span>
-      <button id="continue-purchase" onclick="sendSol()">Purchase with SOL</button>
+      <button id="solPurchaseBtn" onclick="sendSol()">Purchase with SOL</button>
     </div>
   </div>
 
@@ -248,21 +248,21 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.41.0/lib/index.iife.min.js"></script>
 <script>
   let walletAddress = "";
+  let buyerName = "";
+  let buyerEmail = "";
 
   async function connectWallet() {
     try {
       const provider = window.solana;
-
       if (!provider || !provider.isPhantom) {
         alert("Phantom wallet not found. Please install it.");
         return;
       }
-
       const resp = await provider.connect();
       walletAddress = resp.publicKey.toString();
-
       document.getElementById("wallet-box").innerText = walletAddress;
       document.getElementById("wallet-display").style.display = "block";
       document.getElementById("email-section").style.display = "block";
@@ -273,6 +273,18 @@
     }
   }
 
+  function validateEmail() {
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    if (!email) {
+      alert("Please enter a valid email.");
+      return;
+    }
+    buyerName = name;
+    buyerEmail = email;
+    alert("Email saved! You can now proceed with your purchase.");
+  }
+
   function generateFlowID() {
     return ([1e7]+-1e3+-4e3+-8e3+-1e11)
       .replace(/[018]/g, c =>
@@ -280,68 +292,15 @@
       );
   }
 
-  let cachedFlowID = "";
-
-  function submitEmailAndScroll() {
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-
-    if (!email) {
-      alert("Please enter a valid email.");
-      return;
-    }
-
-    if (!walletAddress) {
-      alert("Please connect your wallet before submitting.");
-      return;
-    }
-
-    cachedFlowID = generateFlowID();
-
-    const payload = {
-      email,
-      wallet: walletAddress,
-      name,
-      flow_type: "connect",
-      batch: "B01",
-      edition: "",
-      txn_id: "",
-      status: "",
-      flow_id: cachedFlowID
-    };
-
-    console.log("Submitting payload to Supabase:", payload);
-
-    fetch("https://xlbquzoalvwmtjadteft.functions.supabase.co/logger2_connect_wallet", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    })
-    .then(res => {
-      if (!res.ok) {
-        throw new Error("Fetch failed with status " + res.status);
-      }
-      return res.json();
-    })
-    .then(data => {
-      console.log("Success:", data);
-    })
-    .catch(err => {
-      console.error('Logging failed:', err);
-      alert('Something went wrong while saving your info.');
-    });
-  }
-
-  function continueToPurchase() {
-    if (!cachedFlowID || !walletAddress) {
-      alert("Please connect wallet and submit your email first.");
-      return;
-    }
-    const stripeURL = `https://buy.stripe.com/test_xyz123?flowID=${cachedFlowID}`;
-    window.location.href = stripeURL;
-  }
-
   async function sendSol() {
+    if (!walletAddress) {
+      alert("Please connect your wallet first.");
+      return;
+    }
+    if (!buyerEmail) {
+      alert("Please enter and submit your email first.");
+      return;
+    }
     const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl("devnet"));
     const recipient = "7aNhHdDx4VWWiCNgLK5euUqfHuQQFhF7ME5XKNTtPcTq";
     const amountInSol = 0.044;
@@ -353,7 +312,6 @@
         alert("Please connect your wallet first.");
         return;
       }
-
       const senderPublicKey = provider.publicKey;
       const transaction = new solanaWeb3.Transaction().add(
         solanaWeb3.SystemProgram.transfer({
@@ -362,7 +320,6 @@
           lamports: lamports,
         })
       );
-
       const { blockhash } = await connection.getRecentBlockhash();
       transaction.recentBlockhash = blockhash;
       transaction.feePayer = senderPublicKey;
@@ -373,9 +330,40 @@
 
       alert("✅ Payment successful! TXID: " + txid);
 
+      // Now generate flowID and log to Supabase AFTER payment success
+      const flowID = generateFlowID();
+
+      const payload = {
+        email: buyerEmail,
+        wallet: walletAddress,
+        name: buyerName,
+        flow_type: "connect",
+        batch: "B01",
+        edition_number: "",
+        txn_id: txid,
+        status: "pending",
+        flow_id: flowID,
+        payment_method: "crypto"
+      };
+
+      console.log("Logging payment to Supabase:", payload);
+
+      const res = await fetch("https://xlbquzoalvwmtjadteft.functions.supabase.co/logger2_connect_wallet", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to log payment info: " + res.status);
+      }
+
+      const data = await res.json();
+      console.log("Successfully logged payment:", data);
+
     } catch (err) {
       console.error(err);
-      alert("❌ Payment failed: " + err.message);
+      alert("❌ Payment or logging failed: " + err.message);
     }
   }
 
@@ -393,6 +381,3 @@
 
   updateSolPriceLabel();
 </script>
-</body>
-</html>
-
