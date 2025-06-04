@@ -240,7 +240,6 @@
       <span>LFG! 🚀</span>
       <span id="sol-price-label" style="font-size: 0.9rem;">($7 USD ≈ …)</span>
       <button id="solPurchaseBtn" title="Purchase your NFT">Purchase with SOL</button>
-      <div class="hover-text-smaller">Purchase your NFT</div>
     </div>
   </div>
 
@@ -250,16 +249,40 @@
 </div>
 
 <style>
-  .hover-text-smaller {
-    margin-top: 6px;
-    color: #6B4423; /* dark brown */
+  #submit-email, #solPurchaseBtn {
     background-color: white;
-    padding: 4px 10px;
+    color: #6B4423; /* dark brown */
+    padding: 12px 26px;
+    border: 2px solid #6B4423;
+    border-radius: 8px;
     font-weight: 600;
-    font-size: 0.85rem;
-    border-radius: 5px;
-    width: max-content;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    position: relative; /* needed for tooltip positioning */
+  }
+  #submit-email:hover, #solPurchaseBtn:hover {
+    background-color: #6B4423;
+    color: white;
+  }
+
+  button#submit-email:hover::after,
+  button#solPurchaseBtn:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #FAF7F7;
+    color: #2b1f1a;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    margin-top: 0.3rem;
+    pointer-events: none;
     user-select: none;
+    z-index: 10;
   }
 </style>
 
@@ -307,7 +330,7 @@
     alert("Email saved! You can now proceed with your purchase.");
 
     const video = document.getElementById("preview-video");
-    const scrollTarget = video.offsetTop + video.offsetHeight * 0.35; // 35% down for better view
+    const scrollTarget = video.offsetTop + video.offsetHeight * 0.35;
     window.scrollTo({ top: scrollTarget, behavior: "smooth" });
   }
 
@@ -391,6 +414,10 @@
       alert("❌ Payment or logging failed: " + err.message);
     }
   }
+
+  // Add tooltip text via data-tooltip attribute
+  document.getElementById("submit-email").setAttribute("data-tooltip", "Receive your unlockable content");
+  document.getElementById("solPurchaseBtn").setAttribute("data-tooltip", "Purchase your NFT");
 
   async function updateSolPriceLabel() {
     try {
