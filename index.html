@@ -44,6 +44,9 @@
     .important-brown {
       color: #3b2a24;
       font-weight: normal;
+      display: block;
+      margin-top: 1.5rem;
+      margin-bottom: 1.2rem;
     }
     button, input {
       padding: 0.75rem 1rem;
@@ -62,6 +65,11 @@
       color: #2b1f1a;
       cursor: pointer;
       position: relative;
+      transition: background 0.15s, color 0.15s;
+    }
+    button:active {
+      background-color: #2b1f1a !important;
+      color: #CAF5FA !important;
     }
     button::after {
       content: attr(data-hover);
@@ -118,6 +126,7 @@
       margin-left: auto;
       margin-right: auto;
       text-align: left;
+      font-size: 1.03rem;
     }
     .footer {
       margin-top: 3rem;
@@ -210,14 +219,18 @@
       .wallet-box, .seed-box {
         width: 97vw !important;
         max-width: 97vw !important;
-        font-size: 0.96rem;
+        font-size: 0.89rem !important;
         margin-left: auto !important;
         margin-right: auto !important;
         box-sizing: border-box;
       }
+      .wallet-box, .seed-box {
+        font-size: 0.89rem !important;
+        padding: 0.8rem !important;
+      }
       button, input, .mini-input {
         width: 100% !important;
-        font-size: 1.03rem;
+        font-size: 1.01rem !important;
         margin-top: 0.7rem !important;
         box-sizing: border-box;
       }
@@ -282,8 +295,8 @@
           <button onclick="copyWalletAddress()" data-hover="Save in a safe place">Copy Address</button>
         </div>
 
-        <p class="important-line">This wallet belongs to you — and only you.</p>
-        <p class="important-brown">We don't save your seed phrase.</p>
+        <p class="important-line" style="margin-bottom: 1.2rem;">This wallet belongs to you — and only you.</p>
+        <p class="important-brown" style="margin-top: 1.5rem; margin-bottom: 1.4rem;">We don't save your seed phrase.</p>
 
         <p class="important-line">Here's your recovery seed phrase. Be sure to copy All 12 Words In Order:</p>
         <div class="seed-box" id="seed-phrase"></div>
