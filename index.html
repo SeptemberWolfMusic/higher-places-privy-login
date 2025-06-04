@@ -67,11 +67,6 @@
       cursor: pointer;
       position: relative;
       transition: background 0.15s, color 0.15s;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-      min-width: 140px;
-      max-width: 220px;
     }
     button:active {
       background-color: #2b1f1a !important;
@@ -107,20 +102,14 @@
       border: 1px solid #5d4b44;
       border-radius: 8px;
       box-sizing: border-box;
-      width: 220px;
+      width: 100%;
       max-width: 100%;
       font-size: 1rem;
-      margin-left: auto;
-      margin-right: auto;
-      display: block;
     }
     .mini-input {
-      width: 85px;
+      width: 28%;
       display: inline-block;
-      margin-left: 0;
-      margin-right: 0;
-      font-size: 1rem;
-      vertical-align: middle;
+      min-width: 0;
     }
     .inline-group {
       display: flex;
@@ -128,7 +117,6 @@
       align-items: center;
       gap: 0.5rem;
       margin-top: 1rem;
-      flex-wrap: nowrap;
     }
     .section {
       margin-bottom: 2.5rem;
@@ -139,7 +127,7 @@
       border-radius: 8px;
       margin-top: 0.5rem;
       word-break: break-word;
-      width: 220px;
+      width: 100%;
       max-width: 100%;
       margin-left: auto;
       margin-right: auto;
@@ -147,7 +135,6 @@
       font-size: 1.03rem;
       box-sizing: border-box;
       overflow-wrap: break-word;
-      display: block;
     }
     .footer {
       margin-top: 3rem;
@@ -183,7 +170,6 @@
       font-size: 0.85rem;
       font-weight: normal;
       margin-bottom: 0.5rem;
-      text-align: center;
     }
     .purchase-btn-wrapper {
       display: flex;
@@ -207,22 +193,13 @@
     }
     .copy-wallet-row {
       display: flex;
-      flex-direction: column;
       align-items: center;
+      justify-content: space-between;
       margin-top: 2.5rem;
     }
     .copy-wallet-row button {
       margin: 0 auto;
-      display: block;
-      margin-bottom: 0.3rem;
-    }
-    .save-wallet-label {
-      align-self: flex-start;
-      margin-left: 0;
-      margin-bottom: 0.3rem;
-      color: #FFD700;
-      font-weight: 600;
-      font-size: 1rem;
+      transform: translateX(-60%);
     }
     .centered-input {
       display: flex;
@@ -230,15 +207,12 @@
       align-items: center;
     }
     .centered-input input {
-      width: 220px;
+      width: 100%;
       max-width: 100%;
       font-size: 1rem;
       box-sizing: border-box;
-      margin-left: auto;
-      margin-right: auto;
-      display: block;
     }
-    /* --- MOBILE ONLY STYLES --- */
+    /* --- MOBILE STYLES AND FIXES BELOW --- */
     @media (max-width: 600px) {
       body {
         padding: 2rem 0.5rem 0.5rem;
@@ -252,48 +226,32 @@
         padding: 0 0.2rem;
       }
       .wallet-box, .seed-box {
-        width: 90vw !important;
-        max-width: 98vw !important;
-        min-width: 0 !important;
+        width: 99vw !important;
+        max-width: 99vw !important;
+        font-size: 0.89rem !important;
+        padding: 0.8rem !important;
       }
       .centered-input input,
-      input[type="text"], input[type="email"] {
-        width: 90vw !important;
-        max-width: 98vw !important;
+      input, button, .mini-input {
+        width: 99vw !important;
+        max-width: 99vw !important;
         min-width: 0 !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
-      }
-      button {
-        width: 160px !important;
-        min-width: 110px !important;
-        max-width: 98vw !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
-        display: block !important;
+        font-size: 0.97rem !important;
+        box-sizing: border-box;
       }
       .mini-input {
-        width: 32vw !important;
-        max-width: 32vw !important;
-        min-width: 50px !important;
-        display: inline-block !important;
-        font-size: 1rem !important;
+        width: 47vw !important;
+        max-width: 47vw !important;
       }
-      .inline-group {
-        flex-direction: row !important;
-        align-items: center !important;
-        justify-content: center !important;
-        gap: 2vw !important;
-        flex-wrap: nowrap !important;
-      }
-      .copy-wallet-row {
+      .inline-group, .inline-btns, .purchase-btn-wrapper, .copy-wallet-row {
         flex-direction: column !important;
-        align-items: center !important;
+        align-items: stretch !important;
+        gap: 0.4rem !important;
       }
-      .save-wallet-label {
-        align-self: flex-start !important;
-        margin-left: 0 !important;
-        margin-bottom: 0.3rem !important;
+      .copy-wallet-row button {
+        margin: 0.5rem 0 0 0 !important;
+        transform: none !important;
+        width: 100% !important;
       }
       .footer {
         font-size: 0.8rem;
@@ -340,8 +298,8 @@
         <div class="wallet-box" id="wallet-address"></div>
 
         <div class="copy-wallet-row">
+          <h3 style="margin: 0;"><span class="gold-star">✧</span>Save Your Wallet</h3>
           <button onclick="copyWalletAddress()" data-hover="Save in a safe place">Copy Address</button>
-          <span class="save-wallet-label"><span class="gold-star">✧</span>Save Your Wallet</span>
         </div>
 
         <div class="wallet-seed-block">
@@ -361,8 +319,6 @@
         <div class="inline-group">
           <input class="mini-input" type="text" id="word-2" placeholder="Word #2" />
           <input class="mini-input" type="text" id="word-8" placeholder="Word #8" />
-        </div>
-        <div style="display: flex; justify-content: center;">
           <button class="validate-btn" onclick="validateSeedWords()" data-hover="Validate your seed phrase is correct">Validate</button>
         </div>
 
@@ -519,6 +475,33 @@
           alert("❌ Something went wrong. Please try again.");
         });
       }
+
+      // --- MOBILE ONLY: Center LFG label above purchase button, fix margins ---
+      window.addEventListener('DOMContentLoaded', function() {
+        function adjustMobileStyling() {
+          const lfg = document.getElementById('lfg-label');
+          const walletHeader = document.getElementById('wallet-created-header');
+          if (window.innerWidth <= 600) {
+            if (lfg) {
+              lfg.style.textAlign = 'center';
+              lfg.style.marginBottom = '0.6rem';
+            }
+            if (walletHeader) {
+              walletHeader.style.marginTop = '3.2rem';
+            }
+          } else {
+            if (lfg) {
+              lfg.style.textAlign = '';
+              lfg.style.marginBottom = '';
+            }
+            if (walletHeader) {
+              walletHeader.style.marginTop = '2.5rem';
+            }
+          }
+        }
+        adjustMobileStyling();
+        window.addEventListener('resize', adjustMobileStyling);
+      });
     </script>
   </body>
 </html>
