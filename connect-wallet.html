@@ -240,7 +240,7 @@
       <span>LFG! 🚀</span>
       <span id="sol-price-label" style="font-size: 0.9rem;">($7 USD ≈ …)</span>
       <button id="solPurchaseBtn" title="Purchase your NFT">Purchase with SOL</button>
-      <div class="hover-text">Purchase your NFT</div>
+      <div class="hover-text-smaller">Purchase your NFT</div>
     </div>
   </div>
 
@@ -250,13 +250,14 @@
 </div>
 
 <style>
-  .hover-text {
+  .hover-text-smaller {
     margin-top: 6px;
     color: #6B4423; /* dark brown */
     background-color: white;
-    padding: 6px 12px;
+    padding: 4px 10px;
     font-weight: 600;
-    border-radius: 6px;
+    font-size: 0.85rem;
+    border-radius: 5px;
     width: max-content;
     user-select: none;
   }
@@ -306,7 +307,7 @@
     alert("Email saved! You can now proceed with your purchase.");
 
     const video = document.getElementById("preview-video");
-    const scrollTarget = video.offsetTop + video.offsetHeight * 0.25;
+    const scrollTarget = video.offsetTop + video.offsetHeight * 0.35; // 35% down for better view
     window.scrollTo({ top: scrollTarget, behavior: "smooth" });
   }
 
