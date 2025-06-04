@@ -195,6 +195,57 @@
     .centered-input input {
       width: 85%;
     }
+
+    /* --- MOBILE STYLES ADDED BELOW --- */
+    @media (max-width: 600px) {
+      body {
+        padding: 2rem 0.5rem 0.5rem;
+      }
+      .content {
+        padding: 1rem 0.5rem;
+        max-width: 98vw;
+      }
+      h2 {
+        font-size: 1.3rem;
+        padding: 0 0.2rem;
+      }
+      .centered-input input,
+      .wallet-box, .seed-box {
+        width: 98% !important;
+        font-size: 0.96rem;
+      }
+      button, input, .mini-input {
+        width: 100% !important;
+        font-size: 1rem;
+        margin-top: 0.7rem;
+        box-sizing: border-box;
+      }
+      .inline-group, .inline-btns, .purchase-btn-wrapper, .copy-wallet-row {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0.3rem !important;
+      }
+      .copy-wallet-row button {
+        margin: 0.5rem 0 0 0;
+        transform: none;
+        width: 100%;
+      }
+      .footer {
+        font-size: 0.8rem;
+        margin-top: 2rem;
+      }
+      video {
+        max-width: 98vw;
+        border-radius: 10px;
+        margin-top: 1.3rem;
+      }
+      .section {
+        margin-bottom: 1.3rem;
+      }
+      .spaced-above {
+        margin-top: 1.5rem;
+      }
+    }
   </style>
 </head>
 <body>
