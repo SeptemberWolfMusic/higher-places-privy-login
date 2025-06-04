@@ -4,9 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Wolf Machine – Wallet Creation</title>
-  <!-- ✅ Silence favicon error -->
   <link rel="icon" href="data:," />
-
   <style>
     body {
       background-color: #FAF7F7;
@@ -45,8 +43,11 @@
       color: #3b2a24;
       font-weight: normal;
       display: block;
-      margin-top: 1.5rem;
-      margin-bottom: 1.2rem;
+      margin-top: 0rem;
+      margin-bottom: 0rem;
+    }
+    .wallet-seed-block {
+      margin-bottom: 2.2rem;
     }
     button, input {
       padding: 0.75rem 1rem;
@@ -101,10 +102,14 @@
       border: 1px solid #5d4b44;
       border-radius: 8px;
       box-sizing: border-box;
+      width: 100%;
+      max-width: 100%;
+      font-size: 1rem;
     }
     .mini-input {
       width: 28%;
       display: inline-block;
+      min-width: 0;
     }
     .inline-group {
       display: flex;
@@ -122,11 +127,14 @@
       border-radius: 8px;
       margin-top: 0.5rem;
       word-break: break-word;
-      width: 95%;
+      width: 100%;
+      max-width: 100%;
       margin-left: auto;
       margin-right: auto;
       text-align: left;
       font-size: 1.03rem;
+      box-sizing: border-box;
+      overflow-wrap: break-word;
     }
     .footer {
       margin-top: 3rem;
@@ -199,9 +207,11 @@
       align-items: center;
     }
     .centered-input input {
-      width: 85%;
+      width: 100%;
+      max-width: 100%;
+      font-size: 1rem;
+      box-sizing: border-box;
     }
-
     /* --- MOBILE STYLES AND FIXES BELOW --- */
     @media (max-width: 600px) {
       body {
@@ -209,30 +219,29 @@
       }
       .content {
         padding: 1rem 0.5rem;
-        max-width: 98vw;
+        max-width: 99vw;
       }
       h2 {
         font-size: 1.3rem;
         padding: 0 0.2rem;
       }
-      .centered-input input,
       .wallet-box, .seed-box {
-        width: 97vw !important;
-        max-width: 97vw !important;
-        font-size: 0.89rem !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
-        box-sizing: border-box;
-      }
-      .wallet-box, .seed-box {
+        width: 99vw !important;
+        max-width: 99vw !important;
         font-size: 0.89rem !important;
         padding: 0.8rem !important;
       }
-      button, input, .mini-input {
-        width: 100% !important;
-        font-size: 1.01rem !important;
-        margin-top: 0.7rem !important;
+      .centered-input input,
+      input, button, .mini-input {
+        width: 99vw !important;
+        max-width: 99vw !important;
+        min-width: 0 !important;
+        font-size: 0.97rem !important;
         box-sizing: border-box;
+      }
+      .mini-input {
+        width: 47vw !important;
+        max-width: 47vw !important;
       }
       .inline-group, .inline-btns, .purchase-btn-wrapper, .copy-wallet-row {
         flex-direction: column !important;
@@ -249,7 +258,7 @@
         margin-top: 2rem;
       }
       video {
-        max-width: 98vw;
+        max-width: 99vw;
         border-radius: 10px;
         margin-top: 1.3rem;
       }
@@ -259,12 +268,10 @@
       .spaced-above {
         margin-top: 1.5rem;
       }
-      /* Hide button hover text on mobile */
       button::after {
         display: none !important;
       }
     }
-    /* Hide hover text for touch devices, even on large screens */
     @media (pointer: coarse) {
       button::after {
         display: none !important;
@@ -295,8 +302,10 @@
           <button onclick="copyWalletAddress()" data-hover="Save in a safe place">Copy Address</button>
         </div>
 
-        <p class="important-line" style="margin-bottom: 1.2rem;">This wallet belongs to you — and only you.</p>
-        <p class="important-brown" style="margin-top: 1.5rem; margin-bottom: 1.4rem;">We don't save your seed phrase.</p>
+        <div class="wallet-seed-block">
+          <p class="important-line" style="margin-bottom:0.1rem;">This wallet belongs to you — and only you.</p>
+          <p class="important-brown" style="margin-top:0.1rem; margin-bottom:2.2rem;">We don't save your seed phrase.</p>
+        </div>
 
         <p class="important-line">Here's your recovery seed phrase. Be sure to copy All 12 Words In Order:</p>
         <div class="seed-box" id="seed-phrase"></div>
