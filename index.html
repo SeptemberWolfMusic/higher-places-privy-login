@@ -117,6 +117,7 @@
       align-items: center;
       gap: 0.5rem;
       margin-top: 1rem;
+      flex-wrap: nowrap;
     }
     .section {
       margin-bottom: 2.5rem;
@@ -226,41 +227,51 @@
         padding: 0 0.2rem;
       }
       .wallet-box, .seed-box {
-        width: 95vw !important;
-        max-width: 95vw !important;
+        width: 94vw !important;
+        max-width: 94vw !important;
         font-size: 0.89rem !important;
         padding: 0.8rem !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
       }
       .centered-input input,
       input {
-        width: 95vw !important;
-        max-width: 95vw !important;
+        width: 94vw !important;
+        max-width: 94vw !important;
         min-width: 0 !important;
         font-size: 0.97rem !important;
-        box-sizing: border-box;
+        box-sizing: border-box !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
       }
       .mini-input {
-        width: 38vw !important;
-        max-width: 38vw !important;
-        font-size: 0.97rem !important;
-        min-width: 0 !important;
+        width: 28vw !important;
+        max-width: 28vw !important;
         display: inline-block !important;
+        min-width: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+      }
+      .inline-group {
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 2vw !important;
+        flex-wrap: nowrap !important;
       }
       button {
-        width: 95vw !important;
-        max-width: 95vw !important;
+        width: 94vw !important;
+        max-width: 94vw !important;
+        min-width: 0 !important;
         box-sizing: border-box !important;
-      }
-      .inline-group, .inline-btns, .purchase-btn-wrapper, .copy-wallet-row {
-        flex-direction: column !important;
-        align-items: stretch !important;
-        gap: 0.4rem !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
       }
       .copy-wallet-row button {
         margin: 0.5rem 0 0 0 !important;
         transform: none !important;
-        width: 95vw !important;
-        max-width: 95vw !important;
+        width: 94vw !important;
+        max-width: 94vw !important;
       }
       .footer {
         font-size: 0.8rem;
