@@ -332,60 +332,25 @@
       console.log("📩 Email entered:", email, name);
       if (!email || !email.includes('@')) {
         alert('Please enter a valid email.');
-        return;
+        return false;
       }
       alert('✅ Email saved!');
+      return true;
     }
 
     function continueToPurchase() {
+      if (!submitEmail()) return;
+
       const name = document.getElementById('user-name').value.trim();
       const email = document.getElementById('user-email').value.trim();
       const wallet = document.getElementById('wallet-address').innerText.trim();
 
-      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      if (!emailRegex.test(email)) {
-        alert('❌ Please enter a valid email address (e.g., your@email.com)');
-        return;
-      }
-
       const flowID = crypto.randomUUID();
-      const flowType = 'create';
-      const batch = 'B01';
 
-      const payload = {
-        email,
-        wallet,
-        name,
-        flow_type: flowType,
-        batch,
-        edition_number: "",
-        txn_id: "",
-        status: "",
-        flow_id: flowID
-      };
+      // Do NOT log here. Backend webhook will handle logging after successful payment.
 
-      console.log("📩 Submitting to Supabase:", payload);
-
-      fetch("https://xlbquzoalvwmtjadteft.functions.supabase.co/logger2_create_wallet", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      })
-      .then(res => {
-        if (!res.ok) throw new Error("Fetch failed with status " + res.status);
-        return res.json();
-      })
-      .then(result => {
-        console.log("✅ Supabase log success:", result);
-        const stripeURL = `https://buy.stripe.com/test_xyz123abc456?client_reference_id=${flowID}`;
-        window.location.href = stripeURL;
-      })
-      .catch(err => {
-        console.error("❌ Supabase logging error:", err);
-        alert("❌ Something went wrong. Please try again.");
-      });
+      const stripeURL = `https://buy.stripe.com/test_xyz123abc456?client_reference_id=${flowID}`;
+      window.location.href = stripeURL;
     }
   </script>
 </body>
