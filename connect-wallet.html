@@ -207,7 +207,7 @@
 <div class="content">
   <div class="section">
     <h2>&nbsp;Welcome✨</h2>
-    <div class="btn-center" id="connect-btn-container">
+    <div class="btn-center">
       <button id="connect-wallet" onclick="connectWallet()">Connect Wallet</button>
     </div>
     <p class="link-line">
@@ -249,27 +249,27 @@
 </div>
 
 <style>
-  /* Turquoise base button styles */
+  /* Buttons base style */
   #connect-wallet, #submit-email, #solPurchaseBtn {
-    background-color: #30d5c8;
-    color: white;
+    background-color: #50c7c0; /* turquoise */
+    color: #2b1f1a; /* dark brown */
     padding: 12px 26px;
-    border: 2px solid #30d5c8;
+    border: 2px solid #50c7c0;
     border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
     font-size: 1rem;
     transition: background-color 0.3s ease, color 0.3s ease;
-    position: relative; /* for tooltip positioning */
+    position: relative;
   }
 
-  /* Invert colors on hover */
+  /* Buttons hover */
   #connect-wallet:hover, #submit-email:hover, #solPurchaseBtn:hover {
-    background-color: white;
-    color: #30d5c8;
+    background-color: #2b1f1a; /* dark brown */
+    color: #50c7c0; /* turquoise */
   }
 
-  /* Tooltip styling */
+  /* Tooltip style for submit email and purchase with SOL */
   button#submit-email:hover::after,
   button#solPurchaseBtn:hover::after {
     content: attr(data-tooltip);
@@ -290,19 +290,12 @@
     box-shadow: 0 0 5px rgba(0,0,0,0.1);
   }
 
-  /* Sticky connect wallet button container when clicked */
-  #connect-btn-container.sticky {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 0.5rem 2rem;
-    background: #30d5c8;
-    z-index: 1000;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  /* Keep connect wallet button container centered, no fixed or sticky */
+  .btn-center {
+    text-align: center;
   }
 
-  /* Add some bottom margin to sections for spacing */
+  /* Sections bottom margin */
   .section {
     margin-bottom: 2rem;
   }
@@ -327,11 +320,7 @@
       document.getElementById("wallet-display").style.display = "block";
       document.getElementById("email-section").style.display = "block";
       document.getElementById("purchase-section").style.display = "block";
-
-      // Make connect wallet button sticky at top after click
-      const connectBtnContainer = document.getElementById('connect-btn-container');
-      connectBtnContainer.classList.add('sticky');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // No forced scroll here to avoid button jumping
     } catch (err) {
       alert("Wallet connection failed. Please try again.");
       console.error(err);
@@ -357,7 +346,7 @@
     alert("Email saved! You can now proceed with your purchase.");
 
     const video = document.getElementById("preview-video");
-    const scrollTarget = video.offsetTop + video.offsetHeight * 0.4; // 40% down for better button visibility
+    const scrollTarget = video.offsetTop + video.offsetHeight * 0.4;
     window.scrollTo({ top: scrollTarget, behavior: "smooth" });
   }
 
@@ -442,7 +431,7 @@
     }
   }
 
-  // Add tooltip text via data-tooltip attribute for buttons
+  // Set tooltip text for buttons
   document.getElementById("submit-email").setAttribute("data-tooltip", "Receive your unlockable content");
   document.getElementById("solPurchaseBtn").setAttribute("data-tooltip", "Purchase your NFT");
 
