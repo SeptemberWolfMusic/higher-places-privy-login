@@ -212,7 +212,7 @@
       font-size: 1rem;
       box-sizing: border-box;
     }
-    /* --- MOBILE STYLES AND FIXES BELOW --- */
+   /* --- MOBILE ONLY STYLES --- */
     @media (max-width: 600px) {
       body {
         padding: 2rem 0.5rem 0.5rem;
@@ -226,32 +226,48 @@
         padding: 0 0.2rem;
       }
       .wallet-box, .seed-box {
-        width: 99vw !important;
-        max-width: 99vw !important;
-        font-size: 0.89rem !important;
-        padding: 0.8rem !important;
+        width: 90vw !important;
+        max-width: 98vw !important;
+        min-width: 0 !important;
       }
       .centered-input input,
-      input, button, .mini-input {
-        width: 99vw !important;
-        max-width: 99vw !important;
+      input[type="text"], input[type="email"] {
+        width: 90vw !important;
+        max-width: 98vw !important;
         min-width: 0 !important;
-        font-size: 0.97rem !important;
-        box-sizing: border-box;
+        margin-left: auto !important;
+        margin-right: auto !important;
+      }
+      button {
+        width: 160px !important;
+        min-width: 110px !important;
+        max-width: 98vw !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        display: block !important;
       }
       .mini-input {
-        width: 47vw !important;
-        max-width: 47vw !important;
+        width: 32vw !important;
+        max-width: 32vw !important;
+        min-width: 50px !important;
+        display: inline-block !important;
+        font-size: 1rem !important;
       }
-      .inline-group, .inline-btns, .purchase-btn-wrapper, .copy-wallet-row {
+      .inline-group {
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 2vw !important;
+        flex-wrap: nowrap !important;
+      }
+      .copy-wallet-row {
         flex-direction: column !important;
-        align-items: stretch !important;
-        gap: 0.4rem !important;
+        align-items: center !important;
       }
-      .copy-wallet-row button {
-        margin: 0.5rem 0 0 0 !important;
-        transform: none !important;
-        width: 100% !important;
+      .save-wallet-label {
+        align-self: flex-start !important;
+        margin-left: 0 !important;
+        margin-bottom: 0.3rem !important;
       }
       .footer {
         font-size: 0.8rem;
