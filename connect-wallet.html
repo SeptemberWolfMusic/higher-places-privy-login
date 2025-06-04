@@ -225,10 +225,10 @@
     <p>We use this to deliver your unlockable content after purchase.</p>
     <input type="text" id="name" placeholder="Your Name (optional)" />
     <input type="email" id="email" placeholder="you@example.com" />
-    <button id="submit-email" onclick="validateEmail()">Submit Email</button>
+    <button id="submit-email" onclick="submitEmailAndScroll()">Submit Email</button>
 
     <div id="preview-anchor"></div>
-    <video controls volume="1.0" poster="https://gateway.lighthouse.storage/ipfs/bafybeiddcho7nzz2z6isfa77deakaalbgj3s6ats3yxpzrk5nslz5sjyui">
+    <video controls volume="1.0" poster="https://gateway.lighthouse.storage/ipfs/bafybeiddcho7nzz2z6isfa77deakaalbgj3s6ats3yxpzrk5nslz5sjyui" id="preview-video">
       <source src="https://gateway.lighthouse.storage/ipfs/bafybeietdnlxd5o2tol3hmckhyjww273tezoc5yzaf2ghqaokp3hhihtdu" type="video/mp4" />
       Your browser does not support the video tag.
     </video>
@@ -239,7 +239,8 @@
     <div class="purchase-wrapper">
       <span>LFG! 🚀</span>
       <span id="sol-price-label" style="font-size: 0.9rem;">($7 USD ≈ …)</span>
-      <button id="solPurchaseBtn" onclick="sendSol()">Purchase with SOL</button>
+      <button id="solPurchaseBtn" title="Purchase your NFT">Purchase with SOL</button>
+      <div class="hover-text">Purchase your NFT</div>
     </div>
   </div>
 
@@ -247,6 +248,19 @@
     <a href="https://www.septemberwolfmusic.com" target="_blank">Powered by September Wolf Music <span>✦</span> Made with LOVE</a>
   </div>
 </div>
+
+<style>
+  .hover-text {
+    margin-top: 6px;
+    color: #6B4423; /* dark brown */
+    background-color: white;
+    padding: 6px 12px;
+    font-weight: 600;
+    border-radius: 6px;
+    width: max-content;
+    user-select: none;
+  }
+</style>
 
 <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.41.0/lib/index.iife.min.js"></script>
 <script>
@@ -273,16 +287,27 @@
     }
   }
 
-  function validateEmail() {
+  function submitEmailAndScroll() {
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
+
     if (!email) {
       alert("Please enter a valid email.");
       return;
     }
+
+    if (!walletAddress) {
+      alert("Please connect your wallet before submitting.");
+      return;
+    }
+
     buyerName = name;
     buyerEmail = email;
     alert("Email saved! You can now proceed with your purchase.");
+
+    const video = document.getElementById("preview-video");
+    const scrollTarget = video.offsetTop + video.offsetHeight * 0.25;
+    window.scrollTo({ top: scrollTarget, behavior: "smooth" });
   }
 
   function generateFlowID() {
@@ -330,7 +355,6 @@
 
       alert("✅ Payment successful! TXID: " + txid);
 
-      // Now generate flowID and log to Supabase AFTER payment success
       const flowID = generateFlowID();
 
       const payload = {
