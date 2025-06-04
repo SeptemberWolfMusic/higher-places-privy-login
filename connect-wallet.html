@@ -319,7 +319,8 @@
       document.getElementById("wallet-display").style.display = "block";
       document.getElementById("email-section").style.display = "block";
       document.getElementById("purchase-section").style.display = "block";
-      // No forced scroll here to avoid button jumping
+      // Added scroll to top to prevent jump:
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
       alert("Wallet connection failed. Please try again.");
       console.error(err);
