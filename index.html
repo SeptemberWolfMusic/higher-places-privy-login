@@ -199,191 +199,158 @@
 </head>
 <body>
     <div class="content">
-    <div class="section">
-      <h2>You're entering Web3 – Welcome!</h2>
-      <p class="highlight">Now let's get to generating your new wallet ✨</p>
-      <div class="btn-center">
-        <button onclick="generateWallet()" data-hover="Click to create your free wallet now">Generate My Wallet</button>
-      </div>
-      <div class="connect-link">
-        Already have a wallet? <a href="connect-wallet.html" style="color:#CAF5FA">Connect Wallet instead</a>
-      </div>
+  <div class="section">
+    <h2>You're entering Web3 – Welcome!</h2>
+    <p class="highlight">Now let's get to generating your new wallet ✨</p>
+    <div class="btn-center">
+      <button onclick="generateWallet()" data-hover="Click to create your free wallet now">Generate My Wallet</button>
     </div>
-
-    <div class="section" id="wallet-section" style="display:none;">
-      <h3>Your new wallet has been created.</h3>
-      <p>Here’s your wallet address:</p>
-      <div class="wallet-box" id="wallet-address"></div>
-
-      <div class="copy-wallet-row">
-        <h3 style="margin: 0;"><span class="gold-star">✧</span>Save Your Wallet</h3>
-        <button onclick="copyWalletAddress()" data-hover="Save in a safe place">Copy Address</button>
-      </div>
-
-      <p class="important-line">This wallet belongs to you — and only you.</p>
-      <p class="important-brown">We don't save your seed phrase.</p>
-
-      <p class="important-line">Here's your recovery seed phrase. Be sure to copy All 12 Words In Order:</p>
-      <div class="seed-box" id="seed-phrase"></div>
-      <div class="inline-btns">
-        <button onclick="copySeedPhrase()" data-hover="Save in a safe place">Copy Phrase</button>
-        <button onclick="downloadBackup()" data-hover="Download a backup .txt file of your wallet info">Download Backup</button>
-      </div>
-      <p class="important-line">Keep this safe. If you ever lose access to your wallet, this phrase is the only way to get it back.</p>
-
-      <p class="important-brown" style="margin-top: 2rem; text-align: center;">Validate your seed phrase — confirm word #2 & #8 below</p>
-      <div class="inline-group">
-        <input class="mini-input" type="text" id="word-2" placeholder="Word #2" />
-        <input class="mini-input" type="text" id="word-8" placeholder="Word #8" />
-        <button class="validate-btn" onclick="validateSeedWords()" data-hover="Validate your seed phrase is correct">Validate</button>
-      </div>
-
-      <div class="section spaced-above">
-        <h3><span class="gold-star">✧</span>Enter your email</h3>
-        <p class="important-line">We use this to deliver your unlockable content after purchase.</p>
-        <div class="centered-input">
-          <input type="text" id="user-name" placeholder="Name (optional)" />
-          <input type="email" id="user-email" placeholder="your@email.com" required />
-        </div>
-        <div class="btn-center">
-          <button onclick="submitEmail()" data-hover="Receive your unlockable content">Submit Email</button>
-        </div>
-      </div>
-
-      <div class="section">
-        <p class="important-brown" style="margin-top: 1rem; text-align: left;">* This wallet becomes active once your purchase is complete.</p>
-        <video id="preview-video" controls poster="https://gateway.lighthouse.storage/ipfs/bafybeiddcho7nzz2z6isfa77deakaalbgj3s6ats3yxpzrk5nslz5sjyui">
-          <source src="https://gateway.lighthouse.storage/ipfs/bafybeietdnlxd5o2tol3hmckhyjww273tezoc5yzaf2ghqaokp3hhihtdu" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-      </div>
-
-      <div class="section" id="purchase-section">
-        <p class="all-set">You’re all set!</p>
-        <div class="purchase-btn-wrapper">
-          <div class="rocket-label">LFG! 🚀</div>
-          <button onclick="continueToPurchase()" data-hover="Continue to purchase NFT">Continue to Purchase</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="footer">
-      <a href="https://www.septemberwolfmusic.com" target="_blank">
-        Powered by September Wolf Music <span>✦</span> Made with LOVE
-      </a>
+    <div class="connect-link">
+      Already have a wallet? <a href="connect-wallet.html" style="color:#CAF5FA">Connect Wallet instead</a>
     </div>
   </div>
 
-  <script>
-    let walletAddress = '';
-    let seedPhrase = 'bring crisp salad element hollow genius novel burst reflect dance round canyon';
-    let seedArray = [];
+  <div class="section" id="wallet-section" style="display:none;">
+    <h3>Your new wallet has been created.</h3>
+    <p>Here’s your wallet address:</p>
+    <div class="wallet-box" id="wallet-address"></div>
 
-    function generateWallet() {
-      walletAddress = '9xA1...dummyWalletAddress123';
-      seedPhrase = 'bring crisp salad element hollow genius novel burst reflect dance round canyon';
-      seedArray = seedPhrase.split(" ");
+    <div class="copy-wallet-row">
+      <h3 style="margin: 0;"><span class="gold-star">✧</span>Save Your Wallet</h3>
+      <button onclick="copyWalletAddress()" data-hover="Save in a safe place">Copy Address</button>
+    </div>
 
-      document.getElementById('wallet-address').innerText = walletAddress;
-      document.getElementById('seed-phrase').innerText = seedPhrase;
-      document.getElementById('wallet-section').style.display = 'block';
+    <p class="important-line">This wallet belongs to you — and only you.</p>
+    <p class="important-brown">We don't save your seed phrase.</p>
 
-      const video = document.getElementById('preview-video');
-      if (video) {
-        video.volume = 1.0;
-      }
+    <p class="important-line">Here's your recovery seed phrase. Be sure to copy All 12 Words In Order:</p>
+    <div class="seed-box" id="seed-phrase"></div>
+    <div class="inline-btns">
+      <button onclick="copySeedPhrase()" data-hover="Save in a safe place">Copy Phrase</button>
+      <button onclick="downloadBackup()" data-hover="Download a backup .txt file of your wallet info">Download Backup</button>
+    </div>
+    <p class="important-line">Keep this safe. If you ever lose access to your wallet, this phrase is the only way to get it back.</p>
 
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    <p class="important-brown" style="margin-top: 2rem; text-align: center;">Validate your seed phrase — confirm word #2 & #8 below</p>
+    <div class="inline-group">
+      <input class="mini-input" type="text" id="word-2" placeholder="Word #2" />
+      <input class="mini-input" type="text" id="word-8" placeholder="Word #8" />
+      <button class="validate-btn" onclick="validateSeedWords()" data-hover="Validate your seed phrase is correct">Validate</button>
+    </div>
+
+    <div class="section spaced-above">
+      <h3><span class="gold-star">✧</span>Enter your email</h3>
+      <p class="important-line">We use this to deliver your unlockable content after purchase.</p>
+      <div class="centered-input">
+        <input type="text" id="user-name" placeholder="Name (optional)" />
+        <input type="email" id="user-email" placeholder="your@email.com" required />
+      </div>
+      <div class="btn-center">
+        <button onclick="submitEmail()" data-hover="Receive your unlockable content">Submit Email</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <p class="important-brown" style="margin-top: 1rem; text-align: left;">* This wallet becomes active once your purchase is complete.</p>
+      <video id="preview-video" controls poster="https://gateway.lighthouse.storage/ipfs/bafybeiddcho7nzz2z6isfa77deakaalbgj3s6ats3yxpzrk5nslz5sjyui">
+        <source src="https://gateway.lighthouse.storage/ipfs/bafybeietdnlxd5o2tol3hmckhyjww273tezoc5yzaf2ghqaokp3hhihtdu" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <div class="section" id="purchase-section">
+      <p class="all-set">You’re all set!</p>
+      <div class="purchase-btn-wrapper">
+        <div class="rocket-label">LFG! 🚀</div>
+        <button onclick="continueToPurchase()" data-hover="Continue to purchase NFT">Continue to Purchase</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <a href="https://www.septemberwolfmusic.com" target="_blank">
+      Powered by September Wolf Music <span>✦</span> Made with LOVE
+    </a>
+  </div>
+</div>
+
+<script>
+  let walletAddress = '';
+  let seedPhrase = 'bring crisp salad element hollow genius novel burst reflect dance round canyon';
+  let seedArray = [];
+
+  function generateWallet() {
+    walletAddress = '9xA1...dummyWalletAddress123';
+    seedPhrase = 'bring crisp salad element hollow genius novel burst reflect dance round canyon';
+    seedArray = seedPhrase.split(" ");
+
+    document.getElementById('wallet-address').innerText = walletAddress;
+    document.getElementById('seed-phrase').innerText = seedPhrase;
+    document.getElementById('wallet-section').style.display = 'block';
+
+    const video = document.getElementById('preview-video');
+    if (video) {
+      video.volume = 1.0;
     }
 
-    function copyWalletAddress() {
-      navigator.clipboard.writeText(walletAddress);
-      alert('Wallet address copied to clipboard!');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function copyWalletAddress() {
+    navigator.clipboard.writeText(walletAddress);
+    alert('Wallet address copied to clipboard!');
+  }
+
+  function copySeedPhrase() {
+    navigator.clipboard.writeText(seedPhrase);
+    alert('Seed phrase copied to clipboard!');
+  }
+
+  function downloadBackup() {
+    const blob = new Blob([`Wallet Address: ${walletAddress}\nSeed Phrase: ${seedPhrase}`], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'wallet-backup.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function validateSeedWords() {
+    const word2 = document.getElementById('word-2').value.trim().toLowerCase();
+    const word8 = document.getElementById('word-8').value.trim().toLowerCase();
+    if (word2 === seedArray[1] && word8 === seedArray[7]) {
+      alert('✅ Seed phrase validated!');
+    } else {
+      alert('❌ Incorrect words. Please double-check your seed phrase.');
     }
+  }
 
-    function copySeedPhrase() {
-      navigator.clipboard.writeText(seedPhrase);
-      alert('Seed phrase copied to clipboard!');
+  function submitEmail() {
+    const email = document.getElementById('user-email').value;
+    const name = document.getElementById('user-name').value;
+    if (!email || !email.includes('@')) {
+      alert('❌ Please enter a valid email.');
+      return false;
     }
+    alert('✅ Email saved!');
+    return true;
+  }
 
-    function downloadBackup() {
-      const blob = new Blob([`Wallet Address: ${walletAddress}\nSeed Phrase: ${seedPhrase}`], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'wallet-backup.txt';
-      a.click();
-      URL.revokeObjectURL(url);
-    }
+  function continueToPurchase() {
+    if (!submitEmail()) return;
 
-    function validateSeedWords() {
-      const word2 = document.getElementById('word-2').value.trim().toLowerCase();
-      const word8 = document.getElementById('word-8').value.trim().toLowerCase();
-      if (word2 === seedArray[1] && word8 === seedArray[7]) {
-        alert('✅ Seed phrase validated!');
-      } else {
-        alert('❌ Incorrect words. Please double-check your seed phrase.');
-      }
-    }
+    const name = document.getElementById('user-name').value.trim();
+    const email = document.getElementById('user-email').value.trim();
+    const wallet = document.getElementById('wallet-address').innerText.trim();
 
-    function submitEmail() {
-      const email = document.getElementById('user-email').value;
-      const name = document.getElementById('user-name').value;
-      console.log("📩 Email entered:", email, name);
-      if (!email || !email.includes('@')) {
-        alert('Please enter a valid email.');
-        return false;
-      }
-      alert('✅ Email saved!');
-      return true;
-    }
+    const flowID = crypto.randomUUID();
 
-    function continueToPurchase() {
-      if (!submitEmail()) return;
+    // No logging here, webhook will handle it after successful payment
 
-      const name = document.getElementById('user-name').value.trim();
-      const email = document.getElementById('user-email').value.trim();
-      const wallet = document.getElementById('wallet-address').innerText.trim();
-
-      const flowID = crypto.randomUUID();
-      const flowType = 'create';
-      const batch = 'B01';
-
-      const payload = {
-        email,
-        wallet,
-        name,
-        flow_type: flowType,
-        batch,
-        edition_number: "",
-        txn_id: "",
-        status: "",
-        flow_id: flowID
-      };
-
-      console.log("📩 Submitting to Supabase:", payload);
-
-      fetch("https://xlbquzoalvwmtjadteft.functions.supabase.co/logger2_create_wallet", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      })
-      .then(res => {
-        if (!res.ok) throw new Error("Fetch failed with status " + res.status);
-        return res.json();
-      })
-      .then(result => {
-        console.log("✅ Supabase log success:", result);
-        const stripeURL = `https://buy.stripe.com/test_xyz123abc456?client_reference_id=${flowID}`;
-        window.location.href = stripeURL;
-      })
-      .catch(err => {
-        console.error("❌ Supabase logging error:", err);
-        alert("❌ Something went wrong. Please try again.");
-      });
-    }
-  </script>
+    const stripeURL = `https://buy.stripe.com/test_xyz123abc456?client_reference_id=${flowID}`;
+    window.location.href = stripeURL;
+  }
+</script>
 </body>
 </html>
