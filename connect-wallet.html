@@ -1,27 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Higher Places – Connect</title>
 
-  <!-- ✅ Load Solana web3 BEFORE Buffer fix -->
+  <!-- ✅ Solana web3.js (must be FIRST) -->
   <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.95.2/lib/index.iife.min.js"></script>
-
-  <!-- ✅ Buffer polyfill for Solana web3 -->
+  <!-- ✅ Buffer polyfill -->
   <script src="https://cdn.jsdelivr.net/npm/buffer@6.0.3/index.min.js"></script>
-  <script>
-    window.Buffer = Buffer;
-  </script>
+  <script>window.Buffer = Buffer;</script>
 
-  <!-- SOLANA WALLET ADAPTER SCRIPTS & STYLES -->
-  <script src="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-wallets@0.22.8/lib/index.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-base@0.22.8/lib/index.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-web@0.22.8/lib/index.umd.min.js"></script>
+  <!-- ✅ Wallet Adapter Modal only (best for browser support) -->
   <script src="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-modal@0.22.8/lib/index.umd.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-modal@0.22.8/ui/styles.css">
 
-  <!-- Your styles below -->
   <style>
-    /* ...existing styles... */
     body {
       background-color: #FAF7F7;
       color: #FAF7F7;
@@ -38,27 +32,25 @@
       border-radius: 12px;
       position: relative;
     }
- h1, h2, h3 {
-  font-weight: 600;
-  color: #CAF5FA;
-}
-h2 {
-  font-size: 3rem;
-  margin: 1rem 0 0.2rem;  /* smaller space below Welcome */
-  text-align: center;
-}
-
-/* --- MOBILE ONLY --- */
-@media (max-width: 600px) {
-  h2 {
-    font-size: 2.5rem;    /* restores mobile size */
-    margin: 1rem 0 0.2rem;
-  }
-}
-
-h3 span {
-  color: #ffd700;
-}
+    h1, h2, h3 {
+      font-weight: 600;
+      color: #CAF5FA;
+    }
+    h2 {
+      font-size: 3rem;
+      margin: 1rem 0 0.2rem;
+      text-align: center;
+    }
+    /* --- MOBILE ONLY --- */
+    @media (max-width: 600px) {
+      h2 {
+        font-size: 2.5rem;
+        margin: 1rem 0 0.2rem;
+      }
+    }
+    h3 span {
+      color: #ffd700;
+    }
     h3 {
       display: flex;
       align-items: center;
