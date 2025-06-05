@@ -5,11 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Higher Places – Connect</title>
 
+  <!-- ✅ Favicon (same as Page 1) -->
+  <link rel="icon" href="https://septemberwolfmusic.github.io/favicon.ico" />
+
   <!-- ✅ Solana web3.js (must be FIRST) -->
   <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.95.2/lib/index.iife.min.js"></script>
   <!-- ✅ Buffer polyfill -->
   <script src="https://cdn.jsdelivr.net/npm/buffer@6.0.3/index.min.js"></script>
   <script>window.Buffer = Buffer;</script>
+
+  <!-- ✅ Phantom Wallet Adapter for browser -->
+  <script src="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-wallets@0.21.13/lib/index.umd.min.js"></script>
 
   <!-- ✅ Wallet Adapter Modal only (best for browser support) -->
   <script src="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-modal@0.22.8/lib/index.umd.min.js"></script>
@@ -315,10 +321,16 @@
 
   // Modern multi-wallet, QR, mobile support!
   async function connectWallet() {
-    const { PhantomWalletAdapter } = window.walletAdapterWallets;
-    const { SolflareWalletAdapter } = window.walletAdapterWallets;
-    const { WalletAdapterNetwork } = window.walletAdapterBase;
-    const { WalletModal } = window.walletAdapterModal;
+    // ✅ Get adapters safely after window loads
+    const PhantomWalletAdapter = window.walletAdapterWallets?.PhantomWalletAdapter;
+    const SolflareWalletAdapter = window.walletAdapterWallets?.SolflareWalletAdapter;
+    const WalletAdapterNetwork = window.walletAdapterBase?.WalletAdapterNetwork;
+    const WalletModal = window.walletAdapterModal?.WalletModal;
+
+    if (!(PhantomWalletAdapter && SolflareWalletAdapter && WalletAdapterNetwork && WalletModal)) {
+      alert("Wallet adapter libraries failed to load. Please try again or reload.");
+      return;
+    }
 
     const network = WalletAdapterNetwork.Devnet; // Mainnet for prod
     const wallets = [
@@ -380,8 +392,10 @@
     alert("Email saved! You can now proceed with your purchase.");
 
     const video = document.getElementById("preview-video");
-    const scrollTarget = video.offsetTop + video.offsetHeight * 0.4;
-    window.scrollTo({ top: scrollTarget, behavior: "smooth" });
+    if (video) {
+      const scrollTarget = video.offsetTop + video.offsetHeight * 0.4;
+      window.scrollTo({ top: scrollTarget, behavior: "smooth" });
+    }
   }
 
   function generateFlowID() {
@@ -465,9 +479,13 @@
     }
   }
 
-  // Set tooltip text for buttons
-  document.getElementById("submit-email").setAttribute("data-tooltip", "Receive your unlockable content");
-  document.getElementById("solPurchaseBtn").setAttribute("data-tooltip", "Purchase your NFT");
+  // Set tooltip text for buttons, safe on load
+  window.addEventListener("DOMContentLoaded", () => {
+    const submitBtn = document.getElementById("submit-email");
+    if (submitBtn) submitBtn.setAttribute("data-tooltip", "Receive your unlockable content");
+    const solBtn = document.getElementById("solPurchaseBtn");
+    if (solBtn) solBtn.setAttribute("data-tooltip", "Purchase your NFT");
+  });
 
   async function updateSolPriceLabel() {
     try {
