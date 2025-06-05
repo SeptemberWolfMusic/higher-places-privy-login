@@ -299,22 +299,28 @@
   }
 </style>
 
-<script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.41.0/lib/index.iife.min.js"></script>
 <script>
   let walletAddress = "";
   let buyerName = "";
   let buyerEmail = "";
-  let walletModal; // global modal reference
+  let walletModal = null;
 
-  // --- NEW: Multi-wallet, mobile, QR connect ---
+  async function handleWalletFlip() {
+    if (walletAddress) {
+      disconnectWallet();
+    } else {
+      connectWallet();
+    }
+  }
+
+  // Modern multi-wallet, QR, mobile support!
   async function connectWallet() {
     const { PhantomWalletAdapter } = window.walletAdapterWallets;
     const { SolflareWalletAdapter } = window.walletAdapterWallets;
     const { WalletAdapterNetwork } = window.walletAdapterBase;
     const { WalletModal } = window.walletAdapterModal;
 
-    const network = WalletAdapterNetwork.Devnet; // Change to Mainnet for prod
-
+    const network = WalletAdapterNetwork.Devnet; // Mainnet for prod
     const wallets = [
       new PhantomWalletAdapter({ network }),
       new SolflareWalletAdapter({ network }),
@@ -337,6 +343,7 @@
         document.getElementById("wallet-display").style.display = "block";
         document.getElementById("email-section").style.display = "block";
         document.getElementById("purchase-section").style.display = "block";
+        document.getElementById("wallet-flip").innerText = "Disconnect Wallet";
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         alert("Wallet connection failed or cancelled.");
@@ -347,6 +354,15 @@
     });
   }
 
+  function disconnectWallet() {
+    walletAddress = "";
+    document.getElementById("wallet-box").innerText = "";
+    document.getElementById("wallet-display").style.display = "none";
+    document.getElementById("email-section").style.display = "none";
+    document.getElementById("purchase-section").style.display = "none";
+    document.getElementById("wallet-flip").innerText = "Connect Wallet";
+  }
+
   function submitEmailAndScroll() {
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
@@ -355,12 +371,10 @@
       alert("Please enter a valid email.");
       return;
     }
-
     if (!walletAddress) {
       alert("Please connect your wallet before submitting.");
       return;
     }
-
     buyerName = name;
     buyerEmail = email;
     alert("Email saved! You can now proceed with your purchase.");
@@ -392,8 +406,7 @@
     const lamports = amountInSol * solanaWeb3.LAMPORTS_PER_SOL;
 
     try {
-      // Use whichever wallet is currently connected (modal)
-      // We'll assume window.solana or adapter
+      // We'll use window.solana for sign/send
       const provider = window.solana;
       if (!provider || !provider.isConnected) {
         alert("Please connect your wallet first.");
