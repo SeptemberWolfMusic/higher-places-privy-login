@@ -323,11 +323,11 @@
     }
   }
 
-  // Modern multi-wallet, QR, mobile support!
+let walletAddress = "";
 let walletModal = null;
 
-async function connectWallet() {
-  // Safely get adapters from global window (always works if scripts in <head> are correct)
+// Modern multi-wallet, QR, mobile support!
+function handleWalletFlip() {
   const { PhantomWalletAdapter, SolflareWalletAdapter } = window.walletAdapterWallets;
   const { WalletAdapterNetwork } = window.walletAdapterBase;
   const { WalletModal } = window.walletAdapterModal;
@@ -346,12 +346,13 @@ async function connectWallet() {
   if (!walletModal) {
     walletModal = new WalletModal(wallets, network, {
       title: "Connect your Solana wallet",
-      featuredWallets: [0, 1], // Phantom, Solflare
+      featuredWallets: [0, 1],
       container: document.body,
       darkMode: false,
-      showQrModal: true // Enables QR code/mobile!
+      showQrModal: true
     });
   }
+
   walletModal.open().then(async wallet => {
     if (wallet && wallet.connected && wallet.publicKey) {
       walletAddress = wallet.publicKey.toString();
