@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,7 +12,16 @@
     window.Buffer = Buffer;
   </script>
 
+  <!-- SOLANA WALLET ADAPTER SCRIPTS & STYLES -->
+  <script src="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-wallets@0.22.8/lib/index.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-base@0.22.8/lib/index.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-web@0.22.8/lib/index.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-modal@0.22.8/lib/index.umd.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-modal@0.22.8/ui/styles.css">
+
+  <!-- Your styles below -->
   <style>
+    /* ...existing styles... */
     body {
       background-color: #FAF7F7;
       color: #FAF7F7;
@@ -305,46 +312,47 @@ h3 span {
   let walletAddress = "";
   let buyerName = "";
   let buyerEmail = "";
+  let walletModal; // global modal reference
 
+  // --- NEW: Multi-wallet, mobile, QR connect ---
   async function connectWallet() {
-    try {
-      const provider = window.solana;
-      if (!provider || !provider.isPhantom) {
-        alert("Phantom wallet not found. Please install it.");
-        return;
+    const { PhantomWalletAdapter } = window.walletAdapterWallets;
+    const { SolflareWalletAdapter } = window.walletAdapterWallets;
+    const { WalletAdapterNetwork } = window.walletAdapterBase;
+    const { WalletModal } = window.walletAdapterModal;
+
+    const network = WalletAdapterNetwork.Devnet; // Change to Mainnet for prod
+
+    const wallets = [
+      new PhantomWalletAdapter({ network }),
+      new SolflareWalletAdapter({ network }),
+    ];
+
+    if (!walletModal) {
+      walletModal = new WalletModal(wallets, network, {
+        title: "Connect your Solana wallet",
+        featuredWallets: [0, 1], // Phantom, Solflare
+        container: document.body,
+        darkMode: false,
+        showQrModal: true
+      });
+    }
+
+    walletModal.open().then(async wallet => {
+      if (wallet && wallet.connected && wallet.publicKey) {
+        walletAddress = wallet.publicKey.toString();
+        document.getElementById("wallet-box").innerText = walletAddress;
+        document.getElementById("wallet-display").style.display = "block";
+        document.getElementById("email-section").style.display = "block";
+        document.getElementById("purchase-section").style.display = "block";
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        alert("Wallet connection failed or cancelled.");
       }
-      const resp = await provider.connect();
-      walletAddress = resp.publicKey.toString();
-      document.getElementById("wallet-box").innerText = walletAddress;
-      document.getElementById("wallet-display").style.display = "block";
-      document.getElementById("email-section").style.display = "block";
-      document.getElementById("purchase-section").style.display = "block";
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      // Flip button to "Disconnect"
-      document.getElementById("wallet-flip").innerText = "Disconnect Wallet";
-    } catch (err) {
-      alert("Wallet connection failed. Please try again.");
-      console.error(err);
-    }
-  }
-
-  function disconnectWallet() {
-    if (window.solana && window.solana.isConnected) {
-      window.solana.disconnect();
-    }
-    walletAddress = "";
-    document.getElementById("wallet-display").style.display = "none";
-    document.getElementById("email-section").style.display = "none";
-    document.getElementById("purchase-section").style.display = "none";
-    document.getElementById("wallet-flip").innerText = "Connect Wallet";
-  }
-
-  function handleWalletFlip() {
-    if (walletAddress) {
-      disconnectWallet();
-    } else {
-      connectWallet();
-    }
+    }).catch(e => {
+      alert("Wallet connection error. Try again!");
+      console.error(e);
+    });
   }
 
   function submitEmailAndScroll() {
@@ -392,6 +400,8 @@ h3 span {
     const lamports = amountInSol * solanaWeb3.LAMPORTS_PER_SOL;
 
     try {
+      // Use whichever wallet is currently connected (modal)
+      // We'll assume window.solana or adapter
       const provider = window.solana;
       if (!provider || !provider.isConnected) {
         alert("Please connect your wallet first.");
