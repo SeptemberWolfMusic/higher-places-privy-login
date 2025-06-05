@@ -14,9 +14,13 @@
   <script src="https://cdn.jsdelivr.net/npm/buffer@6.0.3/index.min.js"></script>
   <script>window.Buffer = Buffer;</script>
 
-  <!-- ✅ Phantom Wallet Adapter for browser -->
-  <script src="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-wallets@0.21.13/lib/index.umd.min.js"></script>
+  <!-- ✅ Wallet Adapter Core (required for modal/QR support) -->
+  <script src="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-core@0.18.2/lib/index.umd.min.js"></script>
+  <!-- ✅ Wallet Adapter Base (required for modal) -->
+  <script src="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-base@0.10.4/lib/index.umd.min.js"></script>
 
+  <!-- ✅ Wallet Adapter Wallets -->
+  <script src="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-wallets@0.21.13/lib/index.umd.min.js"></script>
   <!-- ✅ Wallet Adapter Modal only (best for browser support) -->
   <script src="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-modal@0.22.8/lib/index.umd.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-modal@0.22.8/ui/styles.css">
