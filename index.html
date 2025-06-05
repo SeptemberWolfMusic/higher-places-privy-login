@@ -214,73 +214,12 @@
     }
 /* --- MOBILE ONLY STYLES --- */
 @media (max-width: 600px) {
-  body {
-    padding: 2rem 0.5rem 0.5rem;
-  }
-  .content {
-    padding: 1rem 0.5rem;
-    max-width: 99vw;
-  }
-  h2 {
-    font-size: 1.3rem;
-    padding: 0 0.2rem;
-  }
-  .wallet-box, .seed-box {
-    width: 90vw !important;
-    max-width: 98vw !important;
-    min-width: 0 !important;
-  }
-  .centered-input input,
-  input[type="text"], input[type="email"] {
-    width: 90vw !important;
-    max-width: 98vw !important;
-    min-width: 0 !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-  button {
-    width: 160px !important;
-    min-width: 110px !important;
-    max-width: 98vw !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    display: block !important;
-  }
-  /* --- Fix Copy Phrase/Download Backup buttons --- */
-  .inline-btns {
-    margin-top: 0.3rem !important;
-    justify-content: center !important;
-    gap: 0.4rem !important;
-  }
-  .inline-btns button {
-    width: 110px !important;
-    min-width: 90px !important;
-    max-width: 44vw !important;
-    font-size: 0.98rem !important;
-    padding: 0.6rem 0.4rem !important;
-    margin: 0 !important;
-    white-space: nowrap !important;
-  }
-  .mini-input {
-    width: 32vw !important;
-    max-width: 32vw !important;
-    min-width: 50px !important;
-    display: inline-block !important;
-    font-size: 1rem !important;
-  }
-  .inline-group {
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 2vw !important;
-    flex-wrap: nowrap !important;
-  }
-  /* --- Copy Wallet Row: label left, button centered below --- */
+  /* ...your other styles above... */
+
+  /* Copy Address button: centered, thin, fits text on one line */
   .copy-wallet-row {
     flex-direction: column !important;
     align-items: flex-start !important;
-    margin-top: 1.3rem !important;
-    margin-bottom: 0.7rem !important;
     width: 90vw !important;
     max-width: 98vw !important;
   }
@@ -293,29 +232,34 @@
   }
   .copy-wallet-row button {
     align-self: center !important;
-    margin: 0.3rem auto 0.2rem auto !important;
-    width: 130px !important;
-    max-width: 60vw !important;
+    width: 110px !important;
+    min-width: 90px !important;
+    max-width: 44vw !important;
+    margin: 0.2rem auto 0.7rem auto !important;
+    font-size: 1rem !important;
+    white-space: nowrap !important;
+    padding: 0.7rem 0.6rem !important;
+    display: block !important;
   }
-  /* --- More breathing room above email section --- */
-  .spaced-above {
-    margin-top: 2.9rem !important;
+
+  /* Copy Phrase/Download Backup: side by side, same width as Validate, centered, no text cut off */
+  .inline-btns {
+    margin-top: 0.3rem !important;
+    justify-content: center !important;
+    gap: 0.4rem !important;
   }
-  .footer {
-    font-size: 0.8rem;
-    margin-top: 2rem;
+  .inline-btns button {
+    width: 110px !important;
+    min-width: 90px !important;
+    max-width: 44vw !important;
+    font-size: 1rem !important;
+    padding: 0.7rem 0.6rem !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+    display: inline-block !important;
   }
-  video {
-    max-width: 99vw;
-    border-radius: 10px;
-    margin-top: 1.3rem;
-  }
-  .section {
-    margin-bottom: 1.3rem;
-  }
-  button::after {
-    display: none !important;
-  }
+
+  /* ...rest of your mobile CSS stays as you had it... */
 }
 @media (pointer: coarse) {
   button::after {
