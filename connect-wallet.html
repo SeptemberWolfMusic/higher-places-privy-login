@@ -31,18 +31,27 @@
       border-radius: 12px;
       position: relative;
     }
-    h1, h2, h3 {
-      font-weight: 600;
-      color: #CAF5FA;
-    }
-    h2 {
-      font-size: 2.5rem;
-      margin: 2rem 0 1rem;
-      text-align: center;
-    }
-    h3 span {
-      color: #ffd700;
-    }
+ h1, h2, h3 {
+  font-weight: 600;
+  color: #CAF5FA;
+}
+h2 {
+  font-size: 3rem;
+  margin: 1rem 0 0.5rem;
+  text-align: center;
+}
+
+/* --- MOBILE ONLY --- */
+@media (max-width: 600px) {
+  h2 {
+    font-size: 1.3rem;
+    margin: 1rem 0 0.5rem;
+  }
+}
+
+h3 span {
+  color: #ffd700;
+}
     h3 {
       display: flex;
       align-items: center;
