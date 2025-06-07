@@ -10,21 +10,21 @@
       color: #faf7f7;
       font-family: Arial, sans-serif;
       text-align: center;
-      padding: 8rem 2rem 3rem 2rem; /* more top padding for headroom */
+      padding: 8rem 2rem 3rem 2rem;
       margin: 0;
       height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start; /* start from top with padding */
+      justify-content: flex-start;
     }
     h1 {
       font-size: 2.5rem;
-      margin-bottom: 1.5rem; /* more space below heading */
+      margin-bottom: 1.5rem;
     }
     p.subtitle {
       font-size: 1.1rem;
       margin-top: 0;
-      margin-bottom: 4rem; /* more space before button */
+      margin-bottom: 4rem;
       color: #faf7f7cc;
     }
     button.retry-button {
@@ -37,20 +37,20 @@
       border: none;
       cursor: pointer;
       transition: background-color 0.3s ease;
-      margin: 0 auto;
+      margin: 0 auto 6rem auto; /* added bottom margin for 4 line spacing */
       display: inline-block;
     }
     button.retry-button:hover {
       background-color: #e6e2df;
     }
     footer {
-      margin-top: 2rem; /* bring footer up closer to button */
       font-size: 0.9rem;
-      color: #50c7c0;
+      color: #caf5fa;
       font-weight: 600;
+      margin-top: 0;
     }
     footer a {
-      color: #50c7c0;
+      color: #caf5fa;
       text-decoration: none;
       font-weight: 600;
       display: inline-flex;
@@ -58,10 +58,16 @@
       gap: 0.25rem;
     }
     footer .star {
-      color: gold;
-      font-size: 1.2rem;
+      color: transparent;
+      border: 1.5px solid gold;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      display: inline-block;
       line-height: 1;
       user-select: none;
+      position: relative;
+      top: -1px;
     }
   </style>
 </head>
