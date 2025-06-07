@@ -6,50 +6,78 @@
   <title>Retry Payment - Higher Places</title>
   <style>
     body {
-      background-color: #f5f0e6;
-      color: #2a635e;
+      background-color: #3b2a24;
+      color: #faf7f7;
       font-family: Arial, sans-serif;
       text-align: center;
-      padding: 3rem;
+      padding: 6rem 2rem 3rem 2rem;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+    p.subtitle {
+      font-size: 1.1rem;
+      margin-top: 0;
+      margin-bottom: 3rem;
+      color: #faf7f7cc;
     }
     a.retry-button {
       display: inline-block;
-      margin: 2rem 0;
-      padding: 1rem 2rem;
-      background-color: #1d4d4b;
-      color: #f9d967;
+      padding: 1rem 3rem;
+      background-color: #faf7f7;
+      color: #3b2a24;
       text-decoration: none;
       font-weight: bold;
-      border-radius: 5px;
-      font-size: 1.2rem;
+      border-radius: 8px;
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    a.retry-button:hover {
+      background-color: #e6e2df;
     }
     footer {
-      margin-top: 4rem;
+      margin-top: auto;
+      padding-top: 2rem;
       font-size: 0.9rem;
-      color: #a08864;
+      color: #50c7c0;
+      font-weight: 600;
+    }
+    footer .star {
+      color: gold;
+      margin: 0 0.25rem;
     }
     footer a {
-      color: #a08864;
+      color: #50c7c0;
       text-decoration: none;
       font-weight: 600;
     }
   </style>
 </head>
 <body>
-  <h1>Retry Payment</h1>
-  <p>Want to retry while your info is still connected?</p>
-  <a href="#" id="retry-link" class="retry-button">Click here to retry</a>
+  <h1>Want to retry? 🚀</h1>
+  <p class="subtitle">You're still connected until you leave or refresh this page.</p>
+  <a href="#" id="retry-link" class="retry-button">Click to Retry</a>
 
   <footer>
-    Powered by <a href="https://septemberwolfmusic.com" target="_blank" rel="noopener noreferrer">September Wolf Music</a> ✦ Made with LOVE
+    Powered by
+    <a href="https://septemberwolfmusic.com" target="_blank" rel="noopener noreferrer">
+      September Wolf Music
+    </a>
+    <span class="star">✨</span>
+    Made with LOVE
   </footer>
 
   <script>
-    // Get flowID from URL query param
     const params = new URLSearchParams(window.location.search);
     const flowID = params.get('flowID');
 
-    // Replace # with actual Stripe session URL from your edge function
     document.getElementById('retry-link').addEventListener('click', async (e) => {
       e.preventDefault();
       if (!flowID) {
