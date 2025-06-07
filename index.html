@@ -496,12 +496,14 @@
   console.log("📩 Submitting to Supabase Stripe bridge:", payload);
 
   fetch("https://xlbquzoalvwmtjadteft.supabase.co/functions/v1/stripe_flowid_payment_bridge", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ flowID })
-  })
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "apikey": "YOUR_SUPABASE_ANON_KEY",
+    "Authorization": "Bearer YOUR_SUPABASE_ANON_KEY"
+  },
+  body: JSON.stringify({ flowID })
+})
     .then(res => {
       if (!res.ok) throw new Error("Stripe bridge fetch failed with status " + res.status);
       return res.json();
