@@ -10,68 +10,70 @@
       color: #faf7f7;
       font-family: Arial, sans-serif;
       text-align: center;
-      padding: 6rem 2rem 3rem 2rem;
+      padding: 8rem 2rem 3rem 2rem; /* more top padding for headroom */
       margin: 0;
       height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start; /* start from top with padding */
     }
     h1 {
       font-size: 2.5rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 1.5rem; /* more space below heading */
     }
     p.subtitle {
       font-size: 1.1rem;
       margin-top: 0;
-      margin-bottom: 3rem;
+      margin-bottom: 4rem; /* more space before button */
       color: #faf7f7cc;
     }
-    a.retry-button {
-      display: inline-block;
+    button.retry-button {
       padding: 1rem 3rem;
       background-color: #faf7f7;
       color: #3b2a24;
-      text-decoration: none;
       font-weight: bold;
       border-radius: 8px;
       font-size: 1.3rem;
+      border: none;
       cursor: pointer;
       transition: background-color 0.3s ease;
+      margin: 0 auto;
+      display: inline-block;
     }
-    a.retry-button:hover {
+    button.retry-button:hover {
       background-color: #e6e2df;
     }
     footer {
-      margin-top: auto;
-      padding-top: 2rem;
+      margin-top: 2rem; /* bring footer up closer to button */
       font-size: 0.9rem;
       color: #50c7c0;
       font-weight: 600;
-    }
-    footer .star {
-      color: gold;
-      margin: 0 0.25rem;
     }
     footer a {
       color: #50c7c0;
       text-decoration: none;
       font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    footer .star {
+      color: gold;
+      font-size: 1.2rem;
+      line-height: 1;
+      user-select: none;
     }
   </style>
 </head>
 <body>
   <h1>Want to retry? 🚀</h1>
   <p class="subtitle">You're still connected until you leave or refresh this page.</p>
-  <a href="#" id="retry-link" class="retry-button">Click to Retry</a>
+  <button id="retry-link" class="retry-button">Click to Retry</button>
 
   <footer>
-    Powered by
-    <a href="https://septemberwolfmusic.com" target="_blank" rel="noopener noreferrer">
-      September Wolf Music
+    <a href="https://septemberwolfmusic.com" target="_blank" rel="noopener noreferrer" title="Visit September Wolf Music">
+      Powered by September Wolf Music <span class="star">✦</span> Made with LOVE
     </a>
-    <span class="star">✨</span>
-    Made with LOVE
   </footer>
 
   <script>
