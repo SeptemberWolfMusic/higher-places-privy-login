@@ -20,6 +20,7 @@
     h1 {
       font-size: 2.5rem;
       margin-bottom: 1.5rem;
+      white-space: nowrap;
     }
     p.subtitle {
       font-size: 1.1rem;
@@ -28,17 +29,18 @@
       color: #faf7f7cc;
     }
     button.retry-button {
-      padding: 1rem 3rem;
+      padding: 0.6rem 2rem;
       background-color: #faf7f7;
       color: #3b2a24;
       font-weight: bold;
       border-radius: 8px;
-      font-size: 1.3rem;
+      font-size: 1.1rem;
       border: none;
       cursor: pointer;
       transition: background-color 0.3s ease;
-      margin: 0 auto 6rem auto; /* added bottom margin for 4 line spacing */
+      margin: 0 auto 6rem auto;
       display: inline-block;
+      min-width: 160px;
     }
     button.retry-button:hover {
       background-color: #e6e2df;
@@ -58,12 +60,8 @@
       gap: 0.25rem;
     }
     footer .star {
-      color: transparent;
-      border: 1.5px solid gold;
-      border-radius: 50%;
-      width: 18px;
-      height: 18px;
-      display: inline-block;
+      color: gold;
+      font-size: 1.2rem;
       line-height: 1;
       user-select: none;
       position: relative;
@@ -72,7 +70,7 @@
   </style>
 </head>
 <body>
-  <h1>Want to retry? 🚀</h1>
+  <h1>&nbsp;Want to retry? 🚀</h1>
   <p class="subtitle">You're still connected until you leave or refresh this page.</p>
   <button id="retry-link" class="retry-button">Click to Retry</button>
 
