@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Retry Payment - Higher Places</title>
+  <style>
+    body {
+      background-color: #f5f0e6;
+      color: #2a635e;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 3rem;
+    }
+    a.retry-button {
+      display: inline-block;
+      margin: 2rem 0;
+      padding: 1rem 2rem;
+      background-color: #1d4d4b;
+      color: #f9d967;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 5px;
+      font-size: 1.2rem;
+    }
+    footer {
+      margin-top: 4rem;
+      font-size: 0.9rem;
+      color: #a08864;
+    }
+    footer a {
+      color: #a08864;
+      text-decoration: none;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <h1>Retry Payment</h1>
+  <p>Want to retry while your info is still connected?</p>
+  <a href="#" id="retry-link" class="retry-button">Click here to retry</a>
+
+  <footer>
+    Powered by <a href="https://septemberwolfmusic.com" target="_blank" rel="noopener noreferrer">September Wolf Music</a> ✦ Made with LOVE
+  </footer>
+
+  <script>
+    // Get flowID from URL query param
+    const params = new URLSearchParams(window.location.search);
+    const flowID = params.get('flowID');
+
+    // Replace # with actual Stripe session URL from your edge function
+    document.getElementById('retry-link').addEventListener('click', async (e) => {
+      e.preventDefault();
+      if (!flowID) {
+        alert('No valid flowID found.');
+        return;
+      }
+      try {
+        const res = await fetch('https://YOUR_EDGE_FUNCTION_URL/stripe_flowid_payment_bridge', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ flowID })
+        });
+        if (!res.ok) throw new Error('Failed to create session');
+        const { url } = await res.json();
+        window.location.href = url;
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    });
+  </script>
+</body>
+</html>
