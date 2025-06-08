@@ -492,10 +492,9 @@
     txn_id: "",
     flow_id: flowID
   };
+console.log("📩 Submitting to Supabase Stripe bridge:", payload);
 
-  console.log("📩 Submitting to Supabase Stripe bridge:", payload);
-
-  function continueToPurchase(flowID) {
+function continueToPurchase(flowID) {
   fetch("https://xlbquzoalvwmtjadteft.supabase.co/functions/v1/stripe_flowid_payment_bridge", {
     method: "POST",
     headers: {
@@ -521,7 +520,6 @@
     alert("❌ Something went wrong. Please try again.");
   });
 }
-
       // --- MOBILE ONLY: Center LFG label above purchase button, fix margins ---
       window.addEventListener('DOMContentLoaded', function() {
         function adjustMobileStyling() {
