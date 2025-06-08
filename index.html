@@ -495,30 +495,31 @@
 
   console.log("📩 Submitting to Supabase Stripe bridge:", payload);
 
+  function continueToPurchase(flowID) {
   fetch("https://xlbquzoalvwmtjadteft.supabase.co/functions/v1/stripe_flowid_payment_bridge", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    "apikey": "YOUR_SUPABASE_ANON_KEY",
-    "Authorization": "Bearer YOUR_SUPABASE_ANON_KEY"
-  },
-  body: JSON.stringify({ flowID })
-})
-    .then(res => {
-      if (!res.ok) throw new Error("Stripe bridge fetch failed with status " + res.status);
-      return res.json();
-    })
-    .then(result => {
-      if (result.url) {
-        window.location.href = result.url; // Redirects to Stripe Checkout
-      } else {
-        throw new Error("No Stripe URL returned");
-      }
-    })
-    .catch(err => {
-      console.error("❌ Stripe bridge error:", err);
-      alert("❌ Something went wrong. Please try again.");
-    });
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhsYnF1em9hbHZ3bXRqYWR0ZWZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3Mjg4MjEsImV4cCI6MjA2NDMwNDgyMX0.mwSXeQIXJ8FgGtmcqDTnAFchcTXdnLWpCqkcj_3rnXU",
+      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhsYnF1em9hbHZ3bXRqYWR0ZWZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3Mjg4MjEsImV4cCI6MjA2NDMwNDgyMX0.mwSXeQIXJ8FgGtmcqDTnAFchcTXdnLWpCqkcj_3rnXU"
+    },
+    body: JSON.stringify({ flowID })
+  })
+  .then(res => {
+    if (!res.ok) throw new Error("Stripe bridge fetch failed with status " + res.status);
+    return res.json();
+  })
+  .then(result => {
+    if (result.url) {
+      window.location.href = result.url; // Redirects to Stripe Checkout
+    } else {
+      throw new Error("No Stripe URL returned");
+    }
+  })
+  .catch(err => {
+    console.error("❌ Stripe bridge error:", err);
+    alert("❌ Something went wrong. Please try again.");
+  });
 }
 
       // --- MOBILE ONLY: Center LFG label above purchase button, fix margins ---
