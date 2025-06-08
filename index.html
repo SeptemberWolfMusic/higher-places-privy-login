@@ -492,9 +492,9 @@
     txn_id: "",
     flow_id: flowID
   };
-console.log("📩 Submitting to Supabase Stripe bridge:", payload);
 
-function continueToPurchase(flowID) {
+  console.log("📩 Submitting to Supabase Stripe bridge:", payload);
+
   fetch("https://xlbquzoalvwmtjadteft.supabase.co/functions/v1/stripe_flowid_payment_bridge", {
     method: "POST",
     headers: {
@@ -510,7 +510,7 @@ function continueToPurchase(flowID) {
   })
   .then(result => {
     if (result.url) {
-      window.location.href = result.url; // Redirects to Stripe Checkout
+      window.location.href = result.url; // Redirect to Stripe Checkout
     } else {
       throw new Error("No Stripe URL returned");
     }
