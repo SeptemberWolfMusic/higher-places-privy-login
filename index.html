@@ -246,27 +246,27 @@
     margin-right: auto !important;
     display: block !important;
   }
-.inline-btns {
-  display: flex !important;
-  justify-content: center !important;
-  gap: 0.5rem !important;
-  margin-top: 0.3rem !important;
-}
-.inline-btns button:first-child {
-  width: 118px !important;  /* Copy Phrase */
-}
-.inline-btns button:last-child {
-  width: 166px !important;  /* Download Backup (one space wider) */
-}
-.inline-btns button {
-  min-width: 90px !important;
-  max-width: 70vw !important;
-  font-size: 1rem !important;
-  padding: 0.7rem 0.6rem !important;
-  margin: 0 !important;
-  white-space: nowrap !important;
-  display: inline-block !important;
-}
+  .inline-btns {
+    display: flex !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+    margin-top: 0.3rem !important;
+  }
+  .inline-btns button:first-child {
+    width: 118px !important;  /* Copy Phrase */
+  }
+  .inline-btns button:last-child {
+    width: 166px !important;  /* Download Backup (one space wider) */
+  }
+  .inline-btns button {
+    min-width: 90px !important;
+    max-width: 70vw !important;
+    font-size: 1rem !important;
+    padding: 0.7rem 0.6rem !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+    display: inline-block !important;
+  }
   .mini-input {
     width: 32vw !important;
     max-width: 32vw !important;
@@ -291,10 +291,10 @@
     margin-bottom: 0.2rem !important;
     margin-top: 0.4rem !important;
   }
-.copy-wallet-row button {
-  margin: 0.2rem 0 0.7rem 12.5rem !important;
-  display: block !important;
-}
+  .copy-wallet-row button {
+    margin: 0.2rem 0 0.7rem 12.5rem !important;
+    display: block !important;
+  }
   .spaced-above {
     margin-top: 2.3rem !important;
   }
@@ -313,13 +313,25 @@
   button::after {
     display: none !important;
   }
+  /* MAKE KEY LINES SMALLER ON MOBILE */
+  .connect-wallet-note {
+    font-size: 0.93rem !important;
+    line-height: 1.3 !important;
+  }
+  .seed-warning {
+    font-size: 0.89rem !important;
+    line-height: 1.3 !important;
+    margin-bottom: 6px !important;
+    text-align: left !important;
+    word-break: break-word !important;
+  }
 }
 @media (pointer: coarse) {
   button::after {
     display: none !important;
   }
 }
-  </style>
+</style>
 </head>
 <body>
     <div class="content">
