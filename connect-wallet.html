@@ -51,180 +51,183 @@
       margin: 1rem 0 0.2rem;
       text-align: center;
     }
-    /* --- MOBILE ONLY --- */
-    @media (max-width: 600px) {
-      h2 {
-        font-size: 2.5rem;
-        margin: 1rem 0 0.2rem;
-      }
-    .link-line {
-  font-size: 0.78rem !important;
+ /* --- MOBILE ONLY --- */
+@media (max-width: 600px) {
+  h2 {
+    font-size: 2.5rem;
+    margin: 1rem 0 0.2rem;
+  }
+  h3 span {
+    color: #ffd700;
+  }
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: flex-start;
+    padding-left: 1.5ch;
+  }
+  .highlight {
+    font-size: 1.7rem;
+    text-align: center;
+  }
+  .important-line {
+    color: #FFFFFF;
+    font-weight: bold;
+  }
+  .purchase-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-top: 1.2rem;
+  }
+  .purchase-wrapper span {
+    font-size: 0.85rem;
+  }
+  button, input {
+    padding: 0.75rem 1rem;
+    margin-top: 1rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+  }
+  button:hover, input:hover {
+    transform: scale(1.02);
+  }
+  button {
+    background-color: #50c7c0;
+    color: #2b1f1a;
+    cursor: pointer;
+  }
+  input {
+    width: 80%;
+    background-color: #3b2a24;
+    color: #FAF7F7;
+    border: 1px solid #5d4b44;
+    border-radius: 8px;
+    box-sizing: border-box;
+    display: block;
+    margin: 0.5rem auto 0;
+  }
+  .section {
+    margin-bottom: 2.5rem;
+    text-align: center;
+  }
+  .wallet-box {
+    background-color: #3b2a24;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+    word-break: break-word;
+    line-height: 1.4;
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+  }
+  .footer {
+    margin-top: 3rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #FAF7F7;
+  }
+  .footer a {
+    color: #FAF7F7;
+    text-decoration: none;
+  }
+  .footer span {
+    color: #ffd700;
+  }
+  .link-line {
+    font-size: 0.95rem;
+    text-align: center;
+    margin-top: 0.5rem;
+  }
+  .link-line a {
+    color: #CAF5FA;
+    text-decoration: underline;
+  }
+  button#submit-email:hover::after {
+    content: 'Receive your unlockable content';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #FAF7F7;
+    color: #2b1f1a;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    margin-top: 0.3rem;
+  }
+  button#connect-wallet:hover::after {
+    content: 'Connect your wallet to continue';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #FAF7F7;
+    color: #2b1f1a;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    margin-top: 0.3rem;
+  }
+  button#continue-purchase:hover::after {
+    content: 'Continue to purchase NFT';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #FAF7F7;
+    color: #2b1f1a;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    margin-top: 0.3rem;
+  }
+  video {
+    width: 95%;
+    max-width: 600px;
+    border-radius: 12px;
+    margin: 3.5rem auto 0;
+    display: block;
+  }
+  .all-set {
+    text-align: center;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    color: #FAF7F7;
+  }
+  .btn-center {
+    display: flex;
+    justify-content: center;
+    position: relative;
+  }
+  #connect-wallet {
+    position: static;
+    display: block;
+    margin: 1rem auto;
+    background-color: #50c7c0;
+  }
+
+  /* --- ADD-ONLY: Mobile font size tweaks for link-line and footer --- */
+  .link-line {
+    font-size: 0.78rem !important;
+  }
+  .footer {
+    font-size: 0.68rem !important;
+  }
 }
-.footer {
-  font-size: 0.68rem !important;
-}
-    h3 span {
-      color: #ffd700;
-    }
-    h3 {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      justify-content: flex-start;
-      padding-left: 1.5ch;
-    }
-    .highlight {
-      font-size: 1.7rem;
-      text-align: center;
-    }
-    .important-line {
-      color: #FFFFFF;
-      font-weight: bold;
-    }
-    .purchase-wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.5rem;
-      justify-content: center;
-      margin-top: 1.2rem;
-    }
-    .purchase-wrapper span {
-      font-size: 0.85rem;
-    }
-    button, input {
-      padding: 0.75rem 1rem;
-      margin-top: 1rem;
-      font-size: 1rem;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      transition: all 0.2s ease-in-out;
-    }
-    button:hover, input:hover {
-      transform: scale(1.02);
-    }
-    button {
-      background-color: #50c7c0;
-      color: #2b1f1a;
-      cursor: pointer;
-    }
-    input {
-      width: 80%;
-      background-color: #3b2a24;
-      color: #FAF7F7;
-      border: 1px solid #5d4b44;
-      border-radius: 8px;
-      box-sizing: border-box;
-      display: block;
-      margin: 0.5rem auto 0;
-    }
-    .section {
-      margin-bottom: 2.5rem;
-      text-align: center;
-    }
-    .wallet-box {
-      background-color: #3b2a24;
-      padding: 0.75rem 1rem;
-      border-radius: 8px;
-      margin-top: 0.5rem;
-      font-size: 0.95rem;
-      word-break: break-word;
-      line-height: 1.4;
-      width: 85%;
-      margin-left: auto;
-      margin-right: auto;
-      text-align: left;
-    }
-    .footer {
-      margin-top: 3rem;
-      text-align: center;
-      font-size: 0.9rem;
-      color: #FAF7F7;
-    }
-    .footer a {
-      color: #FAF7F7;
-      text-decoration: none;
-    }
-    .footer span {
-      color: #ffd700;
-    }
-    .link-line {
-      font-size: 0.95rem;
-      text-align: center;
-      margin-top: 0.5rem;
-    }
-    .link-line a {
-      color: #CAF5FA;
-      text-decoration: underline;
-    }
-    button#submit-email:hover::after {
-      content: 'Receive your unlockable content';
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: #FAF7F7;
-      color: #2b1f1a;
-      padding: 0.3rem 0.6rem;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      white-space: nowrap;
-      margin-top: 0.3rem;
-    }
-    button#connect-wallet:hover::after {
-      content: 'Connect your wallet to continue';
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: #FAF7F7;
-      color: #2b1f1a;
-      padding: 0.3rem 0.6rem;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      white-space: nowrap;
-      margin-top: 0.3rem;
-    }
-    button#continue-purchase:hover::after {
-      content: 'Continue to purchase NFT';
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: #FAF7F7;
-      color: #2b1f1a;
-      padding: 0.3rem 0.6rem;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      white-space: nowrap;
-      margin-top: 0.3rem;
-    }
-    video {
-      width: 95%;
-      max-width: 600px;
-      border-radius: 12px;
-      margin: 3.5rem auto 0;
-      display: block;
-    }
-    .all-set {
-      text-align: center;
-      font-size: 1rem;
-      margin-top: 0.5rem;
-      color: #FAF7F7;
-    }
-    .btn-center {
-      display: flex;
-      justify-content: center;
-      position: relative;
-    }
-    #connect-wallet {
-      position: static;
-      display: block;
-      margin: 1rem auto;
-      background-color: #50c7c0;
-    }
-  </style>
+</style>
 </head>
 <body>
 <div class="content">
