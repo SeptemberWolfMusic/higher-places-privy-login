@@ -510,17 +510,16 @@
     flow_id: flowID
   };
 
-  // 1. Partial log to Supabase before Stripe
-  try {
-    const logRes = await fetch("https://xlbquzoalvwmtjadteft.supabase.co/rest/v1/create_log", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "apikey": "your_apikey_here",
-        "Authorization": "your_authorization_here"
-      },
-      body: JSON.stringify(payload)
-    });
+ // 1. Partial log to Supabase before Stripe
+try {
+  const logRes = await fetch("https://xlbquzoalvwmtjadteft.supabase.co/rest/v1/create_log", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhsYnF1em9hbHZ3bXRqYWR0ZWZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3Mjg4MjEsImV4cCI6MjA2NDMwNDgyMX0.mwSXeQIXJ8FgGtmcqDTnAFchcTXdnLWpCqkcj_3rnXU"
+    },
+    body: JSON.stringify(payload)
+  });
 
     if (!logRes.ok) {
       const errorMsg = await logRes.text();
