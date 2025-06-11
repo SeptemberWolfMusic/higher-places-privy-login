@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Retry Payment - Higher Places</title>
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   <style>
     body {
       background-color: #97948f;
@@ -95,8 +96,6 @@
 
     if (flow_id) {
       localStorage.setItem('flow_id', flow_id);
-    } else {
-      alert('No valid flow_id found.');
     }
 
     document.getElementById('retry-link').addEventListener('click', async (e) => {
@@ -107,10 +106,10 @@
       }
       try {
         const res = await fetch('https://xlbquzoalvwmtjadteft.supabase.co/functions/v1/stripe_flowid_payment_bridge', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ flow_id }) // lowercase key as expected by bridge
-});
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ flow_id }) // lowercase key as expected by bridge
+        });
         if (!res.ok) throw new Error('Failed to create session');
         const { url } = await res.json();
         window.location.href = url;
