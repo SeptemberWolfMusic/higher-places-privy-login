@@ -484,83 +484,85 @@
     }
   }
 
-  async function continueToPurchase() {
-    const name = document.getElementById('user-name').value.trim();
-    const email = document.getElementById('user-email').value.trim();
-    const wallet = document.getElementById('wallet-address').innerText.trim();
+ async function continueToPurchase() {
+  const name = document.getElementById('user-name').value.trim();
+  const email = document.getElementById('user-email').value.trim();
+  const wallet = document.getElementById('wallet-address').innerText.trim();
 
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!emailRegex.test(email)) {
-      alert('❌ Please enter a valid email address (e.g., your@email.com)');
-      return;
-    }
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!emailRegex.test(email)) {
+    alert('❌ Please enter a valid email address (e.g., your@email.com)');
+    return;
+  }
 
-    const flowID = crypto.randomUUID();
-    const flowType = 'create';
-    const batch = 'B01';
+  const flowID = crypto.randomUUID();
+  const flowType = 'create';
+  const batch = 'B01';
 
-    const payload = {
-      email,
-      wallet,
-      name,
-      flow_type: flowType,
-      batch,
-      edition_number: "",
-      txn_id: "",
-      flow_id: flowID
-    };
+  const payload = {
+    email,
+    wallet,
+    name,
+    flow_type: flowType,
+    batch,
+    edition_number: "",
+    txn_id: "",
+    flow_id: flowID
+  };
 
-    // 1. Partial log to Supabase before Stripe
-    try {
-      const logRes = await fetch("https://xlbquzoalvwmtjadteft.supabase.co/rest/v1/create_log", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhsYnF1em9hbHZ3bXRqYWR0ZWZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3Mjg4MjEsImV4cCI6MjA2NDMwNDgyMX0.mwSXeQIXJ8FgGtmcqDTnAFchcTXdnLWpCqkcj_3rnXU",
-          "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhsYnF1em9hbHZ3bXRqYWR0ZWZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3Mjg4MjEsImV4cCI6MjA2NDMwNDgyMX0.mwSXeQIXJ8FgGtmcqDTnAFchcTXdnLWpCqkcj_3rnXU"
-        },
-        body: JSON.stringify(payload)
-      });
-
-      if (!logRes.ok) {
-        const errorMsg = await logRes.text();
-        console.error("❌ Supabase log error:", errorMsg);
-        alert("❌ Error logging to Supabase. Please try again.");
-        return;
-      }
-      console.log("✅ Partial log submitted to Supabase:", payload);
-    } catch (err) {
-      console.error("❌ Supabase log network error:", err);
-      alert("❌ Network error logging to Supabase.");
-      return;
-    }
-
-    // 2. Continue to Stripe bridge
-    fetch("https://xlbquzoalvwmtjadteft.supabase.co/functions/v1/stripe_flowid_payment_bridge", {
+  // 1. Partial log to Supabase before Stripe
+  try {
+    const logRes = await fetch("https://xlbquzoalvwmtjadteft.supabase.co/rest/v1/create_log", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhsYnF1em9hbHZ3bXRqYWR0ZWZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3Mjg4MjEsImV4cCI6MjA2NDMwNDgyMX0.mwSXeQIXJ8FgGtmcqDTnAFchcTXdnLWpCqkcj_3rnXU",
-        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhsYnF1em9hbHZ3bXRqYWR0ZWZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3Mjg4MjEsImV4cCI6MjA2NDMwNDgyMX0.mwSXeQIXJ8FgGtmcqDTnAFchcTXdnLWpCqkcj_3rnXU"
+        "apikey": "your_apikey_here",
+        "Authorization": "your_authorization_here"
       },
       body: JSON.stringify(payload)
-    })
-    .then(res => {
-      if (!res.ok) throw new Error("Stripe bridge fetch failed with status " + res.status);
-      return res.json();
-    })
-    .then(result => {
-      if (result.url) {
-        window.location.href = result.url; // Redirect to Stripe Checkout
-      } else {
-        throw new Error("No Stripe URL returned");
-      }
-    })
-    .catch(err => {
-      console.error("❌ Stripe bridge error:", err);
-      alert("❌ Something went wrong. Please try again.");
     });
+
+    if (!logRes.ok) {
+      const errorMsg = await logRes.text();
+      console.error("❌ Supabase log error:", errorMsg);
+      alert("❌ Error logging to Supabase. Please try again.");
+      return;
+    }
+    console.log("✅ Partial log submitted to Supabase:", payload);
+  } catch (err) {
+    console.error("❌ Supabase log network error:", err);
+    alert("❌ Network error logging to Supabase.");
+    return;
   }
+
+  // 2. Continue to Stripe bridge
+  console.log("Sending flowID:", payload.flow_id);  // <-- Added console log here
+
+  fetch("https://xlbquzoalvwmtjadteft.supabase.co/functions/v1/stripe_flowid_payment_bridge", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "apikey": "your_apikey_here",
+      "Authorization": "your_authorization_here"
+    },
+    body: JSON.stringify(payload)
+  })
+  .then(res => {
+    if (!res.ok) throw new Error("Stripe bridge fetch failed with status " + res.status);
+    return res.json();
+  })
+  .then(result => {
+    if (result.url) {
+      window.location.href = result.url; // Redirect to Stripe Checkout
+    } else {
+      throw new Error("No Stripe URL returned");
+    }
+  })
+  .catch(err => {
+    console.error("❌ Stripe bridge error:", err);
+    alert("❌ Something went wrong. Please try again.");
+  });
+}
       // --- MOBILE ONLY: Center LFG label above purchase button, fix margins ---
       window.addEventListener('DOMContentLoaded', function() {
         function adjustMobileStyling() {
