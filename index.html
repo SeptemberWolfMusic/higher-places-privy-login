@@ -534,16 +534,17 @@ try {
     return;
   }
 
-  // 2. Continue to Stripe bridge
-  console.log("Sending flowID:", payload.flow_id);  // <-- Added console log here
+ // 2. Continue to Stripe bridge
+console.log("Sending flowID:", payload.flow_id);  // existing log
+console.log("Stripe bridge payload:", payload);   // NEW line for debug
 
- fetch("https://xlbquzoalvwmtjadteft.supabase.co/functions/v1/stripe_flowid_payment_bridge", {
+fetch("https://xlbquzoalvwmtjadteft.supabase.co/functions/v1/stripe_flowid_payment_bridge", {
   method: "POST",
   headers: {
     "Content-Type": "application/json"
   },
   body: JSON.stringify(payload)
-})
+});
   .then(res => {
     if (!res.ok) throw new Error("Stripe bridge fetch failed with status " + res.status);
     return res.json();
