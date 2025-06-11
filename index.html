@@ -484,7 +484,7 @@
     }
   }
 
- async function continueToPurchase() {
+  async function continueToPurchase() {
   const name = document.getElementById('user-name').value.trim();
   const email = document.getElementById('user-email').value.trim();
   const wallet = document.getElementById('wallet-address').innerText.trim();
@@ -496,21 +496,21 @@
   }
 
   const flowID = crypto.randomUUID();
-  const flowType = 'create';
-  const batch = 'B01';
+const flowType = 'create';
+const batch = 'B01';
 
-  const payload = {
-    email,
-    wallet,
-    name,
-    flow_type: flowType,
-    batch,
-    edition_number: "",
-    txn_id: "",
-    flow_id: flowID
-  };
+const payload = {
+  email,
+  wallet,
+  name,
+  flow_type: flowType,
+  batch,
+  edition_number: "",
+  txn_id: "",
+  flow_id: flowID
+};
 
- // 1. Partial log to Supabase before Stripe
+// 1. Partial log to Supabase before Stripe
 try {
   const logRes = await fetch("https://xlbquzoalvwmtjadteft.supabase.co/rest/v1/create_log", {
     method: "POST",
@@ -521,18 +521,18 @@ try {
     body: JSON.stringify(payload)
   });
 
-    if (!logRes.ok) {
-      const errorMsg = await logRes.text();
-      console.error("❌ Supabase log error:", errorMsg);
-      alert("❌ Error logging to Supabase. Please try again.");
-      return;
-    }
-    console.log("✅ Partial log submitted to Supabase:", payload);
-  } catch (err) {
-    console.error("❌ Supabase log network error:", err);
-    alert("❌ Network error logging to Supabase.");
+  if (!logRes.ok) {
+    const errorMsg = await logRes.text();
+    console.error("❌ Supabase log error:", errorMsg);
+    alert("❌ Error logging to Supabase. Please try again.");
     return;
   }
+  console.log("✅ Partial log submitted to Supabase:", payload);
+} catch (err) {
+  console.error("❌ Supabase log network error:", err);
+  alert("❌ Network error logging to Supabase.");
+  return;
+}
 
 // 2. Continue to Stripe bridge
 console.log("Sending flowID:", payload.flow_id);    // existing log
@@ -545,21 +545,22 @@ fetch("https://xlbquzoalvwmtjadteft.supabase.co/functions/v1/stripe_flowid_payme
   },
   body: JSON.stringify(payload)
 })
-.then(res => {
-  if (!res.ok) throw new Error("Stripe bridge fetch failed with status " + res.status);
-  return res.json();
-})
-.then(result => {
-  if (result.url) {
-    window.location.href = result.url; // Redirect to Stripe Checkout
-  } else {
-    throw new Error("No Stripe URL returned");
-  }
-})
-.catch(err => {
-  console.error("❌ Stripe bridge error:", err);
-  alert("❌ Something went wrong. Please try again.");
-});
+  .then(res => {
+    if (!res.ok) throw new Error("Stripe bridge fetch failed with status " + res.status);
+    return res.json();
+  })
+  .then(result => {
+    if (result.url) {
+      window.location.href = result.url; // Redirect to Stripe Checkout
+    } else {
+      throw new Error("No Stripe URL returned");
+    }
+  })
+  .catch(err => {
+    console.error("❌ Stripe bridge error:", err);
+    alert("❌ Something went wrong. Please try again.");
+  });
+
       // --- MOBILE ONLY: Center LFG label above purchase button, fix margins ---
       window.addEventListener('DOMContentLoaded', function() {
         function adjustMobileStyling() {
