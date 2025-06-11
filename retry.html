@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Retry Payment - Higher Places</title>
-  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   <style>
     body {
       background-color: #97948f;
@@ -90,32 +89,36 @@
   </footer>
 
   <script>
-    // Get flow_id from URL or localStorage
-    const params = new URLSearchParams(window.location.search);
-    let flow_id = params.get('flow_id') || localStorage.getItem('flow_id');
+    document.addEventListener('DOMContentLoaded', () => {
+      // Get flow_id from URL or localStorage
+      const params = new URLSearchParams(window.location.search);
+      let flow_id = params.get('flow_id') || localStorage.getItem('flow_id');
 
-    if (flow_id) {
-      localStorage.setItem('flow_id', flow_id);
-    }
-
-    document.getElementById('retry-link').addEventListener('click', async (e) => {
-      e.preventDefault();
-      if (!flow_id) {
+      if (flow_id) {
+        localStorage.setItem('flow_id', flow_id);
+      } else {
         alert('No valid flow_id found.');
-        return;
       }
-      try {
-        const res = await fetch('https://xlbquzoalvwmtjadteft.supabase.co/functions/v1/stripe_flowid_payment_bridge', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ flow_id }) // lowercase key as expected by bridge
-        });
-        if (!res.ok) throw new Error('Failed to create session');
-        const { url } = await res.json();
-        window.location.href = url;
-      } catch (err) {
-        alert('Error: ' + err.message);
-      }
+
+      document.getElementById('retry-link').addEventListener('click', async (e) => {
+        e.preventDefault();
+        if (!flow_id) {
+          alert('No valid flow_id found.');
+          return;
+        }
+        try {
+          const res = await fetch('https://xlbquzoalvwmtjadteft.supabase.co/functions/v1/stripe_flowid_payment_bridge', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ flow_id }) // lowercase key as expected by bridge
+          });
+          if (!res.ok) throw new Error('Failed to create session');
+          const { url } = await res.json();
+          window.location.href = url;
+        } catch (err) {
+          alert('Error: ' + err.message);
+        }
+      });
     });
   </script>
 </body>
