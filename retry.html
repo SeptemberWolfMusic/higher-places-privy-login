@@ -106,11 +106,11 @@
         return;
       }
       try {
-        const res = await fetch('https://YOUR_EDGE_FUNCTION_URL/stripe_flowid_payment_bridge', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ flow_id }) // lowercase key
-        });
+        const res = await fetch('https://xlbquzoalvwmtjadteft.supabase.co/functions/v1/stripe_flowid_payment_bridge', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ flow_id }) // lowercase key as expected by bridge
+});
         if (!res.ok) throw new Error('Failed to create session');
         const { url } = await res.json();
         window.location.href = url;
