@@ -67,8 +67,6 @@
       position: relative;
       top: -1px;
     }
-
-    /* Mobile styles */
     @media (max-width: 480px) {
       h1 {
         font-size: 1.6rem;
@@ -91,20 +89,27 @@
   </footer>
 
   <script>
+    // Get flow_id from URL or localStorage
     const params = new URLSearchParams(window.location.search);
-    const flowID = params.get('flowID');
+    let flow_id = params.get('flow_id') || localStorage.getItem('flow_id');
+
+    if (flow_id) {
+      localStorage.setItem('flow_id', flow_id);
+    } else {
+      alert('No valid flow_id found.');
+    }
 
     document.getElementById('retry-link').addEventListener('click', async (e) => {
       e.preventDefault();
-      if (!flowID) {
-        alert('No valid flowID found.');
+      if (!flow_id) {
+        alert('No valid flow_id found.');
         return;
       }
       try {
         const res = await fetch('https://YOUR_EDGE_FUNCTION_URL/stripe_flowid_payment_bridge', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ flowID })
+          body: JSON.stringify({ flow_id }) // lowercase key
         });
         if (!res.ok) throw new Error('Failed to create session');
         const { url } = await res.json();
