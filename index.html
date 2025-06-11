@@ -534,9 +534,9 @@ try {
     return;
   }
 
- // 2. Continue to Stripe bridge
-console.log("Sending flowID:", payload.flow_id);  // existing log
-console.log("Stripe bridge payload:", payload);   // NEW line for debug
+// 2. Continue to Stripe bridge
+console.log("Sending flowID:", payload.flow_id);    // existing log
+console.log("Stripe bridge payload:", payload);     // debug line
 
 fetch("https://xlbquzoalvwmtjadteft.supabase.co/functions/v1/stripe_flowid_payment_bridge", {
   method: "POST",
@@ -544,23 +544,22 @@ fetch("https://xlbquzoalvwmtjadteft.supabase.co/functions/v1/stripe_flowid_payme
     "Content-Type": "application/json"
   },
   body: JSON.stringify(payload)
+})
+.then(res => {
+  if (!res.ok) throw new Error("Stripe bridge fetch failed with status " + res.status);
+  return res.json();
+})
+.then(result => {
+  if (result.url) {
+    window.location.href = result.url; // Redirect to Stripe Checkout
+  } else {
+    throw new Error("No Stripe URL returned");
+  }
+})
+.catch(err => {
+  console.error("❌ Stripe bridge error:", err);
+  alert("❌ Something went wrong. Please try again.");
 });
-  .then(res => {
-    if (!res.ok) throw new Error("Stripe bridge fetch failed with status " + res.status);
-    return res.json();
-  })
-  .then(result => {
-    if (result.url) {
-      window.location.href = result.url; // Redirect to Stripe Checkout
-    } else {
-      throw new Error("No Stripe URL returned");
-    }
-  })
-  .catch(err => {
-    console.error("❌ Stripe bridge error:", err);
-    alert("❌ Something went wrong. Please try again.");
-  });
-}
       // --- MOBILE ONLY: Center LFG label above purchase button, fix margins ---
       window.addEventListener('DOMContentLoaded', function() {
         function adjustMobileStyling() {
