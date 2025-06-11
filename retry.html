@@ -94,6 +94,9 @@
       const params = new URLSearchParams(window.location.search);
       let flow_id = params.get('flow_id') || localStorage.getItem('flow_id');
 
+      console.log('localStorage flow_id:', localStorage.getItem('flow_id'));
+      console.log('URL flow_id:', flow_id);
+
       if (flow_id) {
         localStorage.setItem('flow_id', flow_id);
       } else {
