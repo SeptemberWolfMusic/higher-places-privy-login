@@ -5,25 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Higher Places – Connect</title>
 
-  <!-- ✅ Favicon (same as Page 1) -->
+  <!-- Favicon -->
   <link rel="icon" href="https://septemberwolfmusic.github.io/favicon.ico" />
 
-  <!-- ✅ Solana web3.js (must be FIRST) -->
+  <!-- Solana web3.js -->
   <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.95.2/lib/index.iife.min.js"></script>
-  <!-- ✅ Buffer polyfill -->
+  <!-- Buffer polyfill -->
   <script src="https://cdn.jsdelivr.net/npm/buffer@6.0.3/index.min.js"></script>
   <script>window.Buffer = Buffer;</script>
 
-  <!-- ✅ Wallet Adapter Core (required for modal/QR support) -->
-  <script src="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-core@0.18.2/lib/index.umd.min.js"></script>
-  <!-- ✅ Wallet Adapter Base (required for modal) -->
-  <script src="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-base@0.10.4/lib/index.umd.min.js"></script>
+  <!-- Wallet Adapter Core -->
+  <script src="https://unpkg.com/@solana/wallet-adapter-core@0.19.4/lib/index.umd.min.js"></script>
+  <!-- Wallet Adapter Base -->
+  <script src="https://unpkg.com/@solana/wallet-adapter-base@0.11.6/lib/index.umd.min.js"></script>
 
-  <!-- ✅ Wallet Adapter Wallets -->
-  <script src="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-wallets@0.21.13/lib/index.umd.min.js"></script>
-  <!-- ✅ Wallet Adapter Modal only (best for browser support) -->
-  <script src="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-modal@0.22.8/lib/index.umd.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-modal@0.22.8/ui/styles.css">
+  <!-- Wallet Adapter Wallets -->
+  <script src="https://unpkg.com/@solana/wallet-adapter-wallets@0.22.3/lib/index.umd.min.js"></script>
+
+  <!-- Wallet Adapter Modal -->
+  <script src="https://unpkg.com/@solana/wallet-adapter-modal@0.23.5/lib/index.umd.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/@solana/wallet-adapter-modal@0.23.5/ui/styles.css" />
+</head>
 
   <style>
     body {
