@@ -321,7 +321,7 @@
   }
 </style>
 
- <script>
+<script>
   // Hide sections initially (locked state)
   document.getElementById("wallet-display").style.display = "none";
   document.getElementById("email-section").style.display = "none";
@@ -389,78 +389,94 @@
     document.getElementById("wallet-flip").innerText = "Connect Wallet";
   }
 
-  // Show QR/deep-link modal for mobile wallets
+  // Show QR/deep-link modal for desktop
   function showWalletQR() {
-  // Modal styles
-  const modalStyle = `
-    position:fixed;top:0;left:0;width:100vw;height:100vh;
-    background:#97948fEE;display:flex;align-items:center;justify-content:center;z-index:9999;`;
-  const cardStyle = `
-    background:#97948f;padding:2.6rem 2.6rem 1.5rem 2.6rem;
-    border-radius:26px;box-shadow:0 4px 32px #3b2a241c;
-    min-width:400px;max-width:98vw;text-align:center;min-height:420px;`;
-  const headerStyle = `
-    color:#faf7f7;font-size:1.18rem;font-weight:600;margin-bottom:1.1rem;letter-spacing:.01em;`;
-  const btnRowStyle = `display:flex;gap:1.5rem;justify-content:center;margin-bottom:1.2rem;`;
-  const btnStyle = `
-    background:#faf7f7;color:#3b2a24;font-weight:600;
-    border:none;border-radius:12px;min-width:132px;padding:1rem 1.8rem;
-    font-size:1.13rem;cursor:pointer;transition:all .15s;`;
-  const btnHoverStyle = `background:#3b2a24;color:#faf7f7;`;
-  const closeBtnStyle = `
-    margin-top:0.9rem;background:#50c7c0;color:#2b1f1a;
-    padding:0.9rem 2.1rem;border-radius:12px;font-weight:700;cursor:pointer;border:none;font-size:1.1rem;`;
-  const footerStyle = `margin-top:1.45rem;font-size:.80rem;color:#faf7f7;opacity:0.78;letter-spacing:0.01em;`;
-  const starStyle = `color:#ffd700;font-size:1.05em;`;
+    // Modal styles
+    const modalStyle = `
+      position:fixed;top:0;left:0;width:100vw;height:100vh;
+      background:#97948fEE;display:flex;align-items:center;justify-content:center;z-index:9999;`;
+    const cardStyle = `
+      background:#97948f;padding:2.6rem 2.6rem 1.5rem 2.6rem;
+      border-radius:26px;box-shadow:0 4px 32px #3b2a241c;
+      min-width:400px;max-width:98vw;text-align:center;min-height:420px;`;
+    const headerStyle = `
+      color:#faf7f7;font-size:1.11rem;font-weight:600;margin-bottom:1.0rem;letter-spacing:.01em;`;
+    const subHeaderStyle = `
+      color:#faf7f7;font-size:.98rem;font-weight:500;margin-bottom:1.1rem;letter-spacing:.01em;`;
+    const btnRowStyle = `display:flex;gap:1.5rem;justify-content:center;margin-bottom:1.1rem;`;
+    const btnStyle = `
+      background:#faf7f7;color:#3b2a24;font-weight:600;
+      border:none;border-radius:12px;min-width:132px;padding:1rem 1.8rem;
+      font-size:1.13rem;cursor:pointer;transition:all .15s;`;
+    const btnHoverStyle = `background:#3b2a24;color:#faf7f7;`;
+    const closeBtnStyle = `
+      margin-top:0.7rem;background:#50c7c0;color:#2b1f1a;
+      padding:0.9rem 2.1rem;border-radius:12px;font-weight:700;cursor:pointer;border:none;font-size:1.1rem;`;
+    const footerStyle = `margin-top:1.05rem;font-size:.80rem;color:#faf7f7;opacity:0.78;letter-spacing:0.01em;`;
+    const starStyle = `color:#ffd700;font-size:1.05em;`;
 
-  // QR function
-  function qrImg(url) {
-  return `<img src="https://api.qrserver.com/v1/create-qr-code/?size=252x252&data=${encodeURIComponent(url)}"
-    alt="QR" style="margin:1.2rem auto 0.5rem auto;border-radius:15px;display:block;background:#faf7f7;" />`;
-}
-  // Links
-  const url = window.location.href;
-  const phantomLink = "https://phantom.app/ul/browse/" + encodeURIComponent(url);
-  const solflareLink = "https://solflare.com/ul/v1/browse/" + encodeURIComponent(url);
+    // QR function
+    function qrImg(url) {
+      return `<img src="https://api.qrserver.com/v1/create-qr-code/?size=252x252&data=${encodeURIComponent(url)}"
+        alt="QR" style="margin:1.2rem auto 0.5rem auto;border-radius:15px;display:block;background:#faf7f7;" />`;
+    }
+    // Links
+    const url = window.location.href;
+    const phantomLink = "https://phantom.app/ul/browse/" + encodeURIComponent(url);
+    const solflareLink = "https://solflare.com/ul/v1/browse/" + encodeURIComponent(url);
+    const phantomDownload = "https://phantom.app/download";
+    const solflareDownload = "https://solflare.com/download";
+    const createWalletURL = "https://septemberwolfmusic.github.io/wolf-machine-wallet-portal/";
 
-  // Modal HTML
-  let modal = document.createElement("div");
-  modal.id = "qr-modal";
-  modal.setAttribute("style", modalStyle);
-  modal.innerHTML = `
-    <div style="${cardStyle}">
-      <div style="${headerStyle}">Scan QR in your wallet app</div>
-      <div id="qr-btn-row" style="${btnRowStyle}">
-        <button id="phantom-btn" style="${btnStyle}">Phantom</button>
-        <button id="solflare-btn" style="${btnStyle}">Solflare</button>
+    // Modal HTML
+    let modal = document.createElement("div");
+    modal.id = "qr-modal";
+    modal.setAttribute("style", modalStyle);
+    modal.innerHTML = `
+      <div style="${cardStyle}">
+        <div style="${headerStyle}">
+          No wallet detected, <a href="${createWalletURL}" target="_blank" style="color:#50c7c0;text-decoration:underline;">click to create one instead</a>.
+        </div>
+        <div style="${subHeaderStyle}">Or choose a wallet to connect to</div>
+        <div id="qr-btn-row" style="${btnRowStyle}">
+          <button id="phantom-btn" style="${btnStyle}">Phantom</button>
+          <button id="solflare-btn" style="${btnStyle}">Solflare</button>
+        </div>
+        <div id="qr-img-holder" style="min-height:265px;"></div>
+        <button onclick="document.getElementById('qr-modal').remove()" style="${closeBtnStyle}">Close</button>
+        <div style="${footerStyle}">
+          Powered by Wolf Machine & SWM <span style="${starStyle}">✦</span> Made with LOVE
+        </div>
       </div>
-      <div id="qr-img-holder" style="min-height:265px;"></div>
-      <button onclick="document.getElementById('qr-modal').remove()" style="${closeBtnStyle}">Close</button>
-      <div style="${footerStyle}">
-        Powered by Wolf Machine & SWM <span style="${starStyle}">✦</span> Made with LOVE
-      </div>
-    </div>
-  `;
-  document.body.appendChild(modal);
+    `;
+    document.body.appendChild(modal);
 
-  // Button events/hover
-  function setQR(wallet) {
-    const link = wallet === "phantom" ? phantomLink : solflareLink;
-    document.getElementById("qr-img-holder").innerHTML = qrImg(link);
+    // Button events/hover
+    function setQR(wallet) {
+      const link = wallet === "phantom" ? phantomLink : solflareLink;
+      const download = wallet === "phantom"
+        ? `<div style="margin-bottom:0.7rem;font-size:.97rem;color:#faf7f7;opacity:0.85;">
+            <a href="${phantomDownload}" target="_blank" style="color:#50c7c0;">Download Phantom extension</a>
+          </div>`
+        : `<div style="margin-bottom:0.7rem;font-size:.97rem;color:#faf7f7;opacity:0.85;">
+            <a href="${solflareDownload}" target="_blank" style="color:#50c7c0;">Download Solflare extension</a>
+          </div>`;
+      document.getElementById("qr-img-holder").innerHTML = download + qrImg(link);
+    }
+    document.getElementById("phantom-btn").onclick = () => setQR("phantom");
+    document.getElementById("solflare-btn").onclick = () => setQR("solflare");
+
+    // Button hover/invert
+    ["phantom-btn", "solflare-btn"].forEach(id => {
+      const btn = document.getElementById(id);
+      btn.onmouseover = () => btn.style = btnStyle + btnHoverStyle;
+      btn.onmouseout = () => btn.style = btnStyle;
+    });
+
+    // No QR shown until button clicked
+    document.getElementById("qr-img-holder").innerHTML = "";
   }
-  document.getElementById("phantom-btn").onclick = () => setQR("phantom");
-  document.getElementById("solflare-btn").onclick = () => setQR("solflare");
 
-  // Button hover/invert
-  ["phantom-btn", "solflare-btn"].forEach(id => {
-    const btn = document.getElementById(id);
-    btn.onmouseover = () => btn.style = btnStyle + btnHoverStyle;
-    btn.onmouseout = () => btn.style = btnStyle;
-  });
-
-  // No QR shown until button clicked
-  document.getElementById("qr-img-holder").innerHTML = "";
-}
   // Email input handling
   function submitEmailAndScroll() {
     const name = document.getElementById("name").value.trim();
