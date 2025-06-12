@@ -345,7 +345,7 @@
   // Unified connect/disconnect button logic
   async function handleWalletFlip() {
     if (walletAddress) {
-      disconnectWallet();
+      Disconnect();
     } else {
       // Try Phantom/Solflare or offer QR/Deep-link as fallback
       if (window.solana && window.solana.isPhantom) {
