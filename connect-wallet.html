@@ -319,16 +319,28 @@
 </style>
 
   <script>
- document.getElementById("wallet-display").style.display = "none";
-document.getElementById("email-section").style.display = "none";
-document.getElementById("purchase-section").style.display = "none";
-document.getElementById("wallet-flip").innerText = "Connect Wallet";
+  // Hide sections initially (locked state)
+  document.getElementById("wallet-display").style.display = "none";
+  document.getElementById("email-section").style.display = "none";
+  document.getElementById("purchase-section").style.display = "none";
+  document.getElementById("wallet-flip").innerText = "Connect Wallet";
+
+  // FlowID setup - lowercase key to match backend
+  let flow_id = localStorage.getItem('flow_id');
+  if (!flow_id) {
+    flow_id = ([1e7]+-1e3+-4e3+-8e3+-1e11)
+      .replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+      );
+    localStorage.setItem('flow_id', flow_id);
+  }
 
   let walletAddress = "";
   let buyerName = "";
   let buyerEmail = "";
   let walletModal = null;
 
+  // Wallet connect/disconnect logic using wallet adapter modal
   async function handleWalletFlip() {
     if (walletAddress) {
       disconnectWallet();
@@ -337,11 +349,10 @@ document.getElementById("wallet-flip").innerText = "Connect Wallet";
     }
   }
 
-  // Modern multi-wallet, QR, mobile support!
-  function handleWalletFlip() {
-    const { PhantomWalletAdapter, SolflareWalletAdapter } = window.walletAdapterWallets;
-    const { WalletAdapterNetwork } = window.walletAdapterBase;
-    const { WalletModal } = window.walletAdapterModal;
+  function connectWallet() {
+    const { PhantomWalletAdapter, SolflareWalletAdapter } = window.walletAdapterWallets || {};
+    const { WalletAdapterNetwork } = window.walletAdapterBase || {};
+    const { WalletModal } = window.walletAdapterModal || {};
 
     if (!(PhantomWalletAdapter && SolflareWalletAdapter && WalletAdapterNetwork && WalletModal)) {
       alert("Wallet adapter libraries failed to load. Please refresh or try a different browser.");
@@ -391,6 +402,7 @@ document.getElementById("wallet-flip").innerText = "Connect Wallet";
     document.getElementById("wallet-flip").innerText = "Connect Wallet";
   }
 
+  // Email input handling
   function submitEmailAndScroll() {
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
@@ -414,6 +426,7 @@ document.getElementById("wallet-flip").innerText = "Connect Wallet";
     }
   }
 
+  // FlowID generator (UUID-like)
   function generateFlowID() {
     return ([1e7]+-1e3+-4e3+-8e3+-1e11)
       .replace(/[018]/g, c =>
@@ -421,6 +434,7 @@ document.getElementById("wallet-flip").innerText = "Connect Wallet";
       );
   }
 
+  // SOL payment + logging
   async function sendSol() {
     if (!walletAddress) {
       alert("Please connect your wallet first.");
@@ -436,7 +450,6 @@ document.getElementById("wallet-flip").innerText = "Connect Wallet";
     const lamports = amountInSol * solanaWeb3.LAMPORTS_PER_SOL;
 
     try {
-      // We'll use window.solana for sign/send
       const provider = window.solana;
       if (!provider || !provider.isConnected) {
         alert("Please connect your wallet first.");
@@ -460,7 +473,9 @@ document.getElementById("wallet-flip").innerText = "Connect Wallet";
 
       alert("✅ Payment successful! TXID: " + txid);
 
-      const flowID = generateFlowID();
+      // Use existing flow_id from localStorage (or generate if missing)
+      const flowIDToLog = localStorage.getItem('flow_id') || generateFlowID();
+      localStorage.setItem('flow_id', flowIDToLog);
 
       const payload = {
         email: buyerEmail,
@@ -470,7 +485,7 @@ document.getElementById("wallet-flip").innerText = "Connect Wallet";
         batch: "B01",
         edition_number: "",
         txn_id: txid,
-        flow_id: flowID,
+        flow_id: flowIDToLog,
         payment_method: "crypto"
       };
 
@@ -489,13 +504,16 @@ document.getElementById("wallet-flip").innerText = "Connect Wallet";
       const data = await res.json();
       console.log("Successfully logged payment:", data);
 
+      // Clear flow_id after successful logging to avoid duplicates
+      localStorage.removeItem('flow_id');
+
     } catch (err) {
       console.error(err);
       alert("❌ Payment or logging failed: " + err.message);
     }
   }
 
-  // Set tooltip text for buttons, safe on load
+  // Tooltip text setup on load
   window.addEventListener("DOMContentLoaded", () => {
     const submitBtn = document.getElementById("submit-email");
     if (submitBtn) submitBtn.setAttribute("data-tooltip", "Receive your unlockable content");
@@ -503,6 +521,7 @@ document.getElementById("wallet-flip").innerText = "Connect Wallet";
     if (solBtn) solBtn.setAttribute("data-tooltip", "Purchase your NFT");
   });
 
+  // Update SOL price label
   async function updateSolPriceLabel() {
     try {
       const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd");
