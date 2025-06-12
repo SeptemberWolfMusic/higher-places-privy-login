@@ -319,6 +319,12 @@
 </style>
 
 <script>
+  // TEMP: Show all sections without wallet for preview
+  document.getElementById("wallet-display").style.display = "block";
+  document.getElementById("email-section").style.display = "block";
+  document.getElementById("purchase-section").style.display = "block";
+  document.getElementById("wallet-flip").innerText = "Disconnect Wallet";
+
   let walletAddress = "";
   let buyerName = "";
   let buyerEmail = "";
