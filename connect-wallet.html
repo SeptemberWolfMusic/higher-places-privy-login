@@ -415,10 +415,9 @@
 
   // QR function
   function qrImg(url) {
-    return `<img src="https://chart.googleapis.com/chart?cht=qr&chs=252x252&chl=${encodeURIComponent(url)}"
-      alt="QR" style="margin:1.2rem auto 0.5rem auto;border-radius:15px;display:block;background:#faf7f7;" />`;
-  }
-
+  return `<img src="https://api.qrserver.com/v1/create-qr-code/?size=252x252&data=${encodeURIComponent(url)}"
+    alt="QR" style="margin:1.2rem auto 0.5rem auto;border-radius:15px;display:block;background:#faf7f7;" />`;
+}
   // Links
   const url = window.location.href;
   const phantomLink = "https://phantom.app/ul/browse/" + encodeURIComponent(url);
