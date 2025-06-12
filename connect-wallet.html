@@ -390,33 +390,33 @@
   }
 
   // Show QR/deep-link modal for mobile wallets
-function showWalletQR() {
+  function showWalletQR() {
   // Modal styles
   const modalStyle = `
     position:fixed;top:0;left:0;width:100vw;height:100vh;
     background:#97948fEE;display:flex;align-items:center;justify-content:center;z-index:9999;`;
   const cardStyle = `
-    background:#97948f;padding:2.4rem 2.4rem 1.3rem 2.4rem;
-    border-radius:22px;box-shadow:0 4px 32px #3b2a241c;
-    min-width:350px;max-width:94vw;text-align:center;`;
+    background:#97948f;padding:2.6rem 2.6rem 1.5rem 2.6rem;
+    border-radius:26px;box-shadow:0 4px 32px #3b2a241c;
+    min-width:400px;max-width:98vw;text-align:center;min-height:420px;`;
   const headerStyle = `
-    color:#faf7f7;font-size:1.17rem;font-weight:600;margin-bottom:1.1rem;letter-spacing:.01em;`;
+    color:#faf7f7;font-size:1.18rem;font-weight:600;margin-bottom:1.1rem;letter-spacing:.01em;`;
   const btnRowStyle = `display:flex;gap:1.5rem;justify-content:center;margin-bottom:1.2rem;`;
   const btnStyle = `
     background:#faf7f7;color:#3b2a24;font-weight:600;
-    border:none;border-radius:10px;min-width:112px;padding:0.8rem 1.7rem;
-    font-size:1.08rem;cursor:pointer;transition:all .15s;`;
+    border:none;border-radius:12px;min-width:132px;padding:1rem 1.8rem;
+    font-size:1.13rem;cursor:pointer;transition:all .15s;`;
   const btnHoverStyle = `background:#3b2a24;color:#faf7f7;`;
   const closeBtnStyle = `
-    margin-top:0.8rem;background:#3b2a24;color:#faf7f7;
-    padding:0.7rem 1.5rem;border-radius:9px;font-weight:600;cursor:pointer;border:none;`;
-  const footerStyle = `margin-top:1.35rem;font-size:.83rem;color:#faf7f7;opacity:0.8;letter-spacing:0.01em;`;
+    margin-top:0.9rem;background:#50c7c0;color:#2b1f1a;
+    padding:0.9rem 2.1rem;border-radius:12px;font-weight:700;cursor:pointer;border:none;font-size:1.1rem;`;
+  const footerStyle = `margin-top:1.45rem;font-size:.80rem;color:#faf7f7;opacity:0.78;letter-spacing:0.01em;`;
   const starStyle = `color:#ffd700;font-size:1.05em;`;
 
   // QR function
   function qrImg(url) {
-    return `<img src="https://chart.googleapis.com/chart?cht=qr&chs=222x222&chl=${encodeURIComponent(url)}"
-      alt="QR" style="margin:1.1rem auto 0.4rem auto;border-radius:13px;display:block;background:#faf7f7;" />`;
+    return `<img src="https://chart.googleapis.com/chart?cht=qr&chs=252x252&chl=${encodeURIComponent(url)}"
+      alt="QR" style="margin:1.2rem auto 0.5rem auto;border-radius:15px;display:block;background:#faf7f7;" />`;
   }
 
   // Links
@@ -435,7 +435,7 @@ function showWalletQR() {
         <button id="phantom-btn" style="${btnStyle}">Phantom</button>
         <button id="solflare-btn" style="${btnStyle}">Solflare</button>
       </div>
-      <div id="qr-img-holder" style="min-height:232px;"></div>
+      <div id="qr-img-holder" style="min-height:265px;"></div>
       <button onclick="document.getElementById('qr-modal').remove()" style="${closeBtnStyle}">Close</button>
       <div style="${footerStyle}">
         Powered by Wolf Machine & SWM <span style="${starStyle}">✦</span> Made with LOVE
