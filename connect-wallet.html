@@ -391,37 +391,77 @@
 
   // Show QR/deep-link modal for mobile wallets
   function showWalletQR() {
-    const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent);
-    const url = window.location.href;
-    // Prefer Phantom, fallback to Solflare
-    const phantomLink = "https://phantom.app/ul/browse/" + encodeURIComponent(url);
-    const solflareLink = "https://solflare.com/ul/v1/browse/" + encodeURIComponent(url);
-    let qrLinks = [
-      { name: "Phantom", url: phantomLink },
-      { name: "Solflare", url: solflareLink }
-    ];
-    let html = qrLinks.map(l =>
-      `<div style='margin-bottom:18px;'>
-         <div style='font-size:1.1rem;color:#CAF5FA;margin-bottom:7px;'>${l.name}</div>
-         <img src="https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=${encodeURIComponent(l.url)}" 
-              alt="QR for ${l.name}" style="background:#fff;border-radius:10px;">
-         <div style='font-size:0.89rem;color:#ffd700;margin-top:6px;'>
-           <a href="${l.url}" target="_blank" style="color:#CAF5FA;text-decoration:underline;">Open ${l.name} (mobile)</a>
-         </div>
-       </div>`
-    ).join("");
-    let modal = document.createElement("div");
-    modal.id = "qr-modal";
-    modal.style = "position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:9999;";
-    modal.innerHTML = `
-      <div style="background:#2b1f1a;padding:2rem 2rem 1.2rem;border-radius:16px;text-align:center;position:relative;max-width:90vw;">
-        <div style='font-size:1.35rem;color:#CAF5FA;margin-bottom:1rem;'>Scan QR in your wallet app</div>
-        ${html}
-        <button style="margin-top:0.2rem;background:#50c7c0;color:#2b1f1a;padding:9px 22px;border-radius:8px;font-weight:600;cursor:pointer;" onclick="document.getElementById('qr-modal').remove()">Close</button>
-      </div>`;
-    document.body.appendChild(modal);
+  // Modal styles
+  const modalStyle = `
+    position:fixed;top:0;left:0;width:100vw;height:100vh;
+    background:#97948fEE;display:flex;align-items:center;justify-content:center;z-index:9999;`;
+  const cardStyle = `
+    background:#97948f;padding:2.2rem 2.2rem 1.7rem 2.2rem;
+    border-radius:20px;box-shadow:0 4px 32px #3b2a241c;
+    min-width:320px;max-width:90vw;text-align:center;`;
+  const headerStyle = `
+    color:#faf7f7;font-size:1.2rem;font-weight:600;margin-bottom:1.1rem;letter-spacing:.01em;`;
+  const btnRowStyle = `display:flex;gap:1.5rem;justify-content:center;margin-bottom:1.2rem;`;
+  const btnStyle = `
+    background:#faf7f7;color:#3b2a24;font-weight:600;
+    border:none;border-radius:10px;min-width:112px;padding:0.8rem 1.7rem;
+    font-size:1.08rem;cursor:pointer;transition:all .15s;`;
+  const btnHoverStyle = `background:#3b2a24;color:#faf7f7;`;
+  const closeBtnStyle = `
+    margin-top:0.5rem;background:#3b2a24;color:#faf7f7;
+    padding:0.6rem 1.5rem;border-radius:9px;font-weight:600;cursor:pointer;border:none;`;
+  const footerStyle = `margin-top:1.5rem;font-size:.89rem;color:#faf7f7;opacity:0.87;`;
+  const starStyle = `color:#ffd700;font-size:1.05em;`;
+
+  // QR function
+  function qrImg(url) {
+    return `<img src="https://chart.googleapis.com/chart?cht=qr&chs=208x208&chl=${encodeURIComponent(url)}"
+      alt="QR" style="margin:1.1rem auto 0;border-radius:13px;display:block;background:#faf7f7;" />`;
   }
 
+  // Links
+  const url = window.location.href;
+  const phantomLink = "https://phantom.app/ul/browse/" + encodeURIComponent(url);
+  const solflareLink = "https://solflare.com/ul/v1/browse/" + encodeURIComponent(url);
+
+  // Modal HTML
+  let modal = document.createElement("div");
+  modal.id = "qr-modal";
+  modal.setAttribute("style", modalStyle);
+  modal.innerHTML = `
+    <div style="${cardStyle}">
+      <div style="${headerStyle}">Scan QR in your wallet app</div>
+      <div id="qr-btn-row" style="${btnRowStyle}">
+        <button id="phantom-btn" style="${btnStyle}">Phantom</button>
+        <button id="solflare-btn" style="${btnStyle}">Solflare</button>
+      </div>
+      <div id="qr-img-holder"></div>
+      <button onclick="document.getElementById('qr-modal').remove()" style="${closeBtnStyle}">Close</button>
+      <div style="${footerStyle}">
+        Powered by Wolf Machine & SWM <span style="${starStyle}">✦</span> Made with LOVE
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  // Button events/hover
+  function setQR(wallet) {
+    const link = wallet === "phantom" ? phantomLink : solflareLink;
+    document.getElementById("qr-img-holder").innerHTML = qrImg(link);
+  }
+  document.getElementById("phantom-btn").onclick = () => setQR("phantom");
+  document.getElementById("solflare-btn").onclick = () => setQR("solflare");
+
+  // Button hover/invert
+  ["phantom-btn", "solflare-btn"].forEach(id => {
+    const btn = document.getElementById(id);
+    btn.onmouseover = () => btn.style = btnStyle + btnHoverStyle;
+    btn.onmouseout = () => btn.style = btnStyle;
+  });
+
+  // Default: Phantom QR shown
+  setQR("phantom");
+}
   // Email input handling
   function submitEmailAndScroll() {
     const name = document.getElementById("name").value.trim();
