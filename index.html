@@ -337,6 +337,23 @@
   }
 }
 </style>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const flowID = localStorage.getItem('flow_id');
+    const paymentComplete = localStorage.getItem('payment_complete'); // adjust if your payment flag differs
+
+    if (flowID && !paymentComplete) {
+      const purchaseBtn = document.getElementById('continue-purchase-btn'); // Replace with actual purchase button ID
+      if (purchaseBtn) {
+        const msgDiv = document.createElement('div');
+        msgDiv.innerText = 'Payment not completed, please try again.';
+        msgDiv.style.color = 'red';
+        msgDiv.style.marginBottom = '1rem';
+        purchaseBtn.parentNode.insertBefore(msgDiv, purchaseBtn);
+      }
+    }
+  });
+</script>
 </head>
 <body>
  <div class="content">
