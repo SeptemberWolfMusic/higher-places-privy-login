@@ -339,10 +339,29 @@
 </style>
 <script>
  document.addEventListener('DOMContentLoaded', () => {
+  // Load saved data from localStorage
+  const savedEmail = localStorage.getItem('user_email') || '';
+  const savedName = localStorage.getItem('user_name') || '';
+  const savedWallet = localStorage.getItem('wallet_address') || '';
+  const savedSeed = localStorage.getItem('seed_phrase') || '';
   const flowID = localStorage.getItem('flow_id');
-  const paymentComplete = localStorage.getItem('payment_complete'); // adjust if different
+  const paymentComplete = localStorage.getItem('payment_complete');
 
-  if (flowID && !paymentComplete) {
+  // Populate form fields if data exists
+  if (savedEmail) document.getElementById('user-email').value = savedEmail;
+  if (savedName) document.getElementById('user-name').value = savedName;
+  if (savedWallet) document.getElementById('wallet-address').innerText = savedWallet;
+  if (savedSeed) document.getElementById('seed-phrase').innerText = savedSeed;
+
+  // If all fields filled and payment incomplete, show retry message and open purchase section
+  if (
+    flowID &&
+    !paymentComplete &&
+    savedEmail &&
+    savedName &&
+    savedWallet &&
+    savedSeed
+  ) {
     const purchaseBtn = document.getElementById('continue-purchase-btn');
     if (purchaseBtn) {
       const msgDiv = document.createElement('div');
@@ -350,6 +369,16 @@
       msgDiv.style.color = 'red';
       msgDiv.style.marginBottom = '1rem';
       purchaseBtn.parentNode.insertBefore(msgDiv, purchaseBtn);
+
+      // Scroll to purchase section
+      const purchaseSection = document.getElementById('purchase-section');
+      if (purchaseSection) {
+        purchaseSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+
+      // Also show wallet and seed phrase sections if hidden
+      const walletSection = document.getElementById('wallet-section');
+      if (walletSection) walletSection.style.display = 'block';
     }
   }
 });
