@@ -477,12 +477,16 @@
       return;
     }
     alert('✅ Email saved!');
-    // Smooth scroll to purchase section (shows mp4/purchase btn)
     const purchaseSection = document.getElementById('purchase-section');
     if (purchaseSection) {
       purchaseSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }
+
+  // Track previous form values to detect changes
+  let previousEmail = '';
+  let previousName = '';
+  let previousWallet = '';
 
   async function continueToPurchase() {
     const name = document.getElementById('user-name').value.trim();
@@ -495,7 +499,30 @@
       return;
     }
 
-    const flowID = crypto.randomUUID();
+    // Check if form data changed; if yes, reset flow_id
+    if (
+      localStorage.getItem('flow_id') &&
+      (email !== previousEmail || name !== previousName || wallet !== previousWallet)
+    ) {
+      console.log('Form changed — clearing old flow_id and generating new one.');
+      localStorage.removeItem('flow_id');
+    }
+
+    // Get or create flow_id
+    let flowID = localStorage.getItem('flow_id');
+    if (!flowID) {
+      flowID = crypto.randomUUID();
+      localStorage.setItem('flow_id', flowID);
+      console.log('Generated new flow_id:', flowID);
+    } else {
+      console.log('Reusing existing flow_id:', flowID);
+    }
+
+    // Update previous values
+    previousEmail = email;
+    previousName = name;
+    previousWallet = wallet;
+
     const flowType = 'create';
     const batch = 'B01';
 
@@ -510,7 +537,6 @@
       flow_id: flowID
     };
 
-    // 1. Partial log to Supabase before Stripe
     try {
       const logRes = await fetch("https://xlbquzoalvwmtjadteft.supabase.co/rest/v1/create_log", {
         method: "POST",
@@ -534,9 +560,8 @@
       return;
     }
 
-    // 2. Continue to Stripe bridge
-    console.log("Sending flowID:", payload.flow_id);    // existing log
-    console.log("Stripe bridge payload:", payload);     // debug line
+    console.log("Sending flowID:", flowID);
+    console.log("Stripe bridge payload:", payload);
 
     fetch("https://xlbquzoalvwmtjadteft.supabase.co/functions/v1/stripe_flowid_payment_bridge", {
       method: "POST",
@@ -551,7 +576,7 @@
       })
       .then(result => {
         if (result.url) {
-          window.location.href = result.url; // Redirect to Stripe Checkout
+          window.location.href = result.url;
         } else {
           throw new Error("No Stripe URL returned");
         }
