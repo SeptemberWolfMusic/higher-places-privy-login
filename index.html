@@ -418,7 +418,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Check Supabase: if status is complete, clear local/session storage
+  // 1. Check Supabase: if status is complete, clear local/session storage and reload before restore
   const flowID = localStorage.getItem('flow_id');
   if (flowID) {
     fetch(`https://xlbquzoalvwmtjadteft.supabase.co/rest/v1/create_log?flow_id=eq.${flowID}`, {
@@ -434,9 +434,50 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.removeItem('user_name');
         localStorage.removeItem('wallet_address');
         localStorage.removeItem('seed_phrase');
+        // Reload the page after clearing, so restore logic doesn't run on old data
+        location.reload();
+      } else {
+        // 2. Restore fields if localStorage/session
+        restoreFieldsAndContinue();
       }
     });
+  } else {
+    // 2. Restore fields if localStorage/session
+    restoreFieldsAndContinue();
   }
+
+  function restoreFieldsAndContinue() {
+    const savedEmail = localStorage.getItem('user_email') || '';
+    const savedName = localStorage.getItem('user_name') || '';
+    const savedWallet = localStorage.getItem('wallet_address') || '';
+    const savedSeed = localStorage.getItem('seed_phrase') || '';
+    // Autofill all fields
+    if (savedEmail) document.getElementById('user-email').value = savedEmail;
+    if (savedName) document.getElementById('user-name').value = savedName;
+    if (savedWallet) {
+      document.getElementById('wallet-address').innerText = savedWallet;
+      document.getElementById('wallet-section').style.display = 'block';
+    }
+    if (savedSeed) document.getElementById('seed-phrase').innerText = savedSeed;
+
+    // If all fields exist & not complete, scroll to purchase and show retry msg
+    const paymentComplete = localStorage.getItem('payment_complete');
+    if (
+      flowID && savedEmail && savedName && savedWallet && savedSeed && !paymentComplete
+    ) {
+      setTimeout(() => {
+        const purchaseSection = document.getElementById('purchase-section');
+        if (purchaseSection) purchaseSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const msgDiv = document.createElement('div');
+        msgDiv.innerText = 'Payment not completed, please try again.';
+        msgDiv.style.color = 'red';
+        msgDiv.style.marginBottom = '1rem';
+        const purchaseBtn = document.getElementById('continue-purchase-btn');
+        if (purchaseBtn) purchaseBtn.parentNode.insertBefore(msgDiv, purchaseBtn);
+      }, 200);
+    }
+  }
+});
 
   // 2. Restore fields if localStorage/session
   const savedEmail = localStorage.getItem('user_email') || '';
