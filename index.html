@@ -409,12 +409,54 @@
         </div>
       </div>
 
-      <div class="footer">
+          <div class="footer">
         <a href="https://www.septemberwolfmusic.com" target="_blank">
           Powered by Wolf Machine & SWM <span>✦</span> Made with LOVE
         </a>
       </div>
     </div>
+
+<script>
+  // Restore retry state: show sections + scroll if all session data is present
+  document.addEventListener('DOMContentLoaded', () => {
+    const savedEmail = localStorage.getItem('user_email') || '';
+    const savedName = localStorage.getItem('user_name') || '';
+    const savedWallet = localStorage.getItem('wallet_address') || '';
+    const savedSeed = localStorage.getItem('seed_phrase') || '';
+    const flowID = localStorage.getItem('flow_id');
+    const paymentComplete = localStorage.getItem('payment_complete');
+    // If all exist and payment not complete, show everything + retry message
+    if (
+      flowID && !paymentComplete &&
+      savedEmail && savedName && savedWallet && savedSeed
+    ) {
+      // Autofill fields
+      if (document.getElementById('user-email')) document.getElementById('user-email').value = savedEmail;
+      if (document.getElementById('user-name')) document.getElementById('user-name').value = savedName;
+      if (document.getElementById('wallet-address')) document.getElementById('wallet-address').innerText = savedWallet;
+      if (document.getElementById('seed-phrase')) document.getElementById('seed-phrase').innerText = savedSeed;
+      // Show wallet section
+      if (document.getElementById('wallet-section')) document.getElementById('wallet-section').style.display = 'block';
+      // Show purchase section
+      if (document.getElementById('purchase-section')) document.getElementById('purchase-section').style.display = 'block';
+      // Show retry message
+      const purchaseBtn = document.getElementById('continue-purchase-btn');
+      if (purchaseBtn && !document.getElementById('retry-msg')) {
+        const msgDiv = document.createElement('div');
+        msgDiv.id = 'retry-msg';
+        msgDiv.innerText = 'Payment not completed, please try again.';
+        msgDiv.style.color = 'red';
+        msgDiv.style.marginBottom = '1rem';
+        purchaseBtn.parentNode.insertBefore(msgDiv, purchaseBtn);
+      }
+      // Scroll to purchase
+      const purchaseSection = document.getElementById('purchase-section');
+      if (purchaseSection) {
+        purchaseSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+  });
+</script>
 
 <script>
   let walletAddress = '';
@@ -425,6 +467,7 @@
     walletAddress = '9xA1...dummyWalletAddress123';
     seedPhrase = 'bring crisp salad element hollow genius novel burst reflect dance round canyon';
     seedArray = seedPhrase.split(" ");
+
 
     document.getElementById('wallet-address').innerText = walletAddress;
     document.getElementById('seed-phrase').innerText = seedPhrase;
