@@ -420,6 +420,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Check Supabase: if status is complete, clear local/session storage
   const flowID = localStorage.getItem('flow_id');
+  let status = null;
   if (flowID) {
     fetch(`https://xlbquzoalvwmtjadteft.supabase.co/rest/v1/create_log?flow_id=eq.${flowID}`, {
       headers: {
@@ -428,49 +429,53 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .then(res => res.json())
     .then(rows => {
-      if (rows[0] && rows[0].status === 'complete') {
+      status = rows[0]?.status || null;
+      if (status === 'complete') {
+        // Only clear ALL storage if flow is marked complete (BURN flow_id)
         localStorage.removeItem('flow_id');
         localStorage.removeItem('user_email');
         localStorage.removeItem('user_name');
         localStorage.removeItem('wallet_address');
         localStorage.removeItem('seed_phrase');
+        // After clearing, reload to appear as new user
+        location.reload();
+      } else {
+        // If pending, restore fields and scroll to purchase section
+        const savedEmail = localStorage.getItem('user_email') || '';
+        const savedName = localStorage.getItem('user_name') || '';
+        const savedWallet = localStorage.getItem('wallet_address') || '';
+        const savedSeed = localStorage.getItem('seed_phrase') || '';
+        if (savedEmail) document.getElementById('user-email').value = savedEmail;
+        if (savedName) document.getElementById('user-name').value = savedName;
+        if (savedWallet) {
+          document.getElementById('wallet-address').innerText = savedWallet;
+          document.getElementById('wallet-section').style.display = 'block';
+        }
+        if (savedSeed) document.getElementById('seed-phrase').innerText = savedSeed;
+        if (savedEmail && savedName && savedWallet && savedSeed) {
+          setTimeout(() => {
+            const purchaseSection = document.getElementById('purchase-section');
+            if (purchaseSection) purchaseSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 200);
+        }
       }
     });
-  }
-
-  // 2. Restore fields if localStorage/session
-  const savedEmail = localStorage.getItem('user_email') || '';
-  const savedName = localStorage.getItem('user_name') || '';
-  const savedWallet = localStorage.getItem('wallet_address') || '';
-  const savedSeed = localStorage.getItem('seed_phrase') || '';
-  // Autofill all fields
-  if (savedEmail) document.getElementById('user-email').value = savedEmail;
-  if (savedName) document.getElementById('user-name').value = savedName;
-  if (savedWallet) {
-    document.getElementById('wallet-address').innerText = savedWallet;
-    document.getElementById('wallet-section').style.display = 'block';
-  }
-  if (savedSeed) document.getElementById('seed-phrase').innerText = savedSeed;
-
-  // If all fields exist & not complete, scroll to purchase and show retry msg
-  const paymentComplete = localStorage.getItem('payment_complete');
-  if (
-    flowID && savedEmail && savedName && savedWallet && savedSeed && !paymentComplete
-  ) {
-    setTimeout(() => {
-      const purchaseSection = document.getElementById('purchase-section');
-      if (purchaseSection) purchaseSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      const msgDiv = document.createElement('div');
-      msgDiv.innerText = 'Payment not completed, please try again.';
-      msgDiv.style.color = 'red';
-      msgDiv.style.marginBottom = '1rem';
-      const purchaseBtn = document.getElementById('continue-purchase-btn');
-      if (purchaseBtn) purchaseBtn.parentNode.insertBefore(msgDiv, purchaseBtn);
-    }, 200);
+  } else {
+    // No flow_id yet—just restore fields if present, but don't scroll
+    const savedEmail = localStorage.getItem('user_email') || '';
+    const savedName = localStorage.getItem('user_name') || '';
+    const savedWallet = localStorage.getItem('wallet_address') || '';
+    const savedSeed = localStorage.getItem('seed_phrase') || '';
+    if (savedEmail) document.getElementById('user-email').value = savedEmail;
+    if (savedName) document.getElementById('user-name').value = savedName;
+    if (savedWallet) {
+      document.getElementById('wallet-address').innerText = savedWallet;
+      document.getElementById('wallet-section').style.display = 'block';
+    }
+    if (savedSeed) document.getElementById('seed-phrase').innerText = savedSeed;
   }
 });
 
-// Use these on Create Wallet / Email / Purchase click:
 function saveSessionFields() {
   localStorage.setItem('user_email', document.getElementById('user-email').value);
   localStorage.setItem('user_name', document.getElementById('user-name').value);
@@ -490,9 +495,7 @@ function generateWallet() {
   document.getElementById('seed-phrase').innerText = seedPhrase;
   document.getElementById('wallet-section').style.display = 'block';
   const video = document.getElementById('preview-video');
-  if (video) {
-    video.volume = 1.0;
-  }
+  if (video) video.volume = 1.0;
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -529,17 +532,13 @@ function validateSeedWords() {
 function submitEmail() {
   const email = document.getElementById('user-email').value;
   const name = document.getElementById('user-name').value;
-  console.log("📩 Email entered:", email, name);
   if (!email || !email.includes('@')) {
     alert('Please enter a valid email.');
     return;
   }
   alert('✅ Email saved!');
-  // Smooth scroll to purchase section (shows mp4/purchase btn)
   const purchaseSection = document.getElementById('purchase-section');
-  if (purchaseSection) {
-    purchaseSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }
+  if (purchaseSection) purchaseSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 // ---- FLOW_ID LOGIC: Reuse, Regenerate, Burn after Mint ----
@@ -562,18 +561,36 @@ async function continueToPurchase() {
   const prevSeed = localStorage.getItem('seed_phrase') || '';
   let flowID = localStorage.getItem('flow_id') || '';
 
-  // If any field changed or no flow_id, generate new
-  if (
-    !flowID ||
-    prevEmail !== email ||
-    prevName !== name ||
-    prevWallet !== wallet ||
-    prevSeed !== seed
-  ) {
+  // Check if we need a new flow_id (only if none exists, or info changed AND status=complete)
+  let mustMakeNewFlow = false;
+  let status = null;
+  if (flowID) {
+    // Check status live
+    try {
+      const res = await fetch(`https://xlbquzoalvwmtjadteft.supabase.co/rest/v1/create_log?flow_id=eq.${flowID}`, {
+        headers: {
+          "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhsYnF1em9hbHZ3bXRqYWR0ZWZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3Mjg4MjEsImV4cCI6MjA2NDMwNDgyMX0.mwSXeQIXJ8FgGtmcqDTnAFchcTXdnLWpCqkcj_3rnXU"
+        }
+      });
+      const rows = await res.json();
+      status = rows[0]?.status || null;
+      // If flow is complete or info changed, make new flowID
+      if (status === 'complete' || prevEmail !== email || prevName !== name || prevWallet !== wallet || prevSeed !== seed) {
+        mustMakeNewFlow = true;
+      }
+    } catch {
+      mustMakeNewFlow = false; // Fallback: safer to reuse flow_id
+    }
+  } else {
+    mustMakeNewFlow = true;
+  }
+
+  if (mustMakeNewFlow) {
     flowID = crypto.randomUUID();
     localStorage.setItem('flow_id', flowID);
   }
-  // Always save current fields after logic
+
+  // Save latest fields
   saveSessionFields();
 
   const flowType = 'create';
@@ -589,7 +606,7 @@ async function continueToPurchase() {
     flow_id: flowID
   };
 
-  // 1. Partial log to Supabase before Stripe
+  // Partial log to Supabase before Stripe
   let allowContinue = false;
   try {
     const logRes = await fetch("https://xlbquzoalvwmtjadteft.supabase.co/rest/v1/create_log", {
@@ -602,31 +619,29 @@ async function continueToPurchase() {
     });
 
     if (logRes.ok) {
-      console.log("✅ Partial log submitted to Supabase:", payload);
       allowContinue = true;
     } else {
       const errorMsg = await logRes.text();
       if (logRes.status === 409) {
         // Duplicate flow_id, already exists, allow continue!
-        console.warn("⚠️ Supabase log duplicate (flow_id exists), continuing to Stripe...");
         allowContinue = true;
       } else {
-        console.error("❌ Supabase log error:", errorMsg);
         alert("❌ Error logging to Supabase. Please try again.");
         return;
       }
     }
   } catch (err) {
-    console.error("❌ Supabase log network error:", err);
     alert("❌ Network error logging to Supabase.");
     return;
   }
 
   if (!allowContinue) return;
 
-  // 2. Continue to Stripe bridge
-  console.log("Sending flowID:", payload.flow_id);
-  console.log("Stripe bridge payload:", payload);
+  // 2. Continue to Stripe bridge (NEVER without a valid flow_id)
+  if (!flowID) {
+    alert("❌ Fatal: No flow ID—cannot proceed to Stripe.");
+    return;
+  }
 
   fetch("https://xlbquzoalvwmtjadteft.supabase.co/functions/v1/stripe_flowid_payment_bridge", {
     method: "POST",
@@ -647,7 +662,6 @@ async function continueToPurchase() {
       }
     })
     .catch(err => {
-      console.error("❌ Stripe bridge error:", err);
       alert("❌ Something went wrong. Please try again.");
     });
 }
