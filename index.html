@@ -418,8 +418,9 @@
 
 <script>
 (async function() {
-  // 1. On page load, check Supabase for flow_id status=complete. If so, clear localStorage and reload.
+  // 1. Check Supabase: if flow_id status COMPLETE, clear localStorage and reload to reset page
   const flowID = localStorage.getItem('flow_id');
+  let status = null;
   if (flowID) {
     try {
       const res = await fetch(`https://xlbquzoalvwmtjadteft.supabase.co/rest/v1/create_log?flow_id=eq.${flowID}`, {
@@ -428,17 +429,18 @@
         }
       });
       const rows = await res.json();
-      if (rows[0] && rows[0].status === 'complete') {
+      status = rows[0]?.status || null;
+      if (status === 'complete') {
         localStorage.clear();
         location.reload();
         return;
       }
     } catch {
-      // Fail silently
+      // Fail silently, continue loading
     }
   }
 
-  // 2. Autofill fields from localStorage (if present)
+  // 2. Restore fields if not complete, scroll if needed (NO retry UI)
   document.addEventListener('DOMContentLoaded', () => {
     const savedEmail = localStorage.getItem('user_email') || '';
     const savedName = localStorage.getItem('user_name') || '';
@@ -452,6 +454,14 @@
       document.getElementById('wallet-section').style.display = 'block';
     }
     if (savedSeed) document.getElementById('seed-phrase').innerText = savedSeed;
+
+    // Scroll to purchase if everything's filled and flow still pending
+    if (status === 'pending' && savedEmail && savedName && savedWallet && savedSeed) {
+      setTimeout(() => {
+        const purchaseSection = document.getElementById('purchase-section');
+        if (purchaseSection) purchaseSection.scrollIntoView({behavior:'smooth', block:'center'});
+      }, 200);
+    }
   });
 })();
 
@@ -521,9 +531,7 @@ function submitEmail() {
   if (purchaseSection) purchaseSection.scrollIntoView({behavior:'smooth', block:'center'});
 }
 
-// FLOW_ID logic: 
-// - Reuse existing flow_id and do NOT log if status is not complete.
-// - Only generate/log a new flow_id if prior status is complete (even if info same).
+// FLOW_ID logic: flawless per requirements
 async function continueToPurchase() {
   const name = document.getElementById('user-name').value.trim();
   const email = document.getElementById('user-email').value.trim();
@@ -536,11 +544,24 @@ async function continueToPurchase() {
     return;
   }
 
+  const prevEmail = localStorage.getItem('user_email') || '';
+  const prevName = localStorage.getItem('user_name') || '';
+  const prevWallet = localStorage.getItem('wallet_address') || '';
+  const prevSeed = localStorage.getItem('seed_phrase') || '';
   let flowID = localStorage.getItem('flow_id') || '';
-  let allowContinue = false;
 
-  // Check status for current flow_id before generating/logging a new one
-  if (flowID) {
+  let infoChanged = false;
+  if (
+    prevEmail !== email ||
+    prevName !== name ||
+    prevWallet !== wallet ||
+    prevSeed !== seed
+  ) {
+    infoChanged = true;
+  }
+
+  // If flowID exists and info is unchanged, check status (reuse or block new log)
+  if (flowID && !infoChanged) {
     try {
       const res = await fetch(`https://xlbquzoalvwmtjadteft.supabase.co/rest/v1/create_log?flow_id=eq.${flowID}`, {
         headers: {
@@ -548,28 +569,57 @@ async function continueToPurchase() {
         }
       });
       const rows = await res.json();
-      if (rows[0] && rows[0].status !== 'complete') {
-        // Still pending or processing, do not proceed or log again.
-        alert('A purchase is already in progress for this wallet/session.\nIf you need to try again, please refresh this page after payment or contact support.');
-        return;
-      }
-      // If status is complete, clear localStorage and generate a new flowID.
-      if (rows[0] && rows[0].status === 'complete') {
+      const status = rows[0]?.status || null;
+      if (status === 'complete') {
+        // Burn and reset as new entry
         localStorage.clear();
         location.reload();
         return;
       }
+      // If pending, reuse flow_id and DO NOT log again—just send to Stripe
+      if (status === 'pending') {
+        saveSessionFields();
+        const flowType = 'create';
+        const batch = 'B01';
+        const payload = {
+          email,
+          wallet,
+          name,
+          flow_type: flowType,
+          batch,
+          edition_number: "",
+          txn_id: "",
+          flow_id: flowID
+        };
+        try {
+          const stripeRes = await fetch("https://xlbquzoalvwmtjadteft.supabase.co/functions/v1/stripe_flowid_payment_bridge", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(payload)
+          });
+          if (!stripeRes.ok) throw new Error("Stripe bridge failed: " + stripeRes.status);
+          const stripeData = await stripeRes.json();
+          if (stripeData.url) {
+            window.location.href = stripeData.url;
+          } else {
+            throw new Error("No Stripe URL returned");
+          }
+        } catch (err) {
+          alert("❌ Something went wrong. Please try again.");
+        }
+        return;
+      }
     } catch (err) {
-      // If network error, safest is to block duplicate logs
-      alert('❌ Network error checking previous purchase. Please check your connection or try refreshing.');
+      alert('❌ Network error checking purchase status. Please try again.');
       return;
     }
   }
 
-  // At this point: either no flowID, or previous is complete and page reloaded. 
-  // So generate new flow_id and log.
-  flowID = crypto.randomUUID();
-  localStorage.setItem('flow_id', flowID);
+  // If no flowID or info changed, make new flowID and log
+  if (!flowID || infoChanged) {
+    flowID = crypto.randomUUID();
+    localStorage.setItem('flow_id', flowID);
+  }
   saveSessionFields();
 
   const flowType = 'create';
@@ -595,42 +645,25 @@ async function continueToPurchase() {
       body: JSON.stringify(payload)
     });
 
-    if (logRes.ok) {
-      allowContinue = true;
-      console.log("✅ Partial log submitted:", payload);
-    } else {
-      const errorMsg = await logRes.text();
-      if (logRes.status === 409) {
-        // Should never happen with new uuid, but allow just in case
-        allowContinue = true;
+    if (logRes.ok || logRes.status === 409) {
+      // Go to Stripe
+      const stripeRes = await fetch("https://xlbquzoalvwmtjadteft.supabase.co/functions/v1/stripe_flowid_payment_bridge", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(payload)
+      });
+      if (!stripeRes.ok) throw new Error("Stripe bridge failed: " + stripeRes.status);
+      const stripeData = await stripeRes.json();
+      if (stripeData.url) {
+        window.location.href = stripeData.url;
       } else {
-        alert("❌ Error logging to Supabase. Please try again.");
-        return;
+        throw new Error("No Stripe URL returned");
       }
+    } else {
+      alert("❌ Error logging to Supabase. Please try again.");
     }
   } catch (err) {
     alert("❌ Network error logging to Supabase.");
-    return;
-  }
-
-  if (!allowContinue) return;
-
-  // Redirect to Stripe checkout via backend bridge
-  try {
-    const stripeRes = await fetch("https://xlbquzoalvwmtjadteft.supabase.co/functions/v1/stripe_flowid_payment_bridge", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(payload)
-    });
-    if (!stripeRes.ok) throw new Error("Stripe bridge failed: " + stripeRes.status);
-    const stripeData = await stripeRes.json();
-    if (stripeData.url) {
-      window.location.href = stripeData.url;
-    } else {
-      throw new Error("No Stripe URL returned");
-    }
-  } catch (err) {
-    alert("❌ Something went wrong. Please try again.");
   }
 }
 </script>
