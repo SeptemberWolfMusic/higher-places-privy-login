@@ -417,6 +417,8 @@
     </div>
 
 <script>
+let seedArray = [];
+
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Check Supabase: if status is complete, clear local/session storage
   const flowID = localStorage.getItem('flow_id');
@@ -427,6 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhsYnF1em9hbHZ3bXRqYWR0ZWZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3Mjg4MjEsImV4cCI6MjA2NDMwNDgyMX0.mwSXeQIXJ8FgGtmcqDTnAFchcTXdnLWpCqkcj_3rnXU"
       }
     })
+    // ...rest of your code continues...
     .then(res => res.json())
     .then(rows => {
       status = rows[0]?.status || null;
