@@ -501,7 +501,7 @@ function generateWallet() {
   walletAddress = keypair.publicKey.toBase58();
 
   // 2. Base58 encode the secret key for backup/export
-  seedPhrase = solanaWeb3.bs58.encode(keypair.secretKey);
+  seedPhrase = bs58.encode(keypair.secretKey);
 
   // 3. Store public and secret in localStorage for recovery/export
   localStorage.setItem('wallet_address', walletAddress);
