@@ -587,7 +587,8 @@ async function generateWallet() {
   const walletAddress = base58encode(keypair.publicKey);
   // Seed phrase (mnemonic)
   const seedPhrase = mnemonic;
-
+  seedArray = seedPhrase.split(" ");
+  
   // Store in localStorage
   localStorage.setItem('wallet_address', walletAddress);
   localStorage.setItem('seed_phrase', seedPhrase);
