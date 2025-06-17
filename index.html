@@ -418,10 +418,8 @@
 
 <script>
 (async function() {
-  // 1. Check Supabase: if status is complete, clear local/session storage and reload before restore
+  // 1. Check Supabase: if flow_id status COMPLETE, clear localStorage and reload to reset page
   const flowID = localStorage.getItem('flow_id');
-  let statusComplete = false;
-
   if (flowID) {
     try {
       const res = await fetch(`https://xlbquzoalvwmtjadteft.supabase.co/rest/v1/create_log?flow_id=eq.${flowID}`, {
@@ -431,21 +429,16 @@
       });
       const rows = await res.json();
       if (rows[0] && rows[0].status === 'complete') {
-        localStorage.removeItem('flow_id');
-        localStorage.removeItem('user_email');
-        localStorage.removeItem('user_name');
-        localStorage.removeItem('wallet_address');
-        localStorage.removeItem('seed_phrase');
-        statusComplete = true;
+        localStorage.clear();
         location.reload();
         return;
       }
-    } catch (e) {
-      // Fail open (do nothing, allow page to load)
+    } catch {
+      // Fail silently, continue loading
     }
   }
 
-  // 2. Restore fields if not completed
+  // 2. Restore fields if not complete, show retry message and scroll if needed
   document.addEventListener('DOMContentLoaded', () => {
     const savedEmail = localStorage.getItem('user_email') || '';
     const savedName = localStorage.getItem('user_name') || '';
@@ -453,7 +446,6 @@
     const savedSeed = localStorage.getItem('seed_phrase') || '';
     const flowIDNow = localStorage.getItem('flow_id') || '';
 
-    // Autofill all fields
     if (savedEmail) document.getElementById('user-email').value = savedEmail;
     if (savedName) document.getElementById('user-name').value = savedName;
     if (savedWallet) {
@@ -462,14 +454,11 @@
     }
     if (savedSeed) document.getElementById('seed-phrase').innerText = savedSeed;
 
-    // If all fields exist & not complete, scroll to purchase and show retry msg
     const paymentComplete = localStorage.getItem('payment_complete');
-    if (
-      flowIDNow && savedEmail && savedName && savedWallet && savedSeed && !paymentComplete
-    ) {
+    if (flowIDNow && savedEmail && savedName && savedWallet && savedSeed && !paymentComplete) {
       setTimeout(() => {
         const purchaseSection = document.getElementById('purchase-section');
-        if (purchaseSection) purchaseSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (purchaseSection) purchaseSection.scrollIntoView({behavior:'smooth', block:'center'});
         const msgDiv = document.createElement('div');
         msgDiv.innerText = 'Payment not completed, please try again.';
         msgDiv.style.color = 'red';
@@ -479,189 +468,172 @@
       }, 200);
     }
   });
+})();
 
-  // Expose functions globally so HTML buttons can access them
-  window.saveSessionFields = function() {
-    localStorage.setItem('user_email', document.getElementById('user-email').value);
-    localStorage.setItem('user_name', document.getElementById('user-name').value);
-    localStorage.setItem('wallet_address', document.getElementById('wallet-address').innerText);
-    localStorage.setItem('seed_phrase', document.getElementById('seed-phrase').innerText);
+// Save current session fields to localStorage
+function saveSessionFields() {
+  localStorage.setItem('user_email', document.getElementById('user-email').value);
+  localStorage.setItem('user_name', document.getElementById('user-name').value);
+  localStorage.setItem('wallet_address', document.getElementById('wallet-address').innerText);
+  localStorage.setItem('seed_phrase', document.getElementById('seed-phrase').innerText);
+}
+
+let walletAddress = '';
+let seedPhrase = 'bring crisp salad element hollow genius novel burst reflect dance round canyon';
+let seedArray = [];
+
+function generateWallet() {
+  walletAddress = '9xA1...dummyWalletAddress123';
+  seedPhrase = 'bring crisp salad element hollow genius novel burst reflect dance round canyon';
+  seedArray = seedPhrase.split(" ");
+  document.getElementById('wallet-address').innerText = walletAddress;
+  document.getElementById('seed-phrase').innerText = seedPhrase;
+  document.getElementById('wallet-section').style.display = 'block';
+  const video = document.getElementById('preview-video');
+  if (video) video.volume = 1.0;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function copyWalletAddress() {
+  navigator.clipboard.writeText(walletAddress);
+  alert('Wallet address copied to clipboard!');
+}
+
+function copySeedPhrase() {
+  navigator.clipboard.writeText(seedPhrase);
+  alert('Seed phrase copied to clipboard!');
+}
+
+function downloadBackup() {
+  const blob = new Blob([`Wallet Address: ${walletAddress}\nSeed Phrase: ${seedPhrase}`], {type: 'text/plain'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'wallet-backup.txt';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function validateSeedWords() {
+  const word2 = document.getElementById('word-2').value.trim().toLowerCase();
+  const word8 = document.getElementById('word-8').value.trim().toLowerCase();
+  if (word2 === seedArray[1] && word8 === seedArray[7]) {
+    alert('✅ Seed phrase validated!');
+  } else {
+    alert('❌ Incorrect words. Please double-check your seed phrase.');
+  }
+}
+
+function submitEmail() {
+  const email = document.getElementById('user-email').value;
+  const name = document.getElementById('user-name').value;
+  if (!email || !email.includes('@')) {
+    alert('Please enter a valid email.');
+    return;
+  }
+  alert('✅ Email saved!');
+  const purchaseSection = document.getElementById('purchase-section');
+  if (purchaseSection) purchaseSection.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+// FLOW_ID logic: reuse if no field changes; burn after successful mint (handled by processor)
+async function continueToPurchase() {
+  const name = document.getElementById('user-name').value.trim();
+  const email = document.getElementById('user-email').value.trim();
+  const wallet = document.getElementById('wallet-address').innerText.trim();
+  const seed = document.getElementById('seed-phrase').innerText.trim();
+
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!emailRegex.test(email) || !wallet || !seed) {
+    alert('❌ Please complete all fields (with a valid email).');
+    return;
+  }
+
+  const prevEmail = localStorage.getItem('user_email') || '';
+  const prevName = localStorage.getItem('user_name') || '';
+  const prevWallet = localStorage.getItem('wallet_address') || '';
+  const prevSeed = localStorage.getItem('seed_phrase') || '';
+  let flowID = localStorage.getItem('flow_id') || '';
+
+  // Generate new flow_id only if any field changed or none exists
+  if (
+    !flowID ||
+    prevEmail !== email ||
+    prevName !== name ||
+    prevWallet !== wallet ||
+    prevSeed !== seed
+  ) {
+    flowID = crypto.randomUUID();
+    localStorage.setItem('flow_id', flowID);
+  }
+
+  saveSessionFields();
+
+  const flowType = 'create';
+  const batch = 'B01';
+  const payload = {
+    email,
+    wallet,
+    name,
+    flow_type: flowType,
+    batch,
+    edition_number: "",
+    txn_id: "",
+    flow_id: flowID
   };
 
-  window.walletAddress = '';
-  window.seedPhrase = 'bring crisp salad element hollow genius novel burst reflect dance round canyon';
-  window.seedArray = [];
-
-  window.generateWallet = function() {
-    walletAddress = '9xA1...dummyWalletAddress123';
-    seedPhrase = 'bring crisp salad element hollow genius novel burst reflect dance round canyon';
-    seedArray = seedPhrase.split(" ");
-    document.getElementById('wallet-address').innerText = walletAddress;
-    document.getElementById('seed-phrase').innerText = seedPhrase;
-    document.getElementById('wallet-section').style.display = 'block';
-    const video = document.getElementById('preview-video');
-    if (video) {
-      video.volume = 1.0;
-    }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  window.copyWalletAddress = function() {
-    navigator.clipboard.writeText(walletAddress);
-    alert('Wallet address copied to clipboard!');
-  };
-
-  window.copySeedPhrase = function() {
-    navigator.clipboard.writeText(seedPhrase);
-    alert('Seed phrase copied to clipboard!');
-  };
-
-  window.downloadBackup = function() {
-    const blob = new Blob([`Wallet Address: ${walletAddress}\nSeed Phrase: ${seedPhrase}`], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'wallet-backup.txt';
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
-  window.validateSeedWords = function() {
-    const word2 = document.getElementById('word-2').value.trim().toLowerCase();
-    const word8 = document.getElementById('word-8').value.trim().toLowerCase();
-    if (word2 === seedArray[1] && word8 === seedArray[7]) {
-      alert('✅ Seed phrase validated!');
-    } else {
-      alert('❌ Incorrect words. Please double-check your seed phrase.');
-    }
-  };
-
-  window.submitEmail = function() {
-    const email = document.getElementById('user-email').value;
-    const name = document.getElementById('user-name').value;
-    console.log("📩 Email entered:", email, name);
-    if (!email || !email.includes('@')) {
-      alert('Please enter a valid email.');
-      return;
-    }
-    alert('✅ Email saved!');
-    // Smooth scroll to purchase section (shows mp4/purchase btn)
-    const purchaseSection = document.getElementById('purchase-section');
-    if (purchaseSection) {
-      purchaseSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  };
-
-  // ---- FLOW_ID LOGIC: Reuse, Regenerate, Burn after Mint ----
-  window.continueToPurchase = async function() {
-    const name = document.getElementById('user-name').value.trim();
-    const email = document.getElementById('user-email').value.trim();
-    const wallet = document.getElementById('wallet-address').innerText.trim();
-    const seed = document.getElementById('seed-phrase').innerText.trim();
-
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!emailRegex.test(email) || !wallet || !seed) {
-      alert('❌ Please complete all fields (with a valid email).');
-      return;
-    }
-
-    // Detect changes
-    const prevEmail = localStorage.getItem('user_email') || '';
-    const prevName = localStorage.getItem('user_name') || '';
-    const prevWallet = localStorage.getItem('wallet_address') || '';
-    const prevSeed = localStorage.getItem('seed_phrase') || '';
-    let flowID = localStorage.getItem('flow_id') || '';
-
-    // If any field changed or no flow_id, generate new
-    if (
-      !flowID ||
-      prevEmail !== email ||
-      prevName !== name ||
-      prevWallet !== wallet ||
-      prevSeed !== seed
-    ) {
-      flowID = crypto.randomUUID();
-      localStorage.setItem('flow_id', flowID);
-    }
-    // Always save current fields after logic
-    saveSessionFields();
-
-    const flowType = 'create';
-    const batch = 'B01';
-    const payload = {
-      email,
-      wallet,
-      name,
-      flow_type: flowType,
-      batch,
-      edition_number: "",
-      txn_id: "",
-      flow_id: flowID
-    };
-
-    // 1. Partial log to Supabase before Stripe
-    let allowContinue = false;
-    try {
-      const logRes = await fetch("https://xlbquzoalvwmtjadteft.supabase.co/rest/v1/create_log", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhsYnF1em9hbHZ3bXRqYWR0ZWZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3Mjg4MjEsImV4cCI6MjA2NDMwNDgyMX0.mwSXeQIXJ8FgGtmcqDTnAFchcTXdnLWpCqkcj_3rnXU"
-        },
-        body: JSON.stringify(payload)
-      });
-
-      if (logRes.ok) {
-        console.log("✅ Partial log submitted to Supabase:", payload);
-        allowContinue = true;
-      } else {
-        const errorMsg = await logRes.text();
-        if (logRes.status === 409) {
-          // Duplicate flow_id, already exists, allow continue!
-          console.warn("⚠️ Supabase log duplicate (flow_id exists), continuing to Stripe...");
-          allowContinue = true;
-        } else {
-          console.error("❌ Supabase log error:", errorMsg);
-          alert("❌ Error logging to Supabase. Please try again.");
-          return;
-        }
-      }
-    } catch (err) {
-      console.error("❌ Supabase log network error:", err);
-      alert("❌ Network error logging to Supabase.");
-      return;
-    }
-
-    if (!allowContinue) return;
-
-    // 2. Continue to Stripe bridge
-    console.log("Sending flowID:", payload.flow_id);
-    console.log("Stripe bridge payload:", payload);
-
-    fetch("https://xlbquzoalvwmtjadteft.supabase.co/functions/v1/stripe_flowid_payment_bridge", {
+  let allowContinue = false;
+  try {
+    const logRes = await fetch("https://xlbquzoalvwmtjadteft.supabase.co/rest/v1/create_log", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhsYnF1em9hbHZ3bXRqYWR0ZWZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3Mjg4MjEsImV4cCI6MjA2NDMwNDgyMX0.mwSXeQIXJ8FgGtmcqDTnAFchcTXdnLWpCqkcj_3rnXU"
       },
       body: JSON.stringify(payload)
-    })
-      .then(res => {
-        if (!res.ok) throw new Error("Stripe bridge fetch failed with status " + res.status);
-        return res.json();
-      })
-      .then(result => {
-        if (result.url) {
-          window.location.href = result.url; // Redirect to Stripe Checkout
-        } else {
-          throw new Error("No Stripe URL returned");
-        }
-      })
-      .catch(err => {
-        console.error("❌ Stripe bridge error:", err);
-        alert("❌ Something went wrong. Please try again.");
-      });
-  };
-})();
+    });
+
+    if (logRes.ok) {
+      allowContinue = true;
+      console.log("✅ Partial log submitted:", payload);
+    } else {
+      const errorMsg = await logRes.text();
+      if (logRes.status === 409) {
+        console.warn("⚠️ Duplicate flow_id, continuing:", flowID);
+        allowContinue = true;
+      } else {
+        console.error("❌ Supabase log error:", errorMsg);
+        alert("❌ Error logging to Supabase. Please try again.");
+        return;
+      }
+    }
+  } catch (err) {
+    console.error("❌ Network error logging to Supabase:", err);
+    alert("❌ Network error logging to Supabase.");
+    return;
+  }
+
+  if (!allowContinue) return;
+
+  // Redirect to Stripe checkout via backend bridge
+  try {
+    const stripeRes = await fetch("https://xlbquzoalvwmtjadteft.supabase.co/functions/v1/stripe_flowid_payment_bridge", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(payload)
+    });
+    if (!stripeRes.ok) throw new Error("Stripe bridge failed: " + stripeRes.status);
+    const stripeData = await stripeRes.json();
+    if (stripeData.url) {
+      window.location.href = stripeData.url;
+    } else {
+      throw new Error("No Stripe URL returned");
+    }
+  } catch (err) {
+    console.error("❌ Stripe bridge error:", err);
+    alert("❌ Something went wrong. Please try again.");
+  }
+}
 </script>
 
 <!-- MOBILE-ONLY STYLING CODE: KEEP THIS AT THE END, OUTSIDE MAIN SCRIPT -->
