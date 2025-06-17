@@ -416,6 +416,7 @@
       </div>
     </div>
 
+<script src="https://unpkg.com/@solana/web3.js@^1.88.2/lib/index.iife.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Check Supabase: if status is complete, clear local/session storage
@@ -437,6 +438,7 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.removeItem('user_name');
         localStorage.removeItem('wallet_address');
         localStorage.removeItem('seed_phrase');
+        localStorage.removeItem('wallet_secret');
         // After clearing, reload to appear as new user
         location.reload();
       } else {
@@ -483,21 +485,37 @@ function saveSessionFields() {
   localStorage.setItem('seed_phrase', document.getElementById('seed-phrase').innerText);
 }
 
+// ---- REAL SOLANA WALLET LOGIC STARTS HERE ----
 let walletAddress = '';
-let seedPhrase = 'bring crisp salad element hollow genius novel burst reflect dance round canyon';
+let seedPhrase = '';
 let seedArray = [];
 
+// NEW: Real wallet creation
 function generateWallet() {
-  walletAddress = '9xA1...dummyWalletAddress123';
-  seedPhrase = 'bring crisp salad element hollow genius novel burst reflect dance round canyon';
-  seedArray = seedPhrase.split(" ");
+  // 1. Generate real Solana Keypair
+  const keypair = solanaWeb3.Keypair.generate();
+  walletAddress = keypair.publicKey.toBase58();
+
+  // 2. Base58 encode the secret key for backup/export
+  seedPhrase = solanaWeb3.bs58.encode(keypair.secretKey);
+
+  // 3. Store public and secret in localStorage for recovery/export
+  localStorage.setItem('wallet_address', walletAddress);
+  localStorage.setItem('seed_phrase', seedPhrase);
+  localStorage.setItem('wallet_secret', seedPhrase); // for clarity
+
+  // 4. Display to user
   document.getElementById('wallet-address').innerText = walletAddress;
   document.getElementById('seed-phrase').innerText = seedPhrase;
   document.getElementById('wallet-section').style.display = 'block';
   const video = document.getElementById('preview-video');
   if (video) video.volume = 1.0;
   window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Set up for validation, etc.
+  seedArray = seedPhrase.split(" ");
 }
+// ---- END REAL SOLANA WALLET LOGIC ----
 
 function copyWalletAddress() {
   navigator.clipboard.writeText(walletAddress);
@@ -510,11 +528,11 @@ function copySeedPhrase() {
 }
 
 function downloadBackup() {
-  const blob = new Blob([`Wallet Address: ${walletAddress}\nSeed Phrase: ${seedPhrase}`], { type: 'text/plain' });
+  const blob = new Blob([`Wallet Address: ${walletAddress}\nSecret Key: ${seedPhrase}`], { type: 'text/plain' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'wallet-backup.txt';
+  a.download = 'solana-wallet-backup.txt';
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -522,7 +540,7 @@ function downloadBackup() {
 function validateSeedWords() {
   const word2 = document.getElementById('word-2').value.trim().toLowerCase();
   const word8 = document.getElementById('word-8').value.trim().toLowerCase();
-  if (word2 === seedArray[1] && word8 === seedArray[7]) {
+  if (seedArray[1] && seedArray[7] && word2 === seedArray[1] && word8 === seedArray[7]) {
     alert('✅ Seed phrase validated!');
   } else {
     alert('❌ Incorrect words. Please double-check your seed phrase.');
