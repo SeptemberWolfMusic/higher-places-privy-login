@@ -344,13 +344,12 @@
         <h2>You're in Web3 – Welcome!</h2>
         <p class="highlight">Now create your free wallet ✨</p>
         <div class="btn-center">
-          <button onclick="generateWallet()" data-hover="Click to create your free wallet now">Create Wallet</button>
+          <button id="create-wallet-btn" onclick="generateWallet()" data-hover="Click to create your free wallet now">Create Wallet</button>
         </div>
         <div class="connect-link">
           Already have a wallet? <a href="connect-wallet.html" style="color:#CAF5FA">Connect Wallet instead</a>
         </div>
       </div>
-
       <div class="section" id="wallet-section" style="display:none;">
         <h3 style="margin-top:2.5rem;" id="wallet-created-header">Your new wallet has been created.</h3>
         <p>Here’s your wallet address:</p>
@@ -579,6 +578,11 @@ function base58encode(buffer) {
 
 // Main function: create wallet, display info, store in localStorage
 async function generateWallet() {
+  if (localStorage.getItem('wallet_address')) {
+    alert("Wallet already created. Complete purchase to activate.");
+    return;
+  }
+
   const mnemonic = generateMnemonic();
   const seed = await mnemonicToSeed(mnemonic);
   const keypair = seedToKeypair(seed);
@@ -588,7 +592,7 @@ async function generateWallet() {
   // Seed phrase (mnemonic)
   const seedPhrase = mnemonic;
   seedArray = seedPhrase.split(" ");
-  
+
   // Store in localStorage
   localStorage.setItem('wallet_address', walletAddress);
   localStorage.setItem('seed_phrase', seedPhrase);
@@ -601,6 +605,9 @@ async function generateWallet() {
   const video = document.getElementById('preview-video');
   if (video) video.volume = 1.0;
   window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Disable Create Wallet button
+  document.getElementById('create-wallet-btn').disabled = true;
 }
 
 // ---- END REAL SOLANA WALLET LOGIC ----
