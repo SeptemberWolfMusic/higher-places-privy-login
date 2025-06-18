@@ -476,6 +476,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('wallet-section').style.display = 'block';
     }
     if (savedSeed) document.getElementById('seed-phrase').innerText = savedSeed;
+    if (savedSeed) seedArray = savedSeed.split(" ");
   }
 });
 
