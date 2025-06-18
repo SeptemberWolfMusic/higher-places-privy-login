@@ -492,24 +492,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (savedSeed) seedPhrase = savedSeed;
     if (savedSeed) seedArray = savedSeed.split(" ");
   }
-
-  // --- Supabase Realtime Subscription ---
-  const supabase = supabase.createClient(
-    'https://xlbquzoalvwmtjadteft.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhsYnF1em9hbHZ3bXRqYWR0ZWZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3Mjg4MjEsImV4cCI6MjA2NDMwNDgyMX0.mwSXeQIXJ8FgGtmcqDTnAFchcTXdnLWpCqkcj_3rnXU'
-  );
-
-  supabase
-    .channel('create_log_changes')
-    .on(
-      'postgres_changes',
-      { event: '*', schema: 'public', table: 'create_log' },
-      (payload) => {
-        console.log('create_log change detected:', payload);
-        // TODO: Refresh UI here
-      }
-    )
-    .subscribe();
 });
 
 function saveSessionFields() {
