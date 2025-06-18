@@ -653,16 +653,6 @@ function copySeedPhrase() {
   alert('Seed phrase copied to clipboard!');
 }
 
-function downloadBackup() {
-  const blob = new Blob([`Wallet Address: ${walletAddress}\nSecret Key: ${seedPhrase}`], { type: 'text/plain' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'solana-wallet-backup.txt';
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
 function validateSeedWords() {
   const word2 = document.getElementById('word-2').value.trim().toLowerCase();
   const word8 = document.getElementById('word-8').value.trim().toLowerCase();
