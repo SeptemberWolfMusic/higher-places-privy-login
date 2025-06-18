@@ -342,35 +342,35 @@
   let buyerName = "";
   let buyerEmail = "";
 
-  // Unified connect/disconnect button logic
-  async function handleWalletFlip() {
-    if (walletAddress) {
-      disconnectWallet();
-    } else {
-      // Try Phantom/Solflare or offer QR/Deep-link as fallback
-      if (window.solana && window.solana.isPhantom) {
-        try {
-          const resp = await window.solana.connect({ onlyIfTrusted: false });
-          walletAddress = resp.publicKey.toString();
-          afterWalletConnect();
-        } catch {
-          alert("Phantom connection canceled.");
-        }
-      } else if (window.solflare && window.solflare.isSolflare) {
-        try {
-          await window.solflare.connect();
-          walletAddress = window.solflare.publicKey.toString();
-          afterWalletConnect();
-        } catch {
-          alert("Solflare connection canceled.");
-        }
-      } else {
-        // No extension—offer QR for Phantom/Solflare mobile apps
-        showWalletQR();
-      }
-    }
+ // Unified connect/disconnect button logic
+async function handleWalletFlip() {
+  if (walletAddress) {
+    disconnectWallet();
+    return;
   }
 
+  const hasPhantom = window.solana && window.solana.isPhantom;
+  const hasSolflare = window.solflare && window.solflare.isSolflare;
+
+  if (hasPhantom || hasSolflare) {
+    try {
+      if (hasPhantom) {
+        const resp = await window.solana.connect({ onlyIfTrusted: false });
+        walletAddress = resp.publicKey.toString();
+        afterWalletConnect();
+      } else if (hasSolflare) {
+        await window.solflare.connect();
+        walletAddress = window.solflare.publicKey.toString();
+        afterWalletConnect();
+      }
+    } catch {
+      alert("Wallet connection canceled.");
+    }
+  } else {
+    // Redirect to No Wallet Detected subpage
+    window.location.href = "https://septemberwolfmusic.github.io/no-wallet-detected.html";
+  }
+}
   function afterWalletConnect() {
     document.getElementById("wallet-box").innerText = walletAddress;
     document.getElementById("wallet-display").style.display = "block";
