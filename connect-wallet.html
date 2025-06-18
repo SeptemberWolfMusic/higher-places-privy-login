@@ -380,14 +380,15 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  function disconnectWallet() {
-    walletAddress = "";
-    document.getElementById("wallet-box").innerText = "";
-    document.getElementById("wallet-display").style.display = "none";
-    document.getElementById("email-section").style.display = "none";
-    document.getElementById("purchase-section").style.display = "none";
-    document.getElementById("wallet-flip").innerText = "Connect Wallet";
-  }
+ async function disconnectWallet() {
+  if (window.solana && window.solana.isPhantom) await window.solana.disconnect();
+  walletAddress = "";
+  document.getElementById("wallet-box").innerText = "";
+  document.getElementById("wallet-display").style.display = "none";
+  document.getElementById("email-section").style.display = "none";
+  document.getElementById("purchase-section").style.display = "none";
+  document.getElementById("wallet-flip").innerText = "Connect Wallet";
+}
 
   // Show QR/deep-link modal for desktop
   function showWalletQR() {
