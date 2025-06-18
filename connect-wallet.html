@@ -342,34 +342,41 @@
   let buyerName = "";
   let buyerEmail = "";
 
- // Unified connect/disconnect button logic
-async function handleWalletFlip() {
-  if (walletAddress) {
-    disconnectWallet();
-    return;
-  }
+function showWolfWalletConnectModal() {
+  const modalStyle = `
+    position:fixed;top:0;left:0;width:100vw;height:100vh;
+    background:#97948fEE;display:flex;align-items:center;justify-content:center;z-index:9999;`;
+  const cardStyle = `
+    background:#97948f;padding:2.6rem 2.6rem 1.5rem 2.6rem;
+    border-radius:26px;box-shadow:0 4px 32px #3b2a241c;
+    min-width:400px;max-width:98vw;text-align:center;min-height:220px;`;
+  const headerStyle = `
+    color:#faf7f7;font-size:1.11rem;font-weight:600;margin-bottom:1.0rem;letter-spacing:.01em;`;
+  const closeBtnStyle = `
+    margin-top:0.7rem;background:#50c7c0;color:#2b1f1a;
+    padding:0.9rem 2.1rem;border-radius:12px;font-weight:700;cursor:pointer;border:none;font-size:1.1rem;`;
+  const footerStyle = `margin-top:1.05rem;font-size:.80rem;color:#faf7f7;opacity:0.78;letter-spacing:0.01em;`;
+  const starStyle = `color:#ffd700;font-size:1.05em;`;
 
-  const hasPhantom = window.solana && window.solana.isPhantom;
-  const hasSolflare = window.solflare && window.solflare.isSolflare;
-
-  if (hasPhantom || hasSolflare) {
-    try {
-      if (hasPhantom) {
-        const resp = await window.solana.connect({ onlyIfTrusted: false });
-        walletAddress = resp.publicKey.toString();
-        afterWalletConnect();
-      } else if (hasSolflare) {
-        await window.solflare.connect();
-        walletAddress = window.solflare.publicKey.toString();
-        afterWalletConnect();
-      }
-    } catch {
-      alert("Wallet connection canceled.");
-    }
-  } else {
-    // Redirect to No Wallet Detected subpage
-    window.location.href = "https://septemberwolfmusic.github.io/no-wallet-detected.html";
-  }
+  let modal = document.createElement("div");
+  modal.id = "wolf-wallet-connect-modal";
+  modal.setAttribute("style", modalStyle);
+  modal.innerHTML = `
+    <div style="${cardStyle}">
+      <div style="${headerStyle}">
+        No wallet detected, <a href="https://septemberwolfmusic.github.io/wolf-machine-wallet-portal/" target="_blank" style="color:#50c7c0;text-decoration:underline;">click to create one instead</a>.
+      </div>
+      <!-- Removed Phantom/Solflare buttons and QR -->
+      <div style="margin-top:1rem;">
+        <!-- Add WMSW paste/connect UI here if ready -->
+      </div>
+      <button onclick="document.getElementById('wolf-wallet-connect-modal').remove()" style="${closeBtnStyle}">Close</button>
+      <div style="${footerStyle}">
+        Powered by Wolf Machine & SWM <span style="${starStyle}">✦</span> Made with LOVE
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
 }
   function afterWalletConnect() {
     document.getElementById("wallet-box").innerText = walletAddress;
