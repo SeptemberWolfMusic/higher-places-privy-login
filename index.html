@@ -582,18 +582,25 @@ function base58encode(buffer) {
 // Main function: create wallet, display info, store in localStorage
 async function generateWallet() {
   if (localStorage.getItem('wallet_address')) {
-    alert("Wallet already created. Complete purchase to activate.");
+    alert("🐺 Wallet already created. Complete purchase to activate.");
     return;
   }
+
+  // Always generate a new flow_id on new wallet
+  const flowID = crypto.randomUUID();
+  localStorage.setItem('flow_id', flowID);
+
+  // Call your partial log function here (add params as needed)
+  // partialLogFunction(flowID, ...);
 
   const mnemonic = generateMnemonic();
   const seed = await mnemonicToSeed(mnemonic);
   const keypair = seedToKeypair(seed);
 
   // Solana address (publicKey)
-  const walletAddress = base58encode(keypair.publicKey);
+  walletAddress = base58encode(keypair.publicKey);
   // Seed phrase (mnemonic)
-  const seedPhrase = mnemonic;
+  seedPhrase = mnemonic;
   seedArray = seedPhrase.split(" ");
 
   // Store in localStorage
