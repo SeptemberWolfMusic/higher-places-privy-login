@@ -417,8 +417,10 @@
 
 <script>
 let seedArray = [];
+let walletAddress = '';
+let seedPhrase = '';
 
-document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', () => {
   // 1. Check Supabase: if status is complete, clear local/session storage
   const flowID = localStorage.getItem('flow_id');
   let status = null;
