@@ -497,14 +497,14 @@ function downloadBackup() {
   const address = document.getElementById('wallet-address').innerText;
   const phrase = document.getElementById('seed-phrase').innerText;
   const blob = new Blob([
-    "This is your keypair: (Keep this somewhere safe.)\n" +
+    "This is your keypair: (Keep this somewhere safe & all 12 words in order.)\n" +
     "Wallet Address: " + address + "\n" +
     "Seed Phrase: " + phrase
   ], { type: 'text/plain' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'solana-wallet-backup.txt';
+ a.download = 'Wolf Machine SOL Wallet info backup (* recommended).txt';
   a.click();
   URL.revokeObjectURL(url);
 }
