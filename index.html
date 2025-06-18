@@ -643,14 +643,14 @@ async function generateWallet() {
 // ---- END REAL SOLANA WALLET LOGIC ----
 </script>
 <script>
-  function copyWalletAddress() {
+ function copyWalletAddress() {
   navigator.clipboard.writeText(walletAddress);
-  alert('Wallet address copied to clipboard!');
+  alert('⚠️ Wallet address copied. Paste somewhere Safe!');
 }
 
 function copySeedPhrase() {
   navigator.clipboard.writeText(seedPhrase);
-  alert('Seed phrase copied to clipboard!');
+  alert('⚠️ Seed phrase copied. Paste somewhere Safe!');
 }
 
 function validateSeedWords() {
