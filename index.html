@@ -424,6 +424,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 1. Check Supabase: if status is complete, clear local/session storage
   const flowID = localStorage.getItem('flow_id');
   let status = null;
+
   if (flowID) {
     fetch(`https://xlbquzoalvwmtjadteft.supabase.co/rest/v1/create_log?flow_id=eq.${flowID}`, {
       headers: {
@@ -449,6 +450,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const savedName = localStorage.getItem('user_name') || '';
         const savedWallet = localStorage.getItem('wallet_address') || '';
         const savedSeed = localStorage.getItem('seed_phrase') || '';
+
         if (savedEmail) document.getElementById('user-email').value = savedEmail;
         if (savedName) document.getElementById('user-name').value = savedName;
         if (savedWallet) {
@@ -456,9 +458,12 @@ document.addEventListener('DOMContentLoaded', () => {
           document.getElementById('wallet-section').style.display = 'block';
         }
         if (savedSeed) document.getElementById('seed-phrase').innerText = savedSeed;
-        if (savedSeed) seedArray = savedSeed.split(" ");
+
+        // Sync globals for copy/validate
         if (savedWallet) walletAddress = savedWallet;
         if (savedSeed) seedPhrase = savedSeed;
+        if (savedSeed) seedArray = savedSeed.split(" ");
+
         if (savedEmail && savedName && savedWallet && savedSeed) {
           setTimeout(() => {
             const purchaseSection = document.getElementById('purchase-section');
@@ -468,11 +473,12 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   } else {
-    // No flow_id yet—just restore fields if present, but don't scroll
+    // No flow_id yet—restore fields if present, no scroll
     const savedEmail = localStorage.getItem('user_email') || '';
     const savedName = localStorage.getItem('user_name') || '';
     const savedWallet = localStorage.getItem('wallet_address') || '';
     const savedSeed = localStorage.getItem('seed_phrase') || '';
+
     if (savedEmail) document.getElementById('user-email').value = savedEmail;
     if (savedName) document.getElementById('user-name').value = savedName;
     if (savedWallet) {
@@ -480,9 +486,11 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('wallet-section').style.display = 'block';
     }
     if (savedSeed) document.getElementById('seed-phrase').innerText = savedSeed;
-    if (savedSeed) seedArray = savedSeed.split(" ");
+
+    // Sync globals for copy/validate
     if (savedWallet) walletAddress = savedWallet;
     if (savedSeed) seedPhrase = savedSeed;
+    if (savedSeed) seedArray = savedSeed.split(" ");
   }
 });
 
