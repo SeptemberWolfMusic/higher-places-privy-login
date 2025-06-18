@@ -420,7 +420,7 @@ let seedArray = [];
 let walletAddress = '';
 let seedPhrase = '';
 
-  document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
   // 1. Check Supabase: if status is complete, clear local/session storage
   const flowID = localStorage.getItem('flow_id');
   let status = null;
@@ -430,7 +430,6 @@ let seedPhrase = '';
         "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhsYnF1em9hbHZ3bXRqYWR0ZWZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3Mjg4MjEsImV4cCI6MjA2NDMwNDgyMX0.mwSXeQIXJ8FgGtmcqDTnAFchcTXdnLWpCqkcj_3rnXU"
       }
     })
-    // ...rest of your code continues...
     .then(res => res.json())
     .then(rows => {
       status = rows[0]?.status || null;
@@ -457,6 +456,9 @@ let seedPhrase = '';
           document.getElementById('wallet-section').style.display = 'block';
         }
         if (savedSeed) document.getElementById('seed-phrase').innerText = savedSeed;
+        if (savedSeed) seedArray = savedSeed.split(" ");
+        if (savedWallet) walletAddress = savedWallet;
+        if (savedSeed) seedPhrase = savedSeed;
         if (savedEmail && savedName && savedWallet && savedSeed) {
           setTimeout(() => {
             const purchaseSection = document.getElementById('purchase-section');
@@ -479,6 +481,8 @@ let seedPhrase = '';
     }
     if (savedSeed) document.getElementById('seed-phrase').innerText = savedSeed;
     if (savedSeed) seedArray = savedSeed.split(" ");
+    if (savedWallet) walletAddress = savedWallet;
+    if (savedSeed) seedPhrase = savedSeed;
   }
 });
 
@@ -487,6 +491,22 @@ function saveSessionFields() {
   localStorage.setItem('user_name', document.getElementById('user-name').value);
   localStorage.setItem('wallet_address', document.getElementById('wallet-address').innerText);
   localStorage.setItem('seed_phrase', document.getElementById('seed-phrase').innerText);
+}
+
+function downloadBackup() {
+  const address = document.getElementById('wallet-address').innerText;
+  const phrase = document.getElementById('seed-phrase').innerText;
+  const blob = new Blob([
+    "This is your keypair: (Keep this somewhere safe.)\n" +
+    "Wallet Address: " + address + "\n" +
+    "Seed Phrase: " + phrase
+  ], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'solana-wallet-backup.txt';
+  a.click();
+  URL.revokeObjectURL(url);
 }
 </script>
 <!-- ---- REAL SOLANA WALLET LOGIC STARTS HERE ---- -->
