@@ -484,16 +484,16 @@
     const email = document.getElementById("email").value.trim();
 
     if (!email) {
-      alert("Please enter a valid email.");
+      alert("❌ Please enter a valid email.");
       return;
     }
     if (!walletAddress) {
-      alert("Please connect your wallet before submitting.");
+      alert("❌ Please connect your wallet before submitting.");
       return;
     }
     buyerName = name;
     buyerEmail = email;
-    alert("Email saved! You can now proceed with your purchase.");
+    alert("✅ Email saved! You can now proceed to purchase.");
 
     const video = document.getElementById("preview-video");
     if (video) {
@@ -513,11 +513,11 @@
   // SOL payment + logging
   async function sendSol() {
     if (!walletAddress) {
-      alert("Please connect your wallet first.");
+      alert("❌ Please connect your wallet first.");
       return;
     }
     if (!buyerEmail) {
-      alert("Please enter and submit your email first.");
+      alert("❌ Please enter a valid email.");
       return;
     }
     const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl("devnet"));
@@ -528,7 +528,7 @@
     try {
       const provider = window.solana;
       if (!provider || !provider.isConnected) {
-        alert("Please connect your wallet first.");
+        alert("❌ Please connect your wallet first.");
         return;
       }
       const senderPublicKey = provider.publicKey;
