@@ -489,10 +489,10 @@ async function sendSol() {
     alert("❌ Please enter a valid email.");
     return;
   }
-  const connection = new solana.Connection(solana.clusterApiUrl("devnet"));
+  const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl("devnet"));
   const recipient = "H1jBM1DQgCX6X8e6Ns6gVBJBfntaShuLuN5U6hwC3qXK";
   const amountInSol = 0.044;
-  const lamports = amountInSol * solana.LAMPORTS_PER_SOL;
+  const lamports = amountInSol * solanaWeb3.LAMPORTS_PER_SOL;
 
   try {
     const provider = window.solana;
@@ -502,7 +502,7 @@ async function sendSol() {
       senderPublicKey = provider.publicKey;
       canSign = true;
     } else if (walletAddress) {
-      senderPublicKey = new solana.PublicKey(walletAddress);
+      senderPublicKey = new solanaWeb3.PublicKey(walletAddress);
       canSign = false;
     } else {
       alert("❌ Please connect your wallet first.");
@@ -514,21 +514,21 @@ async function sendSol() {
     localStorage.setItem('flow_id', flowIDToLog);
 
     // Transfer instruction
-    const transferInstruction = solana.SystemProgram.transfer({
+    const transferInstruction = solanaWeb3.SystemProgram.transfer({
       fromPubkey: senderPublicKey,
-      toPubkey: new solana.PublicKey(recipient),
+      toPubkey: new solanaWeb3.PublicKey(recipient),
       lamports: lamports,
     });
 
     // Memo instruction (attaches flow_id to this tx)
-    const memoInstruction = new solana.TransactionInstruction({
+    const memoInstruction = new solanaWeb3.TransactionInstruction({
       keys: [],
-      programId: new solana.PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"),
+      programId: new solanaWeb3.PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"),
       data: new TextEncoder().encode(flowIDToLog),
     });
 
     // Build transaction with both instructions
-    const transaction = new solana.Transaction().add(
+    const transaction = new solanaWeb3.Transaction().add(
       transferInstruction,
       memoInstruction
     );
