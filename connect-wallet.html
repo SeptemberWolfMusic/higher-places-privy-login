@@ -491,7 +491,8 @@ document.body.appendChild(modal);
         (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
       );
   }
- // Destructure web3 globals for simpler calls
+ 
+  // Destructure web3 globals for simpler calls
   const { Connection, LAMPORTS_PER_SOL, SystemProgram, Transaction, TransactionInstruction, PublicKey, clusterApiUrl } = solanaWeb3;
 
   // SOL payment + logging (now with Memo for flow_id)
@@ -620,7 +621,6 @@ document.body.appendChild(modal);
       console.error("Failed to fetch SOL price:", err);
     }
   }
-
 
   updateSolPriceLabel();
 </script>
