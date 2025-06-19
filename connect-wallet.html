@@ -5,21 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Higher Places – Connect</title>
   <link rel="icon" href="https://septemberwolfmusic.github.io/favicon.ico" />
-  <script src="https://cdn.jsdelivr.net/npm/buffer@6.0.3/index.min.js"></script>
-<script>
-  if (typeof window.Buffer === "undefined") {
-    window.Buffer = buffer.Buffer;
-  } else if (!window.Buffer.from) {
-    window.Buffer.from = function (data, encoding) {
-      return new window.Buffer(data, encoding);
-    };
-  }
-  if (!window.Buffer.isEncoding) {
-    window.Buffer.isEncoding = function () { return true; };
-  }
+  <script src="buffer.min.js"></script>
+  <script>
+    if (typeof window.Buffer === "undefined") {
+      window.Buffer = buffer.Buffer;
+    } else if (!window.Buffer.from) {
+      window.Buffer.from = function (data, encoding) {
+        return new window.Buffer(data, encoding);
+      };
+    }
+    if (!window.Buffer.isEncoding) {
+      window.Buffer.isEncoding = function () { return true; };
+    }
   </script>
-  <script src="index.iife.min.js"></script>
-
+  <script src="solana-web3.iife.min.js"></script>
+</head>
   <style>
     body {
       background-color: #FAF7F7;
@@ -620,6 +620,8 @@ async function updateSolPriceLabel() {
 
 updateSolPriceLabel();
 </script>
+<script src="connect-wallet-app.js"></script>
 </body>
 </html>
+
 
