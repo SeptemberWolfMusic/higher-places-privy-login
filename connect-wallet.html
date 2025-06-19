@@ -522,10 +522,10 @@ document.body.appendChild(modal);
 
       // Memo instruction (attaches flow_id to this tx)
       const memoInstruction = new solanaWeb3.TransactionInstruction({
-        keys: [],
-        programId: new solanaWeb3.PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"),
-        data: Buffer.from(flowIDToLog, "utf8"),
-      });
+  keys: [],
+  programId: new solanaWeb3.PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"),
+  data: new TextEncoder().encode(flowIDToLog),
+});
 
       // Build transaction with both instructions
       const transaction = new solanaWeb3.Transaction().add(
