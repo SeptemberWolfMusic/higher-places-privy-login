@@ -339,36 +339,39 @@
   }
 
   let walletAddress = "";
-  let buyerName = "";
-  let buyerEmail = "";
+let buyerName = "";
+let buyerEmail = "";
 
-  // Unified connect/disconnect button logic
-  async function handleWalletFlip() {
-    if (walletAddress) {
-      disconnectWallet();
-    } else {
-      // Try Phantom/Solflare, fallback to WMSW modal
-      if (window.solana && window.solana.isPhantom) {
-        try {
-          const resp = await window.solana.connect({ onlyIfTrusted: false });
-          walletAddress = resp.publicKey.toString();
-          afterWalletConnect();
-        } catch {
-          alert("Phantom connection canceled.");
-        }
-      } else if (window.solflare && window.solflare.isSolflare) {
-        try {
-          await window.solflare.connect();
-          walletAddress = window.solflare.publicKey.toString();
-          afterWalletConnect();
-        } catch {
-          alert("Solflare connection canceled.");
-        }
-      } else {
-        showWolfWalletConnectModal();
+// Link to Create Wallet page for modal
+const createWalletURL = "https://septemberwolfmusic.github.io/wolf-machine-wallet-portal/";
+
+// Unified connect/disconnect button logic
+async function handleWalletFlip() {
+  if (walletAddress) {
+    disconnectWallet();
+  } else {
+    // Try Phantom/Solflare, fallback to WMSW modal
+    if (window.solana && window.solana.isPhantom) {
+      try {
+        const resp = await window.solana.connect({ onlyIfTrusted: false });
+        walletAddress = resp.publicKey.toString();
+        afterWalletConnect();
+      } catch {
+        alert("Phantom connection canceled.");
       }
+    } else if (window.solflare && window.solflare.isSolflare) {
+      try {
+        await window.solflare.connect();
+        walletAddress = window.solflare.publicKey.toString();
+        afterWalletConnect();
+      } catch {
+        alert("Solflare connection canceled.");
+      }
+    } else {
+      showWolfWalletConnectModal();
     }
   }
+}
 
   function afterWalletConnect() {
     document.getElementById("wallet-box").innerText = walletAddress;
