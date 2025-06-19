@@ -321,6 +321,10 @@
   }
 </style>
 
+<script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.95.2/lib/index.iife.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/buffer@6.0.3/index.min.js"></script>
+<script>window.Buffer = Buffer;</script>
+
 <script>
   // Hide sections initially (locked state)
   document.getElementById("wallet-display").style.display = "none";
@@ -338,66 +342,109 @@
     localStorage.setItem('flow_id', flow_id);
   }
 
-let walletAddress = "";
-let buyerName = "";
-let buyerEmail = "";
+  let walletAddress = "";
+  let buyerName = "";
+  let buyerEmail = "";
 
-function showWolfWalletConnectModal() {
-  const modalStyle = `
-    position:fixed;top:0;left:0;width:100vw;height:100vh;
-    background:#97948fEE;display:flex;align-items:center;justify-content:center;z-index:9999;`;
-  const cardStyle = `
-    background:#97948f;padding:2.6rem 2.6rem 1.5rem 2.6rem;
-    border-radius:26px;box-shadow:0 4px 32px #3b2a241c;
-    min-width:400px;max-width:98vw;text-align:center;min-height:220px;`;
-  const headerStyle = `
-    color:#faf7f7;font-size:1.11rem;font-weight:600;margin-bottom:1.0rem;letter-spacing:.01em;`;
-  const closeBtnStyle = `
-    margin-top:0.7rem;background:#50c7c0;color:#2b1f1a;
-    padding:0.9rem 2.1rem;border-radius:12px;font-weight:700;cursor:pointer;border:none;font-size:1.1rem;`;
-  const footerStyle = `margin-top:1.05rem;font-size:.80rem;color:#faf7f7;opacity:0.78;letter-spacing:0.01em;`;
-  const starStyle = `color:#ffd700;font-size:1.05em;`;
+  // Unified connect/disconnect button logic
+  async function handleWalletFlip() {
+    if (walletAddress) {
+      disconnectWallet();
+    } else {
+      // Try Phantom/Solflare, fallback to WMSW modal
+      if (window.solana && window.solana.isPhantom) {
+        try {
+          const resp = await window.solana.connect({ onlyIfTrusted: false });
+          walletAddress = resp.publicKey.toString();
+          afterWalletConnect();
+        } catch {
+          alert("Phantom connection canceled.");
+        }
+      } else if (window.solflare && window.solflare.isSolflare) {
+        try {
+          await window.solflare.connect();
+          walletAddress = window.solflare.publicKey.toString();
+          afterWalletConnect();
+        } catch {
+          alert("Solflare connection canceled.");
+        }
+      } else {
+        showWolfWalletConnectModal();
+      }
+    }
+  }
 
-  let modal = document.createElement("div");
-  modal.id = "wolf-wallet-connect-modal";
-  modal.setAttribute("style", modalStyle);
-  modal.innerHTML = `
-    <div style="${cardStyle}">
-      <div style="${headerStyle}">
-        No wallet detected, <a href="https://septemberwolfmusic.github.io/wolf-machine-wallet-portal/" target="_blank" style="color:#50c7c0;text-decoration:underline;">click to create one instead</a>.
+  function afterWalletConnect() {
+    document.getElementById("wallet-box").innerText = walletAddress;
+    document.getElementById("wallet-display").style.display = "block";
+    document.getElementById("email-section").style.display = "block";
+    document.getElementById("purchase-section").style.display = "block";
+    document.getElementById("wallet-flip").innerText = "Disconnect";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  async function disconnectWallet() {
+    if (window.solana && window.solana.isPhantom) await window.solana.disconnect();
+    walletAddress = "";
+    document.getElementById("wallet-box").innerText = "";
+    document.getElementById("wallet-display").style.display = "none";
+    document.getElementById("email-section").style.display = "none";
+    document.getElementById("purchase-section").style.display = "none";
+    document.getElementById("wallet-flip").innerText = "Connect Wallet";
+  }
+
+  // Wolf Wallet Modal (no QR, just paste/connect WMSW)
+  function showWolfWalletConnectModal() {
+    const modalStyle = `
+      position:fixed;top:0;left:0;width:100vw;height:100vh;
+      background:#97948fEE;display:flex;align-items:center;justify-content:center;z-index:9999;`;
+    const cardStyle = `
+      background:#97948f;padding:2.6rem 2.6rem 1.5rem 2.6rem;
+      border-radius:26px;box-shadow:0 4px 32px #3b2a241c;
+      min-width:400px;max-width:98vw;text-align:center;min-height:220px;`;
+    const headerStyle = `
+      color:#faf7f7;font-size:1.11rem;font-weight:600;margin-bottom:1.0rem;letter-spacing:.01em;`;
+    const inputStyle = `
+      width:93%;font-size:1.12rem;margin:1rem 0 0.3rem 0;padding:0.68rem 1rem;
+      border-radius:10px;border:1.5px solid #50c7c0;background:#3b2a24;color:#faf7f7;`;
+    const connectBtnStyle = `
+      margin-top:0.8rem;background:#50c7c0;color:#2b1f1a;padding:0.7rem 1.8rem;
+      border-radius:12px;font-weight:700;cursor:pointer;border:none;font-size:1.1rem;`;
+    const closeBtnStyle = `
+      margin-top:0.7rem;background:#50c7c0;color:#2b1f1a;
+      padding:0.9rem 2.1rem;border-radius:12px;font-weight:700;cursor:pointer;border:none;font-size:1.1rem;`;
+    const footerStyle = `margin-top:1.05rem;font-size:.80rem;color:#faf7f7;opacity:0.78;letter-spacing:0.01em;`;
+    const starStyle = `color:#ffd700;font-size:1.05em;`;
+
+    let modal = document.createElement("div");
+    modal.id = "wolf-wallet-connect-modal";
+    modal.setAttribute("style", modalStyle);
+    modal.innerHTML = `
+      <div style="${cardStyle}">
+        <div style="${headerStyle}">
+          No wallet detected.<br/>Paste your Wolf Wallet address below to connect:
+        </div>
+        <input id="wolf-wallet-paste" type="text" placeholder="Paste your Wolf Wallet address" style="${inputStyle}" autocomplete="off"/>
+        <button id="wolf-wallet-connect-btn" style="${connectBtnStyle}">Connect</button>
+        <button onclick="document.getElementById('wolf-wallet-connect-modal').remove()" style="${closeBtnStyle}">Close</button>
+        <div style="${footerStyle}">
+          Powered by Wolf Machine & SWM <span style="${starStyle}">✦</span> Made with LOVE
+        </div>
       </div>
-      <div style="margin-top:1rem;">
-        <!-- Add WMSW paste/connect UI here if ready -->
-      </div>
-      <button onclick="document.getElementById('wolf-wallet-connect-modal').remove()" style="${closeBtnStyle}">Close</button>
-      <div style="${footerStyle}">
-        Powered by Wolf Machine & SWM <span style="${starStyle}">✦</span> Made with LOVE
-      </div>
-    </div>
-  `;
-  document.body.appendChild(modal);
-}
+    `;
+    document.body.appendChild(modal);
 
-function afterWalletConnect() {
-  document.getElementById("wallet-box").innerText = walletAddress;
-  document.getElementById("wallet-display").style.display = "block";
-  document.getElementById("email-section").style.display = "block";
-  document.getElementById("purchase-section").style.display = "block";
-  document.getElementById("wallet-flip").innerText = "Disconnect";
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-async function disconnectWallet() {
-  if (window.solana && window.solana.isPhantom) await window.solana.disconnect();
-  walletAddress = "";
-  document.getElementById("wallet-box").innerText = "";
-  document.getElementById("wallet-display").style.display = "none";
-  document.getElementById("email-section").style.display = "none";
-  document.getElementById("purchase-section").style.display = "none";
-  document.getElementById("wallet-flip").innerText = "Connect Wallet";
-}
-
-// The entire showWalletQR function and related QR code logic have been removed as requested to eliminate redundancy and keep the modal for Wolf Wallet only.
+    document.getElementById('wolf-wallet-connect-btn').onclick = () => {
+      const pasted = document.getElementById('wolf-wallet-paste').value.trim();
+      if (!pasted || pasted.length < 32) {
+        alert("Please paste a valid Wolf Wallet address.");
+        return;
+      }
+      walletAddress = pasted;
+      afterWalletConnect();
+      document.getElementById('wolf-wallet-connect-modal').remove();
+    };
+  }
 
   // Email input handling
   function submitEmailAndScroll() {
@@ -431,97 +478,111 @@ async function disconnectWallet() {
       );
   }
 
- // SOL payment + logging (with Memo for flow_id)
-async function sendSol() {
-  if (!walletAddress) {
-    alert("❌ Please connect your wallet first.");
-    return;
-  }
-  if (!buyerEmail) {
-    alert("❌ Please enter a valid email.");
-    return;
-  }
-  const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl("devnet"));
-  const recipient = "H1jBM1DQgCX6X8e6Ns6gVBJBfntaShuLuN5U6hwC3qXK";
-  const amountInSol = 0.044;
-  const lamports = amountInSol * solanaWeb3.LAMPORTS_PER_SOL;
-
-  try {
-    const provider = window.solana;
-    if (!provider || !provider.isConnected) {
+  // SOL payment + logging (now with Memo for flow_id)
+  async function sendSol() {
+    if (!walletAddress) {
       alert("❌ Please connect your wallet first.");
       return;
     }
-    const senderPublicKey = provider.publicKey;
-
-    // Always use current flow_id from localStorage
-    const flowIDToLog = localStorage.getItem('flow_id') || generateFlowID();
-    localStorage.setItem('flow_id', flowIDToLog);
-
-    // Transfer instruction
-    const transferInstruction = solanaWeb3.SystemProgram.transfer({
-      fromPubkey: senderPublicKey,
-      toPubkey: new solanaWeb3.PublicKey(recipient),
-      lamports: lamports,
-    });
-
-    // Memo instruction (attaches flow_id to this tx)
-    const memoInstruction = new solanaWeb3.TransactionInstruction({
-      keys: [],
-      programId: new solanaWeb3.PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"),
-      data: Buffer.from(flowIDToLog, "utf8"),
-    });
-
-    // Build transaction with both instructions
-    const transaction = new solanaWeb3.Transaction().add(
-      transferInstruction,
-      memoInstruction
-    );
-    const { blockhash } = await connection.getRecentBlockhash();
-    transaction.recentBlockhash = blockhash;
-    transaction.feePayer = senderPublicKey;
-
-    const signed = await provider.signTransaction(transaction);
-    const txid = await connection.sendRawTransaction(signed.serialize());
-    await connection.confirmTransaction(txid);
-
-    alert("✅ Payment successful! TXID: " + txid);
-
-    const payload = {
-      email: buyerEmail,
-      wallet: walletAddress,
-      name: buyerName,
-      flow_type: "connect",
-      batch: "B01",
-      edition_number: "",
-      txn_id: txid,
-      flow_id: flowIDToLog,
-      payment_method: "crypto"
-    };
-
-    console.log("Logging payment to Supabase:", payload);
-
-    const res = await fetch("https://xlbquzoalvwmtjadteft.functions.supabase.co/connect_log_logger", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-
-    if (!res.ok) {
-      throw new Error("Failed to log payment info: " + res.status);
+    if (!buyerEmail) {
+      alert("❌ Please enter a valid email.");
+      return;
     }
+    const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl("devnet"));
+    const recipient = "H1jBM1DQgCX6X8e6Ns6gVBJBfntaShuLuN5U6hwC3qXK";
+    const amountInSol = 0.044;
+    const lamports = amountInSol * solanaWeb3.LAMPORTS_PER_SOL;
 
-    const data = await res.json();
-    console.log("Successfully logged payment:", data);
+    try {
+      const provider = window.solana;
+      let senderPublicKey;
+      let canSign = false;
+      if (provider && provider.isConnected) {
+        senderPublicKey = provider.publicKey;
+        canSign = true;
+      } else if (walletAddress) {
+        senderPublicKey = new solanaWeb3.PublicKey(walletAddress);
+        canSign = false;
+      } else {
+        alert("❌ Please connect your wallet first.");
+        return;
+      }
 
-    // Clear flow_id after successful logging to avoid duplicates
-    localStorage.removeItem('flow_id');
+      // Always use current flow_id from localStorage
+      const flowIDToLog = localStorage.getItem('flow_id') || generateFlowID();
+      localStorage.setItem('flow_id', flowIDToLog);
 
-  } catch (err) {
-    console.error(err);
-    alert("❌ Payment or logging failed: " + err.message);
+      // Transfer instruction
+      const transferInstruction = solanaWeb3.SystemProgram.transfer({
+        fromPubkey: senderPublicKey,
+        toPubkey: new solanaWeb3.PublicKey(recipient),
+        lamports: lamports,
+      });
+
+      // Memo instruction (attaches flow_id to this tx)
+      const memoInstruction = new solanaWeb3.TransactionInstruction({
+        keys: [],
+        programId: new solanaWeb3.PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"),
+        data: Buffer.from(flowIDToLog, "utf8"),
+      });
+
+      // Build transaction with both instructions
+      const transaction = new solanaWeb3.Transaction().add(
+        transferInstruction,
+        memoInstruction
+      );
+      const { blockhash } = await connection.getRecentBlockhash();
+      transaction.recentBlockhash = blockhash;
+      transaction.feePayer = senderPublicKey;
+
+      let txid = "";
+      if (canSign) {
+        const signed = await provider.signTransaction(transaction);
+        txid = await connection.sendRawTransaction(signed.serialize());
+        await connection.confirmTransaction(txid);
+      } else {
+        // For pasted WMSW (no signing, display unsigned tx warning)
+        alert("Please use a wallet app to sign this transaction.");
+        return;
+      }
+
+      alert("✅ Payment successful! TXID: " + txid);
+
+      const payload = {
+        email: buyerEmail,
+        wallet: walletAddress,
+        name: buyerName,
+        flow_type: "connect",
+        batch: "B01",
+        edition_number: "",
+        txn_id: txid,
+        flow_id: flowIDToLog,
+        payment_method: "crypto"
+      };
+
+      console.log("Logging payment to Supabase:", payload);
+
+      const res = await fetch("https://xlbquzoalvwmtjadteft.functions.supabase.co/connect_log_logger", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to log payment info: " + res.status);
+      }
+
+      const data = await res.json();
+      console.log("Successfully logged payment:", data);
+
+      // Clear flow_id after successful logging to avoid duplicates
+      localStorage.removeItem('flow_id');
+
+    } catch (err) {
+      console.error(err);
+      alert("❌ Payment or logging failed: " + err.message);
+    }
   }
-}
 
   // Tooltip text setup on load
   window.addEventListener("DOMContentLoaded", () => {
