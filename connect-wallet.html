@@ -7,6 +7,13 @@
   <link rel="icon" href="https://septemberwolfmusic.github.io/favicon.ico" />
   <script src="https://cdn.jsdelivr.net/npm/buffer@6.0.3/index.min.js"></script>
   <script>window.Buffer = Buffer;</script>
+  <script>
+    if (!window.Buffer.from) {
+      window.Buffer.from = function (data, encoding) {
+        return new window.Buffer(data, encoding);
+      };
+    }
+  </script>
   <script src="index.iife.min.js"></script>
 
   <style>
