@@ -15,6 +15,19 @@
   <!-- Solana web3.js -->
   <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.75.2/lib/index.iife.min.js"></script>
 
+  <!-- Destructure web3 globals for your inline script -->
+  <script>
+    const {
+      Connection,
+      LAMPORTS_PER_SOL,
+      SystemProgram,
+      Transaction,
+      TransactionInstruction,
+      PublicKey,
+      clusterApiUrl
+    } = solanaWeb3;
+  </script>
+
   <!-- Wallet Adapter Core -->
   <script src="https://unpkg.com/@solana/wallet-adapter-core@0.19.4/lib/index.umd.min.js"></script>
   <!-- Wallet Adapter Base -->
@@ -479,111 +492,116 @@ document.body.appendChild(modal);
       );
   }
 
-  // SOL payment + logging (now with Memo for flow_id)
-async function sendSol() {
-  if (!walletAddress) {
-    alert("❌ Please connect your wallet first.");
-    return;
-  }
-  if (!buyerEmail) {
-    alert("❌ Please enter a valid email.");
-    return;
-  }
-  const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl("devnet"));
-  const recipient = "H1jBM1DQgCX6X8e6Ns6gVBJBfntaShuLuN5U6hwC3qXK";
-  const amountInSol = 0.044;
-  const lamports = amountInSol * solanaWeb3.LAMPORTS_PER_SOL;
+ <script>
+  // Destructure web3 globals for simpler calls
+  const { Connection, LAMPORTS_PER_SOL, SystemProgram, Transaction, TransactionInstruction, PublicKey, clusterApiUrl } = solanaWeb3;
 
-  try {
-    const provider = window.solana;
-    let senderPublicKey;
-    let canSign = false;
-    if (provider && provider.isConnected) {
-      senderPublicKey = provider.publicKey;
-      canSign = true;
-    } else if (walletAddress) {
-      senderPublicKey = new solanaWeb3.PublicKey(walletAddress);
-      canSign = false;
-    } else {
+  // SOL payment + logging (now with Memo for flow_id)
+  async function sendSol() {
+    if (!walletAddress) {
       alert("❌ Please connect your wallet first.");
       return;
     }
-
-    // Always use current flow_id from localStorage
-    const flowIDToLog = localStorage.getItem('flow_id') || generateFlowID();
-    localStorage.setItem('flow_id', flowIDToLog);
-
-    // Transfer instruction
-    const transferInstruction = solanaWeb3.SystemProgram.transfer({
-      fromPubkey: senderPublicKey,
-      toPubkey: new solanaWeb3.PublicKey(recipient),
-      lamports: lamports,
-    });
-
-    // Memo instruction (attaches flow_id to this tx)
-    const memoInstruction = new solanaWeb3.TransactionInstruction({
-      keys: [],
-      programId: new solanaWeb3.PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"),
-      data: new TextEncoder().encode(flowIDToLog),
-    });
-
-    // Build transaction with both instructions
-    const transaction = new solanaWeb3.Transaction().add(
-      transferInstruction,
-      memoInstruction
-    );
-    const { blockhash } = await connection.getRecentBlockhash();
-    transaction.recentBlockhash = blockhash;
-    transaction.feePayer = senderPublicKey;
-
-    let txid = "";
-    if (canSign) {
-      const signed = await provider.signTransaction(transaction);
-      txid = await connection.sendRawTransaction(signed.serialize());
-      await connection.confirmTransaction(txid);
-    } else {
-      // For pasted WMSW (no signing, display unsigned tx warning)
-      alert("Please use a wallet app to sign this transaction.");
+    if (!buyerEmail) {
+      alert("❌ Please enter a valid email.");
       return;
     }
+    const connection = new Connection(clusterApiUrl("devnet"));
+    const recipient = "H1jBM1DQgCX6X8e6Ns6gVBJBfntaShuLuN5U6hwC3qXK";
+    const amountInSol = 0.044;
+    const lamports = amountInSol * LAMPORTS_PER_SOL;
 
-    alert("✅ Payment successful! TXID: " + txid);
+    try {
+      const provider = window.solana;
+      let senderPublicKey;
+      let canSign = false;
+      if (provider && provider.isConnected) {
+        senderPublicKey = provider.publicKey;
+        canSign = true;
+      } else if (walletAddress) {
+        senderPublicKey = new PublicKey(walletAddress);
+        canSign = false;
+      } else {
+        alert("❌ Please connect your wallet first.");
+        return;
+      }
 
-    const payload = {
-      email: buyerEmail,
-      wallet: walletAddress,
-      name: buyerName,
-      flow_type: "connect",
-      batch: "B01",
-      edition_number: "",
-      txn_id: txid,
-      flow_id: flowIDToLog,
-      payment_method: "crypto"
-    };
+      // Always use current flow_id from localStorage
+      const flowIDToLog = localStorage.getItem('flow_id') || generateFlowID();
+      localStorage.setItem('flow_id', flowIDToLog);
 
-    console.log("Logging payment to Supabase:", payload);
+      // Transfer instruction
+      const transferInstruction = SystemProgram.transfer({
+        fromPubkey: senderPublicKey,
+        toPubkey: new PublicKey(recipient),
+        lamports: lamports,
+      });
 
-    const res = await fetch("https://xlbquzoalvwmtjadteft.functions.supabase.co/connect_log_logger", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
+      // Memo instruction (attaches flow_id to this tx)
+      const memoInstruction = new TransactionInstruction({
+        keys: [],
+        programId: new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"),
+        data: new TextEncoder().encode(flowIDToLog),
+      });
 
-    if (!res.ok) {
-      throw new Error("Failed to log payment info: " + res.status);
+      // Build transaction with both instructions
+      const transaction = new Transaction().add(
+        transferInstruction,
+        memoInstruction
+      );
+      const { blockhash } = await connection.getRecentBlockhash();
+      transaction.recentBlockhash = blockhash;
+      transaction.feePayer = senderPublicKey;
+
+      let txid = "";
+      if (canSign) {
+        const signed = await provider.signTransaction(transaction);
+        txid = await connection.sendRawTransaction(signed.serialize());
+        await connection.confirmTransaction(txid);
+      } else {
+        // For pasted WMSW (no signing, display unsigned tx warning)
+        alert("Please use a wallet app to sign this transaction.");
+        return;
+      }
+
+      alert("✅ Payment successful! TXID: " + txid);
+
+      const payload = {
+        email: buyerEmail,
+        wallet: walletAddress,
+        name: buyerName,
+        flow_type: "connect",
+        batch: "B01",
+        edition_number: "",
+        txn_id: txid,
+        flow_id: flowIDToLog,
+        payment_method: "crypto"
+      };
+
+      console.log("Logging payment to Supabase:", payload);
+
+      const res = await fetch("https://xlbquzoalvwmtjadteft.functions.supabase.co/connect_log_logger", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to log payment info: " + res.status);
+      }
+
+      const data = await res.json();
+      console.log("Successfully logged payment:", data);
+
+      // Clear flow_id after successful logging to avoid duplicates
+      localStorage.removeItem('flow_id');
+
+    } catch (err) {
+      console.error(err);
+      alert("❌ Payment or logging failed: " + err.message);
     }
-
-    const data = await res.json();
-    console.log("Successfully logged payment:", data);
-
-    // Clear flow_id after successful logging to avoid duplicates
-    localStorage.removeItem('flow_id');
-
-  } catch (err) {
-    console.error(err);
-    alert("❌ Payment or logging failed: " + err.message);
   }
-}
+
   // Tooltip text setup on load
   window.addEventListener("DOMContentLoaded", () => {
     const submitBtn = document.getElementById("submit-email");
@@ -604,6 +622,7 @@ async function sendSol() {
       console.error("Failed to fetch SOL price:", err);
     }
   }
+
 
   updateSolPriceLabel();
 </script>
