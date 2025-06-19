@@ -464,15 +464,21 @@ function generateFlowID() {
 }
 
 // Destructure web3 globals for simpler calls (only ONCE here)
-const {
-  Connection,
-  LAMPORTS_PER_SOL,
-  SystemProgram,
-  Transaction,
-  TransactionInstruction,
-  PublicKey,
-  clusterApiUrl
-} = solanaWeb3;
+let Connection, LAMPORTS_PER_SOL, SystemProgram, Transaction, TransactionInstruction, PublicKey, clusterApiUrl;
+
+if (window.solanaWeb3) {
+  ({
+    Connection,
+    LAMPORTS_PER_SOL,
+    SystemProgram,
+    Transaction,
+    TransactionInstruction,
+    PublicKey,
+    clusterApiUrl
+  } = window.solanaWeb3);
+} else {
+  alert("Solana web3.js library not loaded!");
+}
 
 // SOL payment + logging (now with Memo for flow_id)
 async function sendSol() {
