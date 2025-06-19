@@ -412,23 +412,25 @@
     const footerStyle = `margin-top:1.05rem;font-size:.80rem;color:#faf7f7;opacity:0.78;letter-spacing:0.01em;`;
     const starStyle = `color:#ffd700;font-size:1.05em;`;
 
-    let modal = document.createElement("div");
-    modal.id = "wolf-wallet-connect-modal";
-    modal.setAttribute("style", modalStyle);
-    modal.innerHTML = `
-      <div style="${cardStyle}">
-        <div style="${headerStyle}">
-          No wallet detected.<br/>Paste your Wolf Wallet address below to connect:
-        </div>
-        <input id="wolf-wallet-paste" type="text" placeholder="Paste your Wolf Wallet address" style="${inputStyle}" autocomplete="off"/>
-        <button id="wolf-wallet-connect-btn" style="${connectBtnStyle}">Connect</button>
-        <button onclick="document.getElementById('wolf-wallet-connect-modal').remove()" style="${closeBtnStyle}">Close</button>
-        <div style="${footerStyle}">
-          Powered by Wolf Machine & SWM <span style="${starStyle}">✦</span> Made with LOVE
-        </div>
-      </div>
-    `;
-    document.body.appendChild(modal);
+   let modal = document.createElement("div");
+modal.id = "wolf-wallet-connect-modal";
+modal.setAttribute("style", modalStyle);
+modal.innerHTML = `
+  <div style="${cardStyle}">
+    <div style="${headerStyle}">
+      No wallet detected.<br/>
+      <a href="${createWalletURL}" target="_blank" style="color:#50c7c0;text-decoration:underline;">Click to create one instead</a>.
+      <br/><br/>Paste your Wolf Wallet address below to connect:
+    </div>
+    <input id="wolf-wallet-paste" type="text" placeholder="Paste your Wolf Wallet address" style="${inputStyle}" autocomplete="off"/>
+    <button id="wolf-wallet-connect-btn" style="${connectBtnStyle}">Connect</button>
+    <button onclick="document.getElementById('wolf-wallet-connect-modal').remove()" style="${closeBtnStyle}">Close</button>
+    <div style="${footerStyle}">
+      Powered by Wolf Machine & SWM <span style="${starStyle}">✦</span> Made with LOVE
+    </div>
+  </div>
+`;
+document.body.appendChild(modal);
 
     document.getElementById('wolf-wallet-connect-btn').onclick = () => {
       const pasted = document.getElementById('wolf-wallet-paste').value.trim();
