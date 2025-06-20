@@ -37,7 +37,7 @@ function isMobile() {
 }
 
 function openPhantomDeepLink() {
-  window.location.href = "phantom://app/ul/browse/" + encodeURIComponent(window.location.href);
+phantom://app/ul/browse/https%3A%2F%2Fseptemberwolfmusic.github.io%2Fwolf-machine-wallet-portal%2Fconnect-wallet.html
 }
 // Unified connect/disconnect button logic
 async function handleWalletFlip() {
