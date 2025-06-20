@@ -5,17 +5,6 @@ document.addEventListener("DOMContentLoaded", async function() {
   document.getElementById("purchase-section").style.display = "none";
   document.getElementById("wallet-flip").innerText = "Connect Wallet";
 
-  if (isMobile() && window.solana && window.solana.isPhantom) {
-    try {
-      const resp = await window.solana.connect({ onlyIfTrusted: true });
-      walletAddress = resp.publicKey.toString();
-      afterWalletConnect(pubkey)
-    } catch {
-      // silent connect failed, no action needed
-    }
-  }
-});
-
 // FlowID setup - lowercase key to match backend
 let flow_id = localStorage.getItem('flow_id');
 if (!flow_id) {
@@ -37,9 +26,43 @@ function isMobile() {
   return /android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(navigator.userAgent);
 }
 
-function openPhantomDeepLink() {
-  window.location.href =
-    "phantom://app/ul/browse/https%3A%2F%2Fseptemberwolfmusic.github.io%2Fwolf-machine-wallet-portal%2Fconnect-wallet.html";
+// Wolf Mobile Wallet Adapter (mobile only)
+function wolfMobileConnect() {
+  // Try injected wallet first (Phantom/Solflare/etc)
+  if (window.solana && window.solana.isPhantom) {
+    window.solana.connect({ onlyIfTrusted: false }).then(resp => {
+      if (resp && resp.publicKey) {
+        walletAddress = resp.publicKey.toString();
+        afterWalletConnect();
+      }
+    }).catch(() => {
+      // User declined or not trusted, try deep link fallback
+      wolfDeepLinkToPhantom();
+    });
+  } else {
+    // Not injected: open Phantom deep link (universal for most wallets)
+    wolfDeepLinkToPhantom();
+  }
+}
+
+function wolfDeepLinkToPhantom() {
+  // Deep link to Phantom with return to this page
+  const returnUrl = encodeURIComponent(window.location.href);
+  window.location.href = `phantom://app/ul/browse/${returnUrl}`;
+}
+
+// On mobile page load: auto-silent attempt to connect wallet (after Phantom return)
+if (isMobile()) {
+  document.addEventListener("DOMContentLoaded", function() {
+    if (window.solana && window.solana.isPhantom) {
+      window.solana.connect({ onlyIfTrusted: true }).then(resp => {
+        if (resp && resp.publicKey) {
+          walletAddress = resp.publicKey.toString();
+          afterWalletConnect();
+        }
+      });
+    }
+  });
 }
 
 // Unified connect/disconnect button logic
