@@ -245,9 +245,7 @@ async function sendSol() {
     txid = await connection.sendRawTransaction(signed.serialize());
     await connection.confirmTransaction(txid);
 
-    alert("Success! 🥳 Check for your Official Edition Number email with unlockable content soon.");
-
-    // Logging to Supabase
+    // Logging to Supabase (do this BEFORE alert!)
     const payload = {
       email: buyerEmail,
       wallet: walletAddress,
@@ -277,6 +275,9 @@ async function sendSol() {
 
     // Clear flow_id after successful logging to avoid duplicates
     localStorage.removeItem('flow_id');
+
+    // Only show alert after log is complete
+    alert("Success! 🥳 Check for your Official Edition Number email with unlockable content soon.");
 
   } catch (err) {
     console.error(err);
