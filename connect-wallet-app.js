@@ -25,29 +25,31 @@ const createWalletURL = "https://septemberwolfmusic.github.io/wolf-machine-walle
 
 // Unified connect/disconnect button logic
 async function handleWalletFlip() {
-  if (walletAddress) {
-    disconnectWallet();
-  } else {
-    // Try Phantom/Solflare, fallback to WMSW modal
-    if (window.solana && window.solana.isPhantom) {
-      try {
-        const resp = await window.solana.connect({ onlyIfTrusted: false });
-        walletAddress = resp.publicKey.toString();
-        afterWalletConnect();
-      } catch {
-        alert("Phantom connection canceled.");
-      }
-    } else if (window.solflare && window.solflare.isSolflare) {
-      try {
-        await window.solflare.connect();
-        walletAddress = window.solflare.publicKey.toString();
-        afterWalletConnect();
-      } catch {
-        alert("Solflare connection canceled.");
-      }
-    } else {
-      showWolfWalletConnectModal();
+  // If wallet is set and Phantom is connected, disconnect first
+  if (walletAddress && window.solana && window.solana.isConnected) {
+    await disconnectWallet();
+    return;
+  }
+
+  // Always force connect popup if not connected
+  if (window.solana && window.solana.isPhantom) {
+    try {
+      const resp = await window.solana.connect(); // Always show popup
+      walletAddress = resp.publicKey.toString();
+      afterWalletConnect();
+    } catch {
+      alert("Phantom connection canceled.");
     }
+  } else if (window.solflare && window.solflare.isSolflare) {
+    try {
+      await window.solflare.connect();
+      walletAddress = window.solflare.publicKey.toString();
+      afterWalletConnect();
+    } catch {
+      alert("Solflare connection canceled.");
+    }
+  } else {
+    showWolfWalletConnectModal();
   }
 }
 
