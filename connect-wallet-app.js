@@ -47,16 +47,13 @@ function wolfMobileConnect() {
 
 // Unified connect/disconnect button logic
 async function handleWalletFlip() {
-  // If wallet is set and Phantom is connected, disconnect first
   if (walletAddress && window.solana && window.solana.isConnected) {
     await disconnectWallet();
     return;
   }
-
-  // Always force connect popup if not connected
   if (window.solana && window.solana.isPhantom) {
     try {
-      const resp = await window.solana.connect(); // Always show popup
+      const resp = await window.solana.connect();
       walletAddress = resp.publicKey.toString();
       afterWalletConnect();
     } catch {
@@ -71,46 +68,11 @@ async function handleWalletFlip() {
       alert("Solflare connection canceled.");
     }
   } else if (isMobile()) {
-    // On mobile: try injected wallet connect or fallback to deep link
     wolfMobileConnect();
   } else {
     showWolfWalletConnectModal();
   }
 }
-
-// Unified connect/disconnect button logic
-async function handleWalletFlip() {
-  // If wallet is set and Phantom is connected, disconnect first
-  if (walletAddress && window.solana && window.solana.isConnected) {
-    await disconnectWallet();
-    return;
-  }
-
-  // Always force connect popup if not connected
-  if (window.solana && window.solana.isPhantom) {
-    try {
-      const resp = await window.solana.connect(); // Always show popup
-      walletAddress = resp.publicKey.toString();
-      afterWalletConnect();
-    } catch {
-      alert("Phantom connection canceled.");
-    }
-  } else if (window.solflare && window.solflare.isSolflare) {
-    try {
-      await window.solflare.connect();
-      walletAddress = window.solflare.publicKey.toString();
-      afterWalletConnect();
-    } catch {
-      alert("Solflare connection canceled.");
-    }
-  } else if (isMobile()) {
-    // On mobile: just deep link directly to Phantom
-    openPhantomDeepLink();
-  } else {
-    showWolfWalletConnectModal();
-  }
-}
-
 function afterWalletConnect() {
   // Always generate a new flow_id after wallet connects
   let flow_id = generateFlowID();
