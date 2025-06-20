@@ -226,32 +226,22 @@ const transferInstruction = SystemProgram.transfer({
   lamports: lamports,
 });
 
-    // Memo instruction (attaches flow_id to this tx)
-    const memoInstruction = new TransactionInstruction({
-      keys: [],
-      programId: new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"),
-      data: new TextEncoder().encode(flowIDToLog),
-    });
+    // Build transaction with only the transfer instruction (no memo)
+const transaction = new Transaction().add(transferInstruction);
+const { blockhash } = await connection.getRecentBlockhash();
+transaction.recentBlockhash = blockhash;
+transaction.feePayer = senderPublicKey;
 
-    // Build transaction with both instructions
-    const transaction = new Transaction().add(
-      transferInstruction,
-      memoInstruction
-    );
-    const { blockhash } = await connection.getRecentBlockhash();
-    transaction.recentBlockhash = blockhash;
-    transaction.feePayer = senderPublicKey;
-
-    let txid = "";
-    if (canSign) {
-      const signed = await provider.signTransaction(transaction);
-      txid = await connection.sendRawTransaction(signed.serialize());
-      await connection.confirmTransaction(txid);
-    } else {
-      // For pasted WMSW (no signing, display unsigned tx warning)
-      alert("Please use a wallet app to sign this transaction.");
-      return;
-    }
+let txid = "";
+if (canSign) {
+  const signed = await provider.signTransaction(transaction);
+  txid = await connection.sendRawTransaction(signed.serialize());
+  await connection.confirmTransaction(txid);
+} else {
+  // For pasted WMSW (no signing, display unsigned tx warning)
+  alert("Please use a wallet app to sign this transaction.");
+  return;
+}
 
     alert("✅ Payment successful! TXID: " + txid);
 
