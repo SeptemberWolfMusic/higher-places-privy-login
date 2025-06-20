@@ -333,3 +333,48 @@ async function updateSolPriceLabel() {
 }
 
 updateSolPriceLabel();
+
+// --- MOBILE PHANTOM AUTO-RECONNECT HANDLER ---
+(function() {
+  if (!isMobile()) return; // Only run on mobile
+
+  window.addEventListener('load', async function() {
+    // Wait up to 3s for Phantom to inject
+    let tries = 0;
+    function waitForPhantom(resolve) {
+      if (window.solana && window.solana.isPhantom) return resolve();
+      if (++tries > 30) return resolve();
+      setTimeout(() => waitForPhantom(resolve), 100);
+    }
+    await new Promise(waitForPhantom);
+
+    // Try silent connect if Phantom present and not connected
+    if (
+      window.solana &&
+      window.solana.isPhantom &&
+      !window.solana.isConnected
+    ) {
+      try {
+        const resp = await window.solana.connect({ onlyIfTrusted: true });
+        if (resp && resp.publicKey) {
+          walletAddress = resp.publicKey.toString();
+          afterWalletConnect();
+        }
+      } catch {
+        // Do nothing if not trusted
+      }
+    }
+    // If already connected but walletAddress missing, recover it
+    else if (
+      window.solana &&
+      window.solana.isPhantom &&
+      window.solana.isConnected &&
+      !walletAddress
+    ) {
+      try {
+        walletAddress = window.solana.publicKey.toString();
+        afterWalletConnect();
+      } catch {}
+    }
+  });
+})();
