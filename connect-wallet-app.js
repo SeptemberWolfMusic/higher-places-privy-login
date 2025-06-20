@@ -61,15 +61,24 @@ function afterWalletConnect() {
 }
 
 async function disconnectWallet() {
-  if (window.solana && window.solana.isPhantom) await window.solana.disconnect();
+  if (window.solana && window.solana.isPhantom) {
+    try {
+      await window.solana.disconnect();
+      // Phantom bug workaround: forcibly reset ._connected
+      if (window.solana._connected) window.solana._connected = false;
+    } catch (e) {
+      console.warn("Phantom disconnect failed:", e);
+    }
+  }
   walletAddress = "";
   document.getElementById("wallet-box").innerText = "";
   document.getElementById("wallet-display").style.display = "none";
   document.getElementById("email-section").style.display = "none";
   document.getElementById("purchase-section").style.display = "none";
   document.getElementById("wallet-flip").innerText = "Connect Wallet";
+  // Force reload to ensure session is truly cleared
+  window.location.reload();
 }
-
 // Wolf Wallet Modal (no QR, just paste/connect WMSW)
 function showWolfWalletConnectModal() {
   const modalStyle = `
