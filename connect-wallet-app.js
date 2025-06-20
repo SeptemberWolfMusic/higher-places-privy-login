@@ -198,20 +198,18 @@ async function sendSol() {
   const connection = new Connection(clusterApiUrl("devnet"));
   const recipient = "H1jBM1DQgCX6X8e6Ns6gVBJBfntaShuLuN5U6hwC3qXK";
   const amountInSol = 0.044;
-  const lamports = amountInSol * LAMPORTS_PER_SOL;
+  const lamports = Math.floor(amountInSol * LAMPORTS_PER_SOL);
 
   try {
     const provider = window.solana;
     let senderPublicKey;
     let canSign = false;
-    if (provider && provider.isConnected) {
+
+    if (provider && provider.isPhantom && provider.isConnected && provider.publicKey) {
       senderPublicKey = provider.publicKey;
       canSign = true;
-    } else if (walletAddress) {
-      senderPublicKey = new PublicKey(walletAddress);
-      canSign = false;
     } else {
-      alert("❌ Please connect your wallet first.");
+      alert("❌ Please connect your Phantom wallet.");
       return;
     }
 
@@ -221,14 +219,14 @@ async function sendSol() {
 
     console.log("lamports type:", typeof lamports, "value:", lamports);
 
-// Transfer instruction
-const transferInstruction = SystemProgram.transfer({
-  fromPubkey: senderPublicKey,
-  toPubkey: new PublicKey(recipient),
-  lamports: lamports,
-});
+    // Transfer instruction
+    const transferInstruction = SystemProgram.transfer({
+      fromPubkey: senderPublicKey,
+      toPubkey: new PublicKey(recipient),
+      lamports: lamports,
+    });
 
-// Memo instruction (attaches flow_id to this tx)
+    // Memo instruction (attaches flow_id to this tx)
     const memoInstruction = new TransactionInstruction({
       keys: [],
       programId: new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"),
@@ -236,27 +234,20 @@ const transferInstruction = SystemProgram.transfer({
     });
 
     // Build transaction with both instructions
-    const transaction = new Transaction().add(
-      transferInstruction,
-      memoInstruction
-    );
+    const transaction = new Transaction().add(transferInstruction, memoInstruction);
     const { blockhash } = await connection.getRecentBlockhash();
     transaction.recentBlockhash = blockhash;
     transaction.feePayer = senderPublicKey;
 
     let txid = "";
-    if (canSign) {
-      const signed = await provider.signTransaction(transaction);
-      txid = await connection.sendRawTransaction(signed.serialize());
-      await connection.confirmTransaction(txid);
-    } else {
-      // For pasted WMSW (no signing, display unsigned tx warning)
-      alert("Please use a wallet app to sign this transaction.");
-      return;
-    }
+    // Sign and send with Phantom
+    const signed = await provider.signTransaction(transaction);
+    txid = await connection.sendRawTransaction(signed.serialize());
+    await connection.confirmTransaction(txid);
 
     alert("✅ Payment successful! TXID: " + txid);
 
+    // Logging to Supabase
     const payload = {
       email: buyerEmail,
       wallet: walletAddress,
