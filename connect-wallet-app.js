@@ -245,7 +245,7 @@ async function sendSol() {
     txid = await connection.sendRawTransaction(signed.serialize());
     await connection.confirmTransaction(txid);
 
-    alert("✅ Payment successful! TXID: " + txid);
+    alert("alert("Success! 🥳 Check for your Official Edition Number email with unlockable content soon.");
 
     // Logging to Supabase
     const payload = {
