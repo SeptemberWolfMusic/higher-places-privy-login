@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     try {
       const resp = await window.solana.connect({ onlyIfTrusted: true });
       walletAddress = resp.publicKey.toString();
-      afterWalletConnect();
+      afterWalletConnect(pubkey)
     } catch {
       // silent connect failed, no action needed
     }
