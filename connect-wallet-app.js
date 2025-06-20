@@ -77,6 +77,10 @@ async function handleWalletFlip() {
 }
 
 function afterWalletConnect() {
+  // Always generate a new flow_id after wallet connects
+  let flow_id = generateFlowID();
+  localStorage.setItem('flow_id', flow_id);
+
   document.getElementById("wallet-box").innerText = walletAddress;
   document.getElementById("wallet-display").style.display = "block";
   document.getElementById("email-section").style.display = "block";
