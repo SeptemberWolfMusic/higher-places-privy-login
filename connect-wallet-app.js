@@ -5,6 +5,17 @@ document.addEventListener("DOMContentLoaded", async function() {
   document.getElementById("purchase-section").style.display = "none";
   document.getElementById("wallet-flip").innerText = "Connect Wallet";
 
+  if (isMobile() && window.solana && window.solana.isPhantom) {
+    try {
+      const resp = await window.solana.connect({ onlyIfTrusted: true });
+      walletAddress = resp.publicKey.toString();
+      afterWalletConnect(pubkey)
+    } catch {
+      // silent connect failed, no action needed
+    }
+  }
+});
+
 // FlowID setup - lowercase key to match backend
 let flow_id = localStorage.getItem('flow_id');
 if (!flow_id) {
@@ -26,34 +37,23 @@ function isMobile() {
   return /android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(navigator.userAgent);
 }
 
-// Wolf Mobile Wallet Adapter (mobile only)
-function wolfMobileConnect() {
-  // Try injected wallet first (Phantom/Solflare/etc)
-  if (window.solana && window.solana.isPhantom) {
-    window.solana.connect({ onlyIfTrusted: false }).then(resp => {
-      if (resp && resp.publicKey) {
-        walletAddress = resp.publicKey.toString();
-        afterWalletConnect();
-      }
-    }).catch(() => {
-      // User declined or not trusted, try deep link fallback
-      wolfDeepLinkToPhantom();
-    });
-  } else {
-    // Not injected: open Phantom deep link (universal for most wallets)
-    wolfDeepLinkToPhantom();
-  }
+function openPhantomDeepLink() {
+  window.location.href =
+    "phantom://app/ul/browse/https%3A%2F%2Fseptemberwolfmusic.github.io%2Fwolf-machine-wallet-portal%2Fconnect-wallet.html";
 }
 
 // Unified connect/disconnect button logic
 async function handleWalletFlip() {
+  // If wallet is set and Phantom is connected, disconnect first
   if (walletAddress && window.solana && window.solana.isConnected) {
     await disconnectWallet();
     return;
   }
+
+  // Always force connect popup if not connected
   if (window.solana && window.solana.isPhantom) {
     try {
-      const resp = await window.solana.connect();
+      const resp = await window.solana.connect(); // Always show popup
       walletAddress = resp.publicKey.toString();
       afterWalletConnect();
     } catch {
@@ -68,11 +68,13 @@ async function handleWalletFlip() {
       alert("Solflare connection canceled.");
     }
   } else if (isMobile()) {
-    wolfMobileConnect();
+    // On mobile: just deep link directly to Phantom
+    openPhantomDeepLink();
   } else {
     showWolfWalletConnectModal();
   }
 }
+
 function afterWalletConnect() {
   // Always generate a new flow_id after wallet connects
   let flow_id = generateFlowID();
