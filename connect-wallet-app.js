@@ -22,7 +22,13 @@ let buyerEmail = "";
 
 // Link to Create Wallet page for modal
 const createWalletURL = "https://septemberwolfmusic.github.io/wolf-machine-wallet-portal/";
+function isMobile() {
+  return /android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(navigator.userAgent);
+}
 
+function openPhantomDeepLink() {
+  window.location.href = "phantom://app/ul/browse/" + encodeURIComponent(window.location.href);
+}
 // Unified connect/disconnect button logic
 async function handleWalletFlip() {
   // If wallet is set and Phantom is connected, disconnect first
@@ -47,6 +53,13 @@ async function handleWalletFlip() {
       afterWalletConnect();
     } catch {
       alert("Solflare connection canceled.");
+    }
+  } else if (isMobile()) {
+    // Mobile + no wallet detected: offer Phantom deep link prompt
+    if (confirm("Open Phantom?")) {
+      openPhantomDeepLink();
+    } else {
+      showWolfWalletConnectModal();
     }
   } else {
     showWolfWalletConnectModal();
