@@ -45,24 +45,37 @@ function wolfMobileConnect() {
   }
 }
 
-function wolfDeepLinkToPhantom() {
-  // Deep link to Phantom with return to this page
-  const returnUrl = encodeURIComponent(window.location.href);
-  window.location.href = `phantom://app/ul/browse/${returnUrl}`;
-}
+// Unified connect/disconnect button logic
+async function handleWalletFlip() {
+  // If wallet is set and Phantom is connected, disconnect first
+  if (walletAddress && window.solana && window.solana.isConnected) {
+    await disconnectWallet();
+    return;
+  }
 
-// On mobile page load: auto-silent attempt to connect wallet (after Phantom return)
-if (isMobile()) {
-  document.addEventListener("DOMContentLoaded", function() {
-    if (window.solana && window.solana.isPhantom) {
-      window.solana.connect({ onlyIfTrusted: true }).then(resp => {
-        if (resp && resp.publicKey) {
-          walletAddress = resp.publicKey.toString();
-          afterWalletConnect();
-        }
-      });
+  // Always force connect popup if not connected
+  if (window.solana && window.solana.isPhantom) {
+    try {
+      const resp = await window.solana.connect(); // Always show popup
+      walletAddress = resp.publicKey.toString();
+      afterWalletConnect();
+    } catch {
+      alert("Phantom connection canceled.");
     }
-  });
+  } else if (window.solflare && window.solflare.isSolflare) {
+    try {
+      await window.solflare.connect();
+      walletAddress = window.solflare.publicKey.toString();
+      afterWalletConnect();
+    } catch {
+      alert("Solflare connection canceled.");
+    }
+  } else if (isMobile()) {
+    // On mobile: try injected wallet connect or fallback to deep link
+    wolfMobileConnect();
+  } else {
+    showWolfWalletConnectModal();
+  }
 }
 
 // Unified connect/disconnect button logic
