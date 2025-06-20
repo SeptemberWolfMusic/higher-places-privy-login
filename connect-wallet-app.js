@@ -61,10 +61,10 @@ function afterWalletConnect() {
 }
 
 async function disconnectWallet() {
-  if (window.solana && window.solana.isPhantom) {
+  if (window.solana && window.solana.isPhantom && window.solana.disconnect) {
     try {
       await window.solana.disconnect();
-      // Phantom bug workaround: forcibly reset ._connected
+      // Phantom bug workaround: forcibly reset ._connected (if present)
       if (window.solana._connected) window.solana._connected = false;
     } catch (e) {
       console.warn("Phantom disconnect failed:", e);
@@ -76,7 +76,7 @@ async function disconnectWallet() {
   document.getElementById("email-section").style.display = "none";
   document.getElementById("purchase-section").style.display = "none";
   document.getElementById("wallet-flip").innerText = "Connect Wallet";
-  // Force reload to ensure session is truly cleared
+  // Force reload to ensure session is truly cleared and wallet is locked out
   window.location.reload();
 }
 // Wolf Wallet Modal (no QR, just paste/connect WMSW)
