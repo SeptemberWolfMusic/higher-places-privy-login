@@ -208,12 +208,14 @@ async function sendSol() {
     const flowIDToLog = localStorage.getItem('flow_id') || generateFlowID();
     localStorage.setItem('flow_id', flowIDToLog);
 
-    // Transfer instruction
-    const transferInstruction = SystemProgram.transfer({
-      fromPubkey: senderPublicKey,
-      toPubkey: new PublicKey(recipient),
-      lamports: lamports,
-    });
+    console.log("lamports type:", typeof lamports, "value:", lamports);
+
+// Transfer instruction
+const transferInstruction = SystemProgram.transfer({
+  fromPubkey: senderPublicKey,
+  toPubkey: new PublicKey(recipient),
+  lamports: lamports,
+});
 
     // Memo instruction (attaches flow_id to this tx)
     const memoInstruction = new TransactionInstruction({
