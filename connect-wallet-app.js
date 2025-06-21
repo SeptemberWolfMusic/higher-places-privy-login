@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     try {
       const resp = await window.solana.connect({ onlyIfTrusted: true });
       walletAddress = resp.publicKey.toString();
-      afterWalletConnect(pubkey)
+      afterWalletConnect();
     } catch {
       // silent connect failed, no action needed
     }
@@ -42,37 +42,70 @@ function openPhantomDeepLink() {
     "phantom://app/ul/browse/https%3A%2F%2Fseptemberwolfmusic.github.io%2Fwolf-machine-wallet-portal%2Fconnect-wallet.html";
 }
 
-// Unified connect/disconnect button logic
+// --- Unified connect/disconnect button logic ---
 async function handleWalletFlip() {
-  // If wallet is set and Phantom is connected, disconnect first
-  if (walletAddress && window.solana && window.solana.isConnected) {
+  // If wallet is set and Phantom/Solflare is connected, disconnect first
+  if (walletAddress && (
+      (window.solana && window.solana.isConnected) ||
+      (window.solflare && window.solflare.isConnected) ||
+      (window.walletConnectProvider && window.walletConnectProvider.isConnected)
+    )) {
     await disconnectWallet();
     return;
   }
 
-  // Always force connect popup if not connected
+  // PHANTOM
   if (window.solana && window.solana.isPhantom) {
     try {
-      const resp = await window.solana.connect(); // Always show popup
+      const resp = await window.solana.connect();
       walletAddress = resp.publicKey.toString();
       afterWalletConnect();
+      return;
     } catch {
       alert("Phantom connection canceled.");
     }
-  } else if (window.solflare && window.solflare.isSolflare) {
+  }
+
+  // SOLFLARE
+  if (window.solflare && window.solflare.isSolflare) {
     try {
       await window.solflare.connect();
       walletAddress = window.solflare.publicKey.toString();
       afterWalletConnect();
+      return;
     } catch {
       alert("Solflare connection canceled.");
     }
-  } else if (isMobile()) {
-    // On mobile: just deep link directly to Phantom
-    openPhantomDeepLink();
-  } else {
-    showWolfWalletConnectModal();
   }
+
+  // WALLETCONNECT
+  if (window.WalletConnectSolanaAdapter) {
+    try {
+      // Project ID from WalletConnect Cloud (replace with your own if you want metrics)
+      const projectId = "f6d03a5b9fc3fa717f7ec61c11789111";
+      const adapter = new window.WalletConnectSolanaAdapter.WalletConnectWalletAdapter({
+        network: "devnet",
+        options: { projectId }
+      });
+      await adapter.connect();
+      walletAddress = adapter.publicKey.toString();
+      // Expose for disconnect later
+      window.walletConnectProvider = adapter;
+      afterWalletConnect();
+      return;
+    } catch (e) {
+      alert("WalletConnect canceled or failed: " + (e?.message || e));
+    }
+  }
+
+  // On mobile, deep link to Phantom as fallback
+  if (isMobile()) {
+    openPhantomDeepLink();
+    return;
+  }
+
+  // Default: Show Wolf Wallet paste/connect modal
+  showWolfWalletConnectModal();
 }
 
 function afterWalletConnect() {
@@ -89,13 +122,30 @@ function afterWalletConnect() {
 }
 
 async function disconnectWallet() {
+  // Phantom
   if (window.solana && window.solana.isPhantom && window.solana.disconnect) {
     try {
       await window.solana.disconnect();
-      // Phantom bug workaround: forcibly reset ._connected (if present)
       if (window.solana._connected) window.solana._connected = false;
     } catch (e) {
       console.warn("Phantom disconnect failed:", e);
+    }
+  }
+  // Solflare
+  if (window.solflare && window.solflare.isSolflare && window.solflare.disconnect) {
+    try {
+      await window.solflare.disconnect();
+    } catch (e) {
+      console.warn("Solflare disconnect failed:", e);
+    }
+  }
+  // WalletConnect
+  if (window.walletConnectProvider && window.walletConnectProvider.disconnect) {
+    try {
+      await window.walletConnectProvider.disconnect();
+      window.walletConnectProvider = null;
+    } catch (e) {
+      console.warn("WalletConnect disconnect failed:", e);
     }
   }
   walletAddress = "";
@@ -104,9 +154,9 @@ async function disconnectWallet() {
   document.getElementById("email-section").style.display = "none";
   document.getElementById("purchase-section").style.display = "none";
   document.getElementById("wallet-flip").innerText = "Connect Wallet";
-  // Force reload to ensure session is truly cleared and wallet is locked out
   window.location.reload();
 }
+
 // Wolf Wallet Modal (no QR, just paste/connect WMSW)
 function showWolfWalletConnectModal() {
   const modalStyle = `
@@ -227,23 +277,50 @@ async function sendSol() {
   const lamports = Math.floor(amountInSol * LAMPORTS_PER_SOL);
 
   try {
-    const provider = window.solana;
-    let senderPublicKey;
-    let canSign = false;
+    // Determine provider based on connection method
+    let provider = null;
+    let senderPublicKey = null;
+    let signAndSendTx = null;
 
-    if (provider && provider.isPhantom && provider.isConnected && provider.publicKey) {
+    // Phantom
+    if (window.solana && window.solana.isPhantom && window.solana.isConnected && window.solana.publicKey) {
+      provider = window.solana;
       senderPublicKey = provider.publicKey;
-      canSign = true;
+      signAndSendTx = async tx => {
+        const signed = await provider.signTransaction(tx);
+        return connection.sendRawTransaction(signed.serialize());
+      };
+    }
+    // Solflare
+    else if (window.solflare && window.solflare.isSolflare && window.solflare.isConnected && window.solflare.publicKey) {
+      provider = window.solflare;
+      senderPublicKey = provider.publicKey;
+      signAndSendTx = async tx => {
+        const signed = await provider.signTransaction(tx);
+        return connection.sendRawTransaction(signed.serialize());
+      };
+    }
+    // WalletConnect
+    else if (window.walletConnectProvider && window.walletConnectProvider.connected && window.walletConnectProvider.publicKey) {
+      provider = window.walletConnectProvider;
+      senderPublicKey = provider.publicKey;
+      signAndSendTx = async tx => {
+        const signed = await provider.signTransaction(tx);
+        return connection.sendRawTransaction(signed.serialize());
+      };
+    }
+    // Manual paste fallback
+    else if (walletAddress) {
+      alert("You connected via manual address entry. SOL payment must be done from a wallet extension.");
+      return;
     } else {
-      alert("❌ Please connect your Phantom wallet.");
+      alert("❌ Please connect your wallet.");
       return;
     }
 
     // Always use current flow_id from localStorage
     const flowIDToLog = localStorage.getItem('flow_id') || generateFlowID();
     localStorage.setItem('flow_id', flowIDToLog);
-
-    console.log("lamports type:", typeof lamports, "value:", lamports);
 
     // Transfer instruction
     const transferInstruction = SystemProgram.transfer({
@@ -266,9 +343,8 @@ async function sendSol() {
     transaction.feePayer = senderPublicKey;
 
     let txid = "";
-    // Sign and send with Phantom
-    const signed = await provider.signTransaction(transaction);
-    txid = await connection.sendRawTransaction(signed.serialize());
+    // Sign and send
+    txid = await signAndSendTx(transaction);
     await connection.confirmTransaction(txid);
 
     // Logging to Supabase (do this BEFORE alert!)
