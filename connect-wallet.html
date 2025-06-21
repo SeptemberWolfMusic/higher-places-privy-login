@@ -5,23 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Higher Places – Connect</title>
   <link rel="icon" href="favicon.ico" />
-  <script src="buffer.min.js"></script>
+  
+  <!-- Minimal Buffer polyfill -->
   <script>
-    if (typeof window.Buffer === "undefined") {
-      window.Buffer = buffer.Buffer;
+    if (typeof window.Buffer === 'undefined') {
+      window.Buffer = {
+        from: function (input, encoding) {
+          if (typeof input === 'string') {
+            const enc = new TextEncoder();
+            return enc.encode(input);
+          }
+          return new Uint8Array(input);
+        },
+      };
     }
   </script>
-  <!-- Hotfix: Fake Node modules for browser -->
+  
+  <!-- Hotfix: Properly stub 'inherits', 'pino', 'sonic-boom' as CommonJS modules -->
   <script>
-  // Hotfix: Properly stub 'inherits', 'pino', 'sonic-boom' as CommonJS modules
-  window.inherits = function () {};
-  window.require = window.require || function (module) {
-    if (module === 'inherits') return { default: window.inherits, __esModule: true };
-    if (module === 'events') return { EventEmitter: window.EventEmitter };
-    if (module === 'pino' || module === 'sonic-boom') return function() {};
-    return {};
-  };
-</script>
+    window.inherits = function () {};
+    window.require = window.require || function (module) {
+      if (module === 'inherits') return { default: window.inherits, __esModule: true };
+      if (module === 'events') return { EventEmitter: window.EventEmitter };
+      if (module === 'pino' || module === 'sonic-boom') return function() {};
+      return {};
+    };
+  </script>
+  
   <script src="solana-web3.iife.min.js"></script>
   <!-- EventEmitter Polyfill (hosted locally) -->
   <script src="eventemitter3.min.js"></script>
