@@ -11,6 +11,14 @@
       window.Buffer = buffer.Buffer;
     }
   </script>
+  <script>
+    // Minimal require polyfill to support Node module shims in browser
+    window.require = function (module) {
+      if (module === 'events') return { EventEmitter: window.EventEmitter };
+      // Ignore all Node modules in browser context
+      return {};
+    };
+  </script>
   <script src="solana-web3.iife.min.js"></script>
   <!-- EventEmitter Polyfill (hosted locally) -->
   <script src="eventemitter3.min.js"></script>
