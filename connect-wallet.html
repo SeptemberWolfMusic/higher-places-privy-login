@@ -13,15 +13,15 @@
   </script>
   <!-- Hotfix: Fake Node modules for browser -->
   <script>
-    window.inherits = function () {};
-    window.require = window.require || function (module) {
-      if (module === 'inherits') return window.inherits;
-      if (module === 'events') return { EventEmitter: window.EventEmitter };
-      if (module === 'pino' || module === 'sonic-boom') return function() {};
-      // Add any other needed stubs here
-      return {};
-    };
-  </script>
+  // Hotfix: Properly stub 'inherits', 'pino', 'sonic-boom' as CommonJS modules
+  window.inherits = function () {};
+  window.require = window.require || function (module) {
+    if (module === 'inherits') return { default: window.inherits, __esModule: true };
+    if (module === 'events') return { EventEmitter: window.EventEmitter };
+    if (module === 'pino' || module === 'sonic-boom') return function() {};
+    return {};
+  };
+</script>
   <script src="solana-web3.iife.min.js"></script>
   <!-- EventEmitter Polyfill (hosted locally) -->
   <script src="eventemitter3.min.js"></script>
