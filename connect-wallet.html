@@ -11,11 +11,14 @@
       window.Buffer = buffer.Buffer;
     }
   </script>
+  <!-- Hotfix: Fake Node modules for browser -->
   <script>
-    // Minimal require polyfill to support Node module shims in browser
-    window.require = function (module) {
+    window.inherits = function () {};
+    window.require = window.require || function (module) {
+      if (module === 'inherits') return window.inherits;
       if (module === 'events') return { EventEmitter: window.EventEmitter };
-      // Ignore all Node modules in browser context
+      if (module === 'pino' || module === 'sonic-boom') return function() {};
+      // Add any other needed stubs here
       return {};
     };
   </script>
