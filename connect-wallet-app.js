@@ -84,9 +84,9 @@ async function handleWalletFlip() {
       // Project ID from WalletConnect Cloud (replace with your own if you want metrics)
       const projectId = "f6d03a5b9fc3fa717f7ec61c11789111";
       const adapter = new window.WalletConnectSolanaAdapter.WalletConnectWalletAdapter({
-        network: "devnet",
-        options: { projectId }
-      });
+  network: "devnet",
+  projectId // pass projectId directly here, not inside options object
+});
       await adapter.connect();
       walletAddress = adapter.publicKey.toString();
       // Expose for disconnect later
