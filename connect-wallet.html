@@ -6,23 +6,22 @@
   <title>Higher Places – Connect</title>
   <link rel="icon" href="favicon.ico" />
 
-  <!-- Polyfill require('buffer') for browser -->
+  <!-- Node-like require('buffer') and global stubs -->
   <script>
+    window.inherits = window.inherits || function () {};
     window.require = window.require || function(module) {
       if (module === 'buffer') {
         return { Buffer: window.Buffer };
       }
-      // your previous stubs below
       if (module === 'inherits') return { default: window.inherits, __esModule: true };
       if (module === 'events') return { EventEmitter: window.EventEmitter };
       if (module === 'pino' || module === 'sonic-boom') return function() {};
       return {};
     };
-    window.inherits = window.inherits || function () {};
   </script>
 
-  <!-- Full Buffer polyfill (for bs58, wallet adapters) -->
-  <script src="https://cdn.jsdelivr.net/npm/buffer@6.0.3/index.min.js"></script>
+  <!-- Full Buffer polyfill (hosted locally) -->
+  <script src="buffer.min.js"></script>
   <script>
     if (typeof window.Buffer === "undefined") {
       window.Buffer = buffer.Buffer;
@@ -30,25 +29,8 @@
     window.buffer = window.Buffer;
   </script>
 
-  <!-- Minimal Buffer polyfill (your custom, safe to leave) -->
-  <script>
-    if (typeof window.Buffer === 'undefined') {
-      window.Buffer = {
-        from: function (input, encoding) {
-          if (typeof input === 'string') {
-            const enc = new TextEncoder();
-            return enc.encode(input);
-          }
-          return new Uint8Array(input);
-        },
-      };
-    }
-  </script>
-
   <script src="solana-web3.iife.min.js"></script>
-  <!-- EventEmitter Polyfill (hosted locally) -->
   <script src="eventemitter3.min.js"></script>
-  <!-- WalletConnect Solana Adapter (hosted locally at project root) -->
   <script src="wolf-walletconnect-solana-adapter.umd.js"></script>
 </head>
   <style>
