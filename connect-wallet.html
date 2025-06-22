@@ -6,8 +6,10 @@
   <title>Higher Places – Connect</title>
   <link rel="icon" href="favicon.ico" />
 
-  <!-- Node-like require('buffer') and global stubs -->
+  <!-- Node/CommonJS polyfills for browser -->
   <script>
+    window.exports = window.exports || {};
+    window.module = window.module || { exports: window.exports };
     window.inherits = window.inherits || function () {};
     window.require = window.require || function(module) {
       if (module === 'buffer') {
