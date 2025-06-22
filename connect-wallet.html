@@ -6,18 +6,21 @@
   <title>Higher Places – Connect</title>
   <link rel="icon" href="favicon.ico" />
 
-  <!-- Node/CommonJS polyfills for browser -->
+  <!-- Node/CommonJS polyfills for browser (full set) -->
   <script>
     window.exports = window.exports || {};
     window.module = window.module || { exports: window.exports };
     window.inherits = window.inherits || function () {};
     window.require = window.require || function(module) {
-      if (module === 'buffer') {
-        return { Buffer: window.Buffer };
-      }
+      if (module === 'buffer') return { Buffer: window.Buffer };
       if (module === 'inherits') return { default: window.inherits, __esModule: true };
-      if (module === 'events') return { EventEmitter: window.EventEmitter };
-      if (module === 'pino' || module === 'sonic-boom') return function() {};
+      if (module === 'events') return { EventEmitter: window.EventEmitter || function(){} };
+      if (module === 'pino' || module === 'sonic-boom') return function(){};
+      // Polyfill all Node modules to empty object for UMD compatibility
+      if (module === 'fs' || module === 'path' || module === 'os' ||
+          module === 'http' || module === 'https' || module === 'stream' ||
+          module === 'zlib' || module === 'assert' || module === 'worker_threads' ||
+          module === 'module' || module === 'url' || module === 'crypto') return {};
       return {};
     };
   </script>
