@@ -5,15 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Higher Places – Connect</title>
   <link rel="icon" href="favicon.ico" />
-
-  <!-- Full Buffer polyfill for all wallet adapters -->
-  <script src="https://cdn.jsdelivr.net/npm/buffer@6.0.3/index.min.js"></script>
-  <script>
-    if (typeof window.Buffer === "undefined") {
-      window.Buffer = buffer.Buffer;
-    }
-  </script>
-  
   <!-- Minimal Buffer polyfill (your custom, safe to leave) -->
   <script>
     if (typeof window.Buffer === 'undefined') {
