@@ -1,5 +1,5 @@
 // Wolf Machine – Universal Mobile Wallet Connector
-// github.com/SeptemberWolfMusic  |  (c) 2025 SWM Team
+// github.com/SeptemberWolfMusic  |  (c) 2025 Wolf Machine & SWM 
 
 (function () {
   // Detect mobile
