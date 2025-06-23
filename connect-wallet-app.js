@@ -596,7 +596,7 @@ updateSolPriceLabel();
       showMobileWalletFallbackModal();
     }
 
-    // --- Helper functions (same as before) ---
+    // --- Helper functions ---
     function checkOtherWalletsPresent() {
       for (const key in window) {
         if (
@@ -635,4 +635,5 @@ updateSolPriceLabel();
     }
   });
 })();
+
 
