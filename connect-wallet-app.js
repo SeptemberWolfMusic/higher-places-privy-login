@@ -412,47 +412,227 @@ async function updateSolPriceLabel() {
 
 updateSolPriceLabel();
 
-// --- MOBILE PHANTOM AUTO-RECONNECT HANDLER ---
+// --- On-page logger for mobile (shows logs at screen bottom) ---
 (function() {
-  if (!isMobile()) return; // Only run on mobile
+  const logContainer = document.createElement('div');
+  logContainer.style.position = 'fixed';
+  logContainer.style.bottom = '0';
+  logContainer.style.left = '0';
+  logContainer.style.width = '100%';
+  logContainer.style.maxHeight = '150px';
+  logContainer.style.overflowY = 'auto';
+  logContainer.style.background = 'rgba(0,0,0,0.7)';
+  logContainer.style.color = '#fff';
+  logContainer.style.fontSize = '12px';
+  logContainer.style.fontFamily = 'monospace';
+  logContainer.style.zIndex = '9999999';
+  logContainer.style.padding = '5px';
+  document.body.appendChild(logContainer);
+
+  window.logToScreen = function(msg) {
+    const line = document.createElement('div');
+    line.textContent = msg;
+    logContainer.appendChild(line);
+    logContainer.scrollTop = logContainer.scrollHeight;
+  };
+})();
+
+// --- UNIVERSAL MOBILE WALLET CONNECT MANAGER (FINAL, FULLY INLINE, WITH LOGGING) ---
+(function() {
+  if (!isMobile()) {
+    logToScreen("Not mobile: skipping universal wallet connect manager.");
+    return; // Only run on mobile
+  }
 
   window.addEventListener('load', async function() {
-    // Wait up to 3s for Phantom to inject
-    let tries = 0;
-    function waitForPhantom(resolve) {
-      if (window.solana && window.solana.isPhantom) return resolve();
-      if (++tries > 30) return resolve();
-      setTimeout(() => waitForPhantom(resolve), 100);
-    }
-    await new Promise(waitForPhantom);
+    logToScreen("Mobile wallet connect manager started...");
 
-    // Try silent connect if Phantom present and not connected
-    if (
-      window.solana &&
-      window.solana.isPhantom &&
-      !window.solana.isConnected
-    ) {
+    // Wait up to 3s for wallet providers to inject
+    let tries = 0;
+    function waitForWallets(resolve) {
+      if (
+        (window.solana && window.solana.isPhantom) ||
+        (window.solflare && window.solflare.isSolflare) ||
+        (window.WalletConnectAdapter) ||
+        checkOtherWalletsPresent()
+      ) {
+        logToScreen("Detected wallet provider(s) present.");
+        return resolve();
+      }
+      if (++tries > 30) {
+        logToScreen("Wallet providers not found after wait.");
+        return resolve();
+      }
+      setTimeout(() => waitForWallets(resolve), 100);
+    }
+    await new Promise(waitForWallets);
+
+    let connected = false;
+
+    // 1. Try Phantom (inline, silent if trusted)
+    if (window.solana && window.solana.isPhantom && !connected) {
+      logToScreen("Trying Phantom silent connect...");
       try {
         const resp = await window.solana.connect({ onlyIfTrusted: true });
         if (resp && resp.publicKey) {
           walletAddress = resp.publicKey.toString();
           afterWalletConnect();
+          connected = true;
+          logToScreen("Phantom connected silently: " + walletAddress);
         }
-      } catch {
-        // Do nothing if not trusted
+      } catch (e) {
+        logToScreen("Phantom silent connect failed: " + e.message);
+      }
+      if (!connected && window.solana.isConnected && !walletAddress) {
+        try {
+          walletAddress = window.solana.publicKey.toString();
+          afterWalletConnect();
+          connected = true;
+          logToScreen("Phantom already connected, recovered key: " + walletAddress);
+        } catch (e) {
+          logToScreen("Phantom recovery failed: " + e.message);
+        }
       }
     }
-    // If already connected but walletAddress missing, recover it
-    else if (
-      window.solana &&
-      window.solana.isPhantom &&
-      window.solana.isConnected &&
-      !walletAddress
-    ) {
+
+    // 2. Try Solflare (inline, silent if trusted)
+    if (!connected && window.solflare && window.solflare.isSolflare) {
+      logToScreen("Trying Solflare silent connect...");
       try {
-        walletAddress = window.solana.publicKey.toString();
+        const resp = await window.solflare.connect({ onlyIfTrusted: true });
+        if (resp && resp.publicKey) {
+          walletAddress = resp.publicKey.toString();
+          afterWalletConnect();
+          connected = true;
+          logToScreen("Solflare connected silently: " + walletAddress);
+        }
+      } catch (e) {
+        logToScreen("Solflare silent connect failed: " + e.message);
+      }
+      if (!connected && window.solflare.isConnected && !walletAddress) {
+        try {
+          walletAddress = window.solflare.publicKey.toString();
+          afterWalletConnect();
+          connected = true;
+          logToScreen("Solflare already connected, recovered key: " + walletAddress);
+        } catch (e) {
+          logToScreen("Solflare recovery failed: " + e.message);
+        }
+      }
+    }
+
+    // 3. Try WalletConnect (inline, supports silent restore)
+    if (
+      !connected &&
+      typeof window.WalletConnectAdapter === "function"
+    ) {
+      logToScreen("Trying WalletConnect adapter...");
+      try {
+        // Create or get your WalletConnect adapter instance
+        let wcAdapter;
+        if (window.wcAdapterInstance) {
+          wcAdapter = window.wcAdapterInstance;
+          logToScreen("Reusing cached WalletConnect adapter instance.");
+        } else {
+          wcAdapter = new window.WalletConnectAdapter({
+            // Add your config here if needed (projectId, network, etc.)
+          });
+          window.wcAdapterInstance = wcAdapter;
+          logToScreen("Created new WalletConnect adapter instance.");
+        }
+
+        // If cached session exists, try silent restore
+        const cachedSession = localStorage.getItem("walletConnectSession");
+        if (cachedSession) {
+          logToScreen("Attempting WalletConnect silent restore...");
+          try {
+            await wcAdapter.connect(JSON.parse(cachedSession)); // Silent restore
+            if (wcAdapter.publicKey) {
+              walletAddress = wcAdapter.publicKey.toString();
+              afterWalletConnect();
+              connected = true;
+              logToScreen("WalletConnect session restored: " + walletAddress);
+            }
+          } catch (e) {
+            logToScreen("WalletConnect silent restore failed: " + e.message);
+          }
+        }
+
+        // If no session or restore failed, try first-time connect inline
+        if (!connected) {
+          logToScreen("Trying WalletConnect first-time connect...");
+          const resp = await wcAdapter.connect();
+          if (resp && resp.publicKey) {
+            walletAddress = resp.publicKey.toString();
+            afterWalletConnect();
+            // Save session for next time
+            if (wcAdapter.session) {
+              localStorage.setItem("walletConnectSession", JSON.stringify(wcAdapter.session));
+              logToScreen("WalletConnect session saved.");
+            }
+            connected = true;
+            logToScreen("WalletConnect connected: " + walletAddress);
+          }
+        }
+      } catch (e) {
+        logToScreen("WalletConnect connection error: " + e.message);
+      }
+    }
+
+    // 4. Try other SOL wallets
+    if (!connected) {
+      const foundWallet = scanOtherSolWallets();
+      if (foundWallet && foundWallet.publicKey) {
+        walletAddress = foundWallet.publicKey.toString();
         afterWalletConnect();
-      } catch {}
+        connected = true;
+        logToScreen("Connected other SOL wallet: " + walletAddress);
+      }
+    }
+
+    // 5. If all fail, fallback modal
+    if (!connected) {
+      logToScreen("No wallets connected; showing fallback modal.");
+      showMobileWalletFallbackModal();
+    }
+
+    // --- Helper functions (same as before) ---
+    function checkOtherWalletsPresent() {
+      for (const key in window) {
+        if (
+          window[key] &&
+          typeof window[key] === "object" &&
+          typeof window[key].connect === "function" &&
+          typeof window[key].publicKey !== "undefined"
+        ) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function scanOtherSolWallets() {
+      for (const key in window) {
+        const w = window[key];
+        if (
+          w &&
+          typeof w === "object" &&
+          typeof w.connect === "function" &&
+          typeof w.publicKey !== "undefined" &&
+          typeof w.isConnected !== "undefined"
+        ) {
+          try {
+            if (!w.isConnected) w.connect();
+            if (w.publicKey) return w;
+          } catch {}
+        }
+      }
+      return null;
+    }
+
+    function showMobileWalletFallbackModal() {
+      alert("No wallet detected. Create one instead, or paste your SOL wallet address on the next screen.");
     }
   });
 })();
+
