@@ -437,15 +437,15 @@ updateSolPriceLabel();
   };
 })();
 
-// --- UNIVERSAL MOBILE WALLET CONNECT MANAGER (FINAL, FULLY INLINE, WITH LOGGING) ---
+// --- Wolf Machine - universal mobile wallet connect manager ---
 (function() {
   if (!isMobile()) {
-    logToScreen("Not mobile: skipping universal wallet connect manager.");
+    logToScreen?.("Not mobile: skipping universal wallet connect manager.");
     return; // Only run on mobile
   }
 
   window.addEventListener('load', async function() {
-    logToScreen("Mobile wallet connect manager started...");
+    logToScreen?.("Wolf Machine wallet connect manager started...");
 
     // Wait up to 3s for wallet providers to inject
     let tries = 0;
@@ -456,11 +456,11 @@ updateSolPriceLabel();
         (window.WalletConnectAdapter) ||
         checkOtherWalletsPresent()
       ) {
-        logToScreen("Detected wallet provider(s) present.");
+        logToScreen?.("Detected wallet provider(s) present.");
         return resolve();
       }
       if (++tries > 30) {
-        logToScreen("Wallet providers not found after wait.");
+        logToScreen?.("Wallet providers not found after wait.");
         return resolve();
       }
       setTimeout(() => waitForWallets(resolve), 100);
@@ -471,52 +471,52 @@ updateSolPriceLabel();
 
     // 1. Try Phantom (inline, silent if trusted)
     if (window.solana && window.solana.isPhantom && !connected) {
-      logToScreen("Trying Phantom silent connect...");
+      logToScreen?.("Trying Phantom silent connect...");
       try {
         const resp = await window.solana.connect({ onlyIfTrusted: true });
         if (resp && resp.publicKey) {
           walletAddress = resp.publicKey.toString();
           afterWalletConnect();
           connected = true;
-          logToScreen("Phantom connected silently: " + walletAddress);
+          logToScreen?.("Phantom connected silently: " + walletAddress);
         }
       } catch (e) {
-        logToScreen("Phantom silent connect failed: " + e.message);
+        logToScreen?.("Phantom silent connect failed: " + e.message);
       }
       if (!connected && window.solana.isConnected && !walletAddress) {
         try {
           walletAddress = window.solana.publicKey.toString();
           afterWalletConnect();
           connected = true;
-          logToScreen("Phantom already connected, recovered key: " + walletAddress);
+          logToScreen?.("Phantom already connected, recovered key: " + walletAddress);
         } catch (e) {
-          logToScreen("Phantom recovery failed: " + e.message);
+          logToScreen?.("Phantom recovery failed: " + e.message);
         }
       }
     }
 
     // 2. Try Solflare (inline, silent if trusted)
     if (!connected && window.solflare && window.solflare.isSolflare) {
-      logToScreen("Trying Solflare silent connect...");
+      logToScreen?.("Trying Solflare silent connect...");
       try {
         const resp = await window.solflare.connect({ onlyIfTrusted: true });
         if (resp && resp.publicKey) {
           walletAddress = resp.publicKey.toString();
           afterWalletConnect();
           connected = true;
-          logToScreen("Solflare connected silently: " + walletAddress);
+          logToScreen?.("Solflare connected silently: " + walletAddress);
         }
       } catch (e) {
-        logToScreen("Solflare silent connect failed: " + e.message);
+        logToScreen?.("Solflare silent connect failed: " + e.message);
       }
       if (!connected && window.solflare.isConnected && !walletAddress) {
         try {
           walletAddress = window.solflare.publicKey.toString();
           afterWalletConnect();
           connected = true;
-          logToScreen("Solflare already connected, recovered key: " + walletAddress);
+          logToScreen?.("Solflare already connected, recovered key: " + walletAddress);
         } catch (e) {
-          logToScreen("Solflare recovery failed: " + e.message);
+          logToScreen?.("Solflare recovery failed: " + e.message);
         }
       }
     }
@@ -526,41 +526,41 @@ updateSolPriceLabel();
       !connected &&
       typeof window.WalletConnectAdapter === "function"
     ) {
-      logToScreen("Trying WalletConnect adapter...");
+      logToScreen?.("Trying WalletConnect adapter...");
       try {
         // Create or get your WalletConnect adapter instance
         let wcAdapter;
         if (window.wcAdapterInstance) {
           wcAdapter = window.wcAdapterInstance;
-          logToScreen("Reusing cached WalletConnect adapter instance.");
+          logToScreen?.("Reusing cached WalletConnect adapter instance.");
         } else {
           wcAdapter = new window.WalletConnectAdapter({
             // Add your config here if needed (projectId, network, etc.)
           });
           window.wcAdapterInstance = wcAdapter;
-          logToScreen("Created new WalletConnect adapter instance.");
+          logToScreen?.("Created new WalletConnect adapter instance.");
         }
 
         // If cached session exists, try silent restore
         const cachedSession = localStorage.getItem("walletConnectSession");
         if (cachedSession) {
-          logToScreen("Attempting WalletConnect silent restore...");
+          logToScreen?.("Attempting WalletConnect silent restore...");
           try {
             await wcAdapter.connect(JSON.parse(cachedSession)); // Silent restore
             if (wcAdapter.publicKey) {
               walletAddress = wcAdapter.publicKey.toString();
               afterWalletConnect();
               connected = true;
-              logToScreen("WalletConnect session restored: " + walletAddress);
+              logToScreen?.("WalletConnect session restored: " + walletAddress);
             }
           } catch (e) {
-            logToScreen("WalletConnect silent restore failed: " + e.message);
+            logToScreen?.("WalletConnect silent restore failed: " + e.message);
           }
         }
 
         // If no session or restore failed, try first-time connect inline
         if (!connected) {
-          logToScreen("Trying WalletConnect first-time connect...");
+          logToScreen?.("Trying WalletConnect first-time connect...");
           const resp = await wcAdapter.connect();
           if (resp && resp.publicKey) {
             walletAddress = resp.publicKey.toString();
@@ -568,14 +568,14 @@ updateSolPriceLabel();
             // Save session for next time
             if (wcAdapter.session) {
               localStorage.setItem("walletConnectSession", JSON.stringify(wcAdapter.session));
-              logToScreen("WalletConnect session saved.");
+              logToScreen?.("WalletConnect session saved.");
             }
             connected = true;
-            logToScreen("WalletConnect connected: " + walletAddress);
+            logToScreen?.("WalletConnect connected: " + walletAddress);
           }
         }
       } catch (e) {
-        logToScreen("WalletConnect connection error: " + e.message);
+        logToScreen?.("WalletConnect connection error: " + e.message);
       }
     }
 
@@ -586,13 +586,13 @@ updateSolPriceLabel();
         walletAddress = foundWallet.publicKey.toString();
         afterWalletConnect();
         connected = true;
-        logToScreen("Connected other SOL wallet: " + walletAddress);
+        logToScreen?.("Connected other SOL wallet: " + walletAddress);
       }
     }
 
     // 5. If all fail, fallback modal
     if (!connected) {
-      logToScreen("No wallets connected; showing fallback modal.");
+      logToScreen?.("No wallets connected; showing fallback modal.");
       showMobileWalletFallbackModal();
     }
 
