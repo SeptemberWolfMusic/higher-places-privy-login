@@ -64,8 +64,8 @@ async function handleWalletFlip() {
       afterWalletConnect();
       return;
     } catch {
-      alert("Phantom connection canceled.");
-    }
+  if (!isMobile()) alert("Phantom connection canceled.");
+}
   }
 
   // SOLFLARE
