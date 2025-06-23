@@ -100,11 +100,11 @@ async function handleWalletFlip() {
     }
   }
 
-  // On mobile, deep link to Phantom as fallback
-  if (isMobile()) {
-    openPhantomDeepLink();
-    return;
-  }
+  // Removed deep link fallback to enforce inline-only wallet connect flow per Wolf Machine design.
+// if (isMobile()) {
+//   openPhantomDeepLink();
+//   return;
+// }
 
   // Default: Show Wolf Wallet paste/connect modal
   showWolfWalletConnectModal();
