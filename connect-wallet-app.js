@@ -1,10 +1,12 @@
 // Hide sections initially (locked state)
-//   document.addEventListener("DOMContentLoaded", async function() {
-//   document.getElementById("wallet-display").style.display = "none";
-//   document.getElementById("email-section").style.display = "none";
-//   document.getElementById("purchase-section").style.display = "none";
-//   document.getElementById("wallet-flip").innerText = "Connect Wallet";
+// Always hide UI sections and set button on page load (for all devices)
+document.getElementById("wallet-display").style.display = "none";
+document.getElementById("email-section").style.display = "none";
+document.getElementById("purchase-section").style.display = "none";
+document.getElementById("wallet-flip").innerText = "Connect Wallet";
 
+// --- OLD MOBILE PHANTOM HANDLER COMMENTED OUT ---
+// document.addEventListener("DOMContentLoaded", async function() {
 //   if (isMobile() && window.solana && window.solana.isPhantom) {
 //     try {
 //       const resp = await window.solana.connect({ onlyIfTrusted: true });
