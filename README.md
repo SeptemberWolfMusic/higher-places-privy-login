@@ -4,4 +4,4 @@ This page lets fans create a Solana wallet, save their recovery phrase, and cont
 
 Built for a smooth Web2 → Web3 transition, with email capture, wallet backup, and Stripe checkout.
 
-Powered by September Wolf Music ✦ Made with LOVE
+Powered by Wolf Machine & SWM ✦ Made with LOVE
