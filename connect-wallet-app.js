@@ -108,6 +108,7 @@ async function handleWalletFlip() {
   // Default: Show Wolf Wallet paste/connect modal
   // showWolfWalletConnectModal();
 }
+window.handleWalletFlip = handleWalletFlip;
 function afterWalletConnect() {
   // Always generate a new flow_id after wallet connects
   let flow_id = generateFlowID();
