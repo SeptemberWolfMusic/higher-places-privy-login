@@ -163,18 +163,19 @@ import { WalletConnectWalletAdapter } from './adapters.js';
 
   // Expose handleWalletFlip for button
   window.handleWalletFlip = async function() {
-    if (
-      walletAddress &&
-      (
-        (window.solana && window.solana.isConnected) ||
-        (window.solflare && window.solflare.isConnected) ||
-        (window.walletConnectProvider && window.walletConnectProvider.isConnected)
-      )
-    ) {
-      await window.wolfMachineMobileDisconnect();
-      return;
-    }
-    if (await connectWalletConnect()) return;
-    showWolfUniversalWalletConnectModal();
-  };
+  // If wallet connected, disconnect first
+  if (
+    walletAddress &&
+    (
+      (window.solana && window.solana.isConnected) ||
+      (window.solflare && window.solflare.isConnected) ||
+      (window.walletConnectProvider && window.walletConnectProvider.isConnected)
+    )
+  ) {
+    await window.wolfMachineMobileDisconnect();
+    return;
+  }
+  // Show modal directly to connect wallet
+  showWolfUniversalWalletConnectModal();
+};
 })();
