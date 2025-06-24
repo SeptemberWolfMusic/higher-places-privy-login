@@ -1,9 +1,10 @@
 function isMobile() {
   return /android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(navigator.userAgent);
 }
-if (isMobile()) return;
 
-(() => {
+if (isMobile()) {
+  import('./wolf-machine-universal-mobile-wallet-connector.js');
+} else {
 
 // Hide sections initially (locked state)
 // Always hide UI sections and set button on page load (for all devices)
@@ -442,4 +443,3 @@ updateSolPriceLabel();
 
 if (isMobile()) import('./wolf-machine-universal-mobile-wallet-connector.js');
 
-})(); // End IIFE
