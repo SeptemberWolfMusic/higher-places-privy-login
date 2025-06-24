@@ -1,3 +1,4 @@
+import { WalletConnectWalletAdapter } from './adapter.js';
 // Wolf Machine – Universal Mobile Wallet Connector
 // github.com/SeptemberWolfMusic  |  (c) 2025 Wolf Machine & SWM 
 
