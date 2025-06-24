@@ -329,13 +329,21 @@
   .btn-center {
     text-align: center;
   }
-  .section {
+ .section {
     margin-bottom: 2rem;
   }
 </style>
 
+<script>
+  if (/android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(navigator.userAgent)) {
+    var s = document.createElement('script');
+    s.src = './wolf-machine-universal-mobile-wallet-connector.js';
+    document.head.appendChild(s);
+  }
+</script>
 <script src="connect-wallet-app.js"></script>
 </body>
 </html>
+
 
 
