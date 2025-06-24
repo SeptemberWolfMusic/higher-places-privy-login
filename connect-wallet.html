@@ -340,7 +340,8 @@
   if (/android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(navigator.userAgent)) {
     var s = document.createElement('script');
     s.src = './wolf-machine-universal-mobile-wallet-connector.js';
-    document.head.appendChild(s);
+    s.type = "module";
+    document.body.appendChild(s);
   }
 </script>
 </body>
