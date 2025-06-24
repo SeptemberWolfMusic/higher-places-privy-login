@@ -337,7 +337,8 @@
 <script type="module" src="connect-wallet-app.js"></script>
 <!-- Mobile wallet connector loads AFTER connect-wallet-app.js for override -->
 <script>
-  if (/android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(navigator.userAgent)) {
+  var isMobile = /android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(navigator.userAgent);
+  if (isMobile) {
     var s = document.createElement('script');
     s.src = './wolf-machine-universal-mobile-wallet-connector.js';
     s.type = "module";
