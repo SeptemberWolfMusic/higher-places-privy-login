@@ -78,16 +78,23 @@ import { WalletConnectWalletAdapter } from './adapters.js';
   }
 
   // 3. Fallback: show paste modal
-  function showFallbackModal() {
-    log("Showing fallback modal for manual wallet paste.");
-    // Simple prompt for now; replace with your preferred modal UI if needed.
-    let pasted = prompt("No wallet apps detected.\nPaste your SOL wallet address to connect:");
-    if (pasted && pasted.length >= 32) {
-      walletAddress = pasted;
-      afterWalletConnect();
-      log("Manual wallet pasted: " + walletAddress);
-      return true;
-    }
+function showFallbackModal() {
+  log("Showing fallback modal for manual wallet paste.");
+  // Simple prompt for now; replace with your preferred modal UI if needed.
+  let pasted = prompt("No wallet apps detected.\nPaste your SOL wallet address to connect:");
+  if (pasted && pasted.length >= 32) {
+    walletAddress = pasted;
+    afterWalletConnect();
+    log("Manual wallet pasted: " + walletAddress);
+    return true;
+  }
+  alert("Please paste a valid wallet address.");
+  return false;
+}
+
+// For testing modal design only
+showFallbackModal();
+
     alert("Please paste a valid wallet address.");
     return false;
   }
