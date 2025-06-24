@@ -43,11 +43,14 @@ function openPhantomDeepLink() {
 // --- Unified connect/disconnect button logic ---
 async function handleWalletFlip() {
   // If wallet is set and Phantom/Solflare is connected, disconnect first
-  if (walletAddress && (
+  if (
+    walletAddress &&
+    (
       (window.solana && window.solana.isConnected) ||
       (window.solflare && window.solflare.isConnected) ||
       (window.walletConnectProvider && window.walletConnectProvider.isConnected)
-    )) {
+    )
+  ) {
     await disconnectWallet();
     return;
   }
@@ -103,9 +106,8 @@ async function handleWalletFlip() {
   // }
 
   // Default: Show Wolf Wallet paste/connect modal
-// showWolfWalletConnectModal();
+  // showWolfWalletConnectModal();
 }
-
 function afterWalletConnect() {
   // Always generate a new flow_id after wallet connects
   let flow_id = generateFlowID();
