@@ -334,6 +334,8 @@
   }
 </style>
 
+<script type="module" src="connect-wallet-app.js"></script>
+<!-- Mobile wallet connector loads AFTER connect-wallet-app.js for override -->
 <script>
   if (/android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(navigator.userAgent)) {
     var s = document.createElement('script');
@@ -341,7 +343,6 @@
     document.head.appendChild(s);
   }
 </script>
-<script type="module" src="connect-wallet-app.js"></script>
 </body>
 </html>
 
