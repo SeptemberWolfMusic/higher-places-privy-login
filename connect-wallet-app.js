@@ -1,4 +1,3 @@
-import './wolf-machine-universal-mobile-wallet-connector.js';
 // Hide sections initially (locked state)
 // Always hide UI sections and set button on page load (for all devices)
 document.getElementById("wallet-display").style.display = "none";
