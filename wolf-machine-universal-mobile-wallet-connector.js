@@ -10,6 +10,12 @@ import { WalletConnectWalletAdapter } from './adapters.js';
   }
   if (!isMobile()) return;
 
+  // Attach handler to Connect button if present
+  document.addEventListener("DOMContentLoaded", function () {
+    var btn = document.getElementById("wallet-flip");
+    if (btn) btn.onclick = handleWalletFlip;
+  });
+
   // Logging (optional for debug, safe to leave in)
   function log(msg) {
     try {
