@@ -3,6 +3,8 @@ function isMobile() {
 }
 if (isMobile()) return;
 
+(() => {
+
 // Hide sections initially (locked state)
 // Always hide UI sections and set button on page load (for all devices)
 document.getElementById("wallet-display").style.display = "none";
@@ -65,8 +67,8 @@ async function handleWalletFlip() {
       afterWalletConnect();
       return;
     } catch {
-  if (!isMobile()) alert("Phantom connection canceled.");
-}
+      if (!isMobile()) alert("Phantom connection canceled.");
+    }
   }
 
   // SOLFLARE
@@ -87,9 +89,9 @@ async function handleWalletFlip() {
       // Project ID from WalletConnect Cloud (replace with your own if you want metrics)
       const projectId = "f6d03a5b9fc3fa717f7ec61c11789111";
       const adapter = new window.WalletConnectSolanaAdapter.WalletConnectWalletAdapter({
-  network: "devnet",
-  projectId // pass projectId directly here, not inside options object
-});
+        network: "devnet",
+        projectId // pass projectId directly here, not inside options object
+      });
       await adapter.connect();
       walletAddress = adapter.publicKey.toString();
       // Expose for disconnect later
@@ -102,10 +104,10 @@ async function handleWalletFlip() {
   }
 
   // Removed deep link fallback to enforce inline-only wallet connect flow per Wolf Machine design.
-// if (isMobile()) {
-//   openPhantomDeepLink();
-//   return;
-// }
+  // if (isMobile()) {
+  //   openPhantomDeepLink();
+  //   return;
+  // }
 
   // Default: Show Wolf Wallet paste/connect modal
   showWolfWalletConnectModal();
@@ -439,3 +441,5 @@ updateSolPriceLabel();
 })();
 
 if (isMobile()) import('./wolf-machine-universal-mobile-wallet-connector.js');
+
+})(); // End IIFE
