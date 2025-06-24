@@ -168,23 +168,24 @@ function showWolfUniversalWalletConnectModal() {
   };
 
    // Expose handleWalletFlip for button
-  window.handleWalletFlip = async function() {
-    // If wallet connected, disconnect first
-    if (
-      walletAddress &&
-      (
-        (window.solana && window.solana.isConnected) ||
-        (window.solflare && window.solflare.isConnected) ||
-        (window.walletConnectProvider && window.walletConnectProvider.isConnected)
-      )
-    ) {
-      await window.wolfMachineMobileDisconnect();
-      return;
-    }
-    // Show modal directly to connect wallet (for design/testing)
-    showWolfUniversalWalletConnectModal();
-  };
-
+window.handleWalletFlip = async function() {
+  console.log("flip clicked"); // Console log
+  if (window.logToScreen) window.logToScreen("flip clicked"); // On-screen log
+  // If wallet connected, disconnect first
+  if (
+    walletAddress &&
+    (
+      (window.solana && window.solana.isConnected) ||
+      (window.solflare && window.solflare.isConnected) ||
+      (window.walletConnectProvider && window.walletConnectProvider.isConnected)
+    )
+  ) {
+    await window.wolfMachineMobileDisconnect();
+    return;
+  }
+  // Show modal directly to connect wallet (for design/testing)
+  showWolfUniversalWalletConnectModal();
+};
   // --- Wolf Universal Modal Placeholder ---
 // function showWolfUniversalWalletConnectModal() {
 //   alert("Modal would open here! (Design Mode)");
