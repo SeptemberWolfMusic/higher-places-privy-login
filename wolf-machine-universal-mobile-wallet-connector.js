@@ -78,23 +78,16 @@ import { WalletConnectWalletAdapter } from './adapters.js';
   }
 
   // 3. Fallback: show paste modal
-function showFallbackModal() {
-  log("Showing fallback modal for manual wallet paste.");
-  // Simple prompt for now; replace with your preferred modal UI if needed.
-  let pasted = prompt("No wallet apps detected.\nPaste your SOL wallet address to connect:");
-  if (pasted && pasted.length >= 32) {
-    walletAddress = pasted;
-    afterWalletConnect();
-    log("Manual wallet pasted: " + walletAddress);
-    return true;
-  }
-  alert("Please paste a valid wallet address.");
-  return false;
-}
-
-// For testing modal design only
-showFallbackModal();
-
+  function showFallbackModal() {
+    log("Showing fallback modal for manual wallet paste.");
+    // Simple prompt for now; replace with your preferred modal UI if needed.
+    let pasted = prompt("No wallet apps detected.\nPaste your SOL wallet address to connect:");
+    if (pasted && pasted.length >= 32) {
+      walletAddress = pasted;
+      afterWalletConnect();
+      log("Manual wallet pasted: " + walletAddress);
+      return true;
+    }
     alert("Please paste a valid wallet address.");
     return false;
   }
@@ -129,5 +122,25 @@ showFallbackModal();
     // Optionally trigger a UI refresh
     if (window.onWolfWalletDisconnected) window.onWolfWalletDisconnected();
   };
-})();
 
+  // Expose handleWalletFlip for button
+  window.handleWalletFlip = async function() {
+    // If wallet connected, disconnect first
+    if (
+      walletAddress &&
+      (
+        (window.solana && window.solana.isConnected) ||
+        (window.solflare && window.solflare.isConnected) ||
+        (window.walletConnectProvider && window.walletConnectProvider.isConnected)
+      )
+    ) {
+      await window.wolfMachineMobileDisconnect();
+      return;
+    }
+    // Try connect fresh WalletConnect session
+    if (await connectWalletConnect()) return;
+    // Fallback to paste modal
+    showFallbackModal();
+  };
+
+})();
