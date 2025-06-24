@@ -185,8 +185,8 @@ window.handleWalletFlip = function() {
   };
 
   // --- Wolf Universal Modal Placeholder ---
-  function showWolfUniversalWalletConnectModal() {
-    alert("Modal would open here! (Design Mode)");
-  }
+// function showWolfUniversalWalletConnectModal() {
+//   alert("Modal would open here! (Design Mode)");
+// }
 
 })();
