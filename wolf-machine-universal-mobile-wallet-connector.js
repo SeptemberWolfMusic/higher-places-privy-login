@@ -166,21 +166,27 @@ window.handleWalletFlip = function() {
     if (window.onWolfWalletDisconnected) window.onWolfWalletDisconnected();
   };
 
-  // Expose handleWalletFlip for button
+   // Expose handleWalletFlip for button
   window.handleWalletFlip = async function() {
-  // If wallet connected, disconnect first
-  if (
-    walletAddress &&
-    (
-      (window.solana && window.solana.isConnected) ||
-      (window.solflare && window.solflare.isConnected) ||
-      (window.walletConnectProvider && window.walletConnectProvider.isConnected)
-    )
-  ) {
-    await window.wolfMachineMobileDisconnect();
-    return;
+    // If wallet connected, disconnect first
+    if (
+      walletAddress &&
+      (
+        (window.solana && window.solana.isConnected) ||
+        (window.solflare && window.solflare.isConnected) ||
+        (window.walletConnectProvider && window.walletConnectProvider.isConnected)
+      )
+    ) {
+      await window.wolfMachineMobileDisconnect();
+      return;
+    }
+    // Show modal directly to connect wallet (for design/testing)
+    showWolfUniversalWalletConnectModal();
+  };
+
+  // --- Wolf Universal Modal Placeholder ---
+  function showWolfUniversalWalletConnectModal() {
+    alert("Modal would open here! (Design Mode)");
   }
-  // Show modal directly to connect wallet
-  showWolfUniversalWalletConnectModal();
-};
+
 })();
