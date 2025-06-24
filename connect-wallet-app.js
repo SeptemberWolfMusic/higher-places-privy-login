@@ -103,7 +103,7 @@ async function handleWalletFlip() {
   // }
 
   // Default: Show Wolf Wallet paste/connect modal
-  showWolfWalletConnectModal();
+// showWolfWalletConnectModal();
 }
 
 function afterWalletConnect() {
