@@ -10,6 +10,11 @@ import { WalletConnectWalletAdapter } from './adapters.js';
   }
   if (!isMobile()) return;
 
+// For testing: always show modal on connect wallet click (mobile)
+window.handleWalletFlip = function() {
+  showWolfUniversalWalletConnectModal();
+};
+
   // Attach handler to Connect button if present
   document.addEventListener("DOMContentLoaded", function () {
     var btn = document.getElementById("wallet-flip");
