@@ -1,3 +1,8 @@
+function isMobile() {
+  return /android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(navigator.userAgent);
+}
+if (isMobile()) return;
+
 // Hide sections initially (locked state)
 // Always hide UI sections and set button on page load (for all devices)
 document.getElementById("wallet-display").style.display = "none";
@@ -34,10 +39,6 @@ let buyerEmail = "";
 
 // Link to Create Wallet page for modal
 const createWalletURL = "https://septemberwolfmusic.github.io/wolf-machine-wallet-portal/";
-
-function isMobile() {
-  return /android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(navigator.userAgent);
-}
 
 function openPhantomDeepLink() {
   window.location.href =
