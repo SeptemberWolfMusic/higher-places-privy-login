@@ -1,11 +1,3 @@
-function isMobile() {
-  return /android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(navigator.userAgent);
-}
-
-if (isMobile()) {
-  import('./wolf-machine-universal-mobile-wallet-connector.js');
-} else {
-
 // Hide sections initially (locked state)
 // Always hide UI sections and set button on page load (for all devices)
 document.getElementById("wallet-display").style.display = "none";
@@ -440,6 +432,4 @@ updateSolPriceLabel();
     logContainer.scrollTop = logContainer.scrollHeight;
   };
 })();
-
-if (isMobile()) import('./wolf-machine-universal-mobile-wallet-connector.js');
 
