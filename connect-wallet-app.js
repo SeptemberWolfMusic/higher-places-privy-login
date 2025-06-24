@@ -381,3 +381,7 @@ updateSolPriceLabel();
   };
 })();
 
+// Make key functions available to HTML
+window.handleWalletFlip = handleWalletFlip;
+window.submitEmailAndScroll = submitEmailAndScroll;
+window.sendSol = sendSol;
