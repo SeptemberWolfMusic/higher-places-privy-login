@@ -357,31 +357,6 @@ async function updateSolPriceLabel() {
 }
 
 updateSolPriceLabel();
-// --- On-page logger for mobile (shows logs at screen bottom) ---
-(function() {
-  const logContainer = document.createElement('div');
-  logContainer.style.position = 'fixed';
-  logContainer.style.bottom = '0';
-  logContainer.style.left = '0';
-  logContainer.style.width = '100%';
-  logContainer.style.maxHeight = '150px';
-  logContainer.style.overflowY = 'auto';
-  logContainer.style.background = 'rgba(0,0,0,0.7)';
-  logContainer.style.color = '#fff';
-  logContainer.style.fontSize = '12px';
-  logContainer.style.fontFamily = 'monospace';
-  logContainer.style.zIndex = '9999999';
-  logContainer.style.padding = '5px';
-  document.body.appendChild(logContainer);
-
-  window.logToScreen = function(msg) {
-    const line = document.createElement('div');
-    line.textContent = msg;
-    logContainer.appendChild(line);
-    logContainer.scrollTop = logContainer.scrollHeight;
-  };
-
-})();
 
 // Make key functions available to HTML
 window.handleWalletFlip = handleWalletFlip;
