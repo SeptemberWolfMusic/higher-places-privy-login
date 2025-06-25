@@ -217,3 +217,5 @@ window.handleWalletFlip = async function() {
     logContainer.appendChild(line);
     logContainer.scrollTop = logContainer.scrollHeight;
   };
+
+})();
