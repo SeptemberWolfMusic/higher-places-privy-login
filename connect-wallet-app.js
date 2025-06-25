@@ -284,6 +284,8 @@ async function sendSol() {
 
     // Build transaction with both instructions
     const transaction = new Transaction().add(transferInstruction, memoInstruction);
+
+    // --- Refresh the blockhash right before sending ---
     const { blockhash } = await connection.getRecentBlockhash();
     transaction.recentBlockhash = blockhash;
     transaction.feePayer = senderPublicKey;
