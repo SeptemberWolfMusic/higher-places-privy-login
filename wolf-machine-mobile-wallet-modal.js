@@ -9,11 +9,12 @@ export function showWolfWalletConnectModal(walletDetected = true) {
   const headerStyle = `
     color:#faf7f7;font-size:1.13rem;font-weight:600;margin-bottom:1.1rem;letter-spacing:.01em;`;
   const connectBtnStyle = `
-    background:#50c7c0;color:#2b1f1a;padding:0.80rem 2.0rem;
-    border-radius:13px;font-weight:700;cursor:pointer;border:none;font-size:1.14rem;min-width:180px;display:block;margin:0 auto;`;
-  const closeBtnStyle = `
+  background:#50c7c0;color:#2b1f1a;padding:0.80rem 2.0rem;
+  border-radius:13px;font-weight:700;cursor:pointer;border:none;font-size:1.14rem;min-width:180px;display:block;margin:1.5rem auto 0;`;
+
+const closeBtnStyle = `
   margin-top:6rem;background:#50c7c0;color:#2b1f1a;
-  padding:0.55rem 1.6rem;border-radius:10px;font-weight:700;cursor:pointer;border:none;font-size:1rem;display:block;width:50%;margin:6rem auto 0;
+  padding:0.55rem 1.2rem;border-radius:10px;font-weight:700;cursor:pointer;border:none;font-size:1rem;display:block;width:auto;max-width:150px;margin:6rem auto 0;
 `;
   const footerStyle = `margin-top:1.05rem;font-size:.80rem;color:#faf7f7;opacity:0.78;letter-spacing:0.01em;`;
   const starStyle = `color:#ffd700;font-size:1.05em;`;
