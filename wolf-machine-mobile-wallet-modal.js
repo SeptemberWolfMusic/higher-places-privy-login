@@ -28,6 +28,7 @@ export function showWolfWalletConnectModal(walletDetected = true) {
   let modal = document.createElement("div");
   modal.id = "wolf-wallet-connect-modal";
   modal.setAttribute("style", modalStyle);
+  console.log("walletDetected value:", walletDetected);
   modal.innerHTML = `
     <div style="${cardStyle}">
       <div style="${headerStyle}">Connect your Solana wallet.</div>
