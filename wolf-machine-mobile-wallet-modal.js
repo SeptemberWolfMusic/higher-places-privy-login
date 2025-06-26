@@ -33,8 +33,8 @@ export function showWolfWalletConnectModal(walletDetected = true) {
       <div style="${headerStyle}">Connect your Solana wallet.</div>
       ${
   walletDetected
-   ? `<button id="wolf-wallet-connect-btn-desktop" style="${connectBtnStyle}">Connect Wallet</button>`
-    : `<button id="wolf-wallet-connect-btn-desktop" style="${connectBtnDisabledStyle}" disabled>No wallet detected</button>`
+   ? `<button id="wolf-wallet-connect-btn" style="${connectBtnStyle}">Connect Wallet</button>`
+    : `<button id="wolf-wallet-connect-btn" style="${connectBtnDisabledStyle}" disabled>No wallet detected</button>`
 }
       <a href="https://septemberwolfmusic.github.io/wolf-machine-wallet-portal/" target="_blank" style="${createLinkStyle}">✨Create one instead?</a>
       <button id="wolf-wallet-close-btn" style="${closeBtnStyle}">Close</button>
@@ -50,9 +50,9 @@ export function showWolfWalletConnectModal(walletDetected = true) {
     if (window.solana && window.solana.isPhantom) detectedName = "Phantom";
     else if (window.solflare && window.solflare.isSolflare) detectedName = "Solflare";
     else if (window.WalletConnectSolanaAdapter) detectedName = "WalletConnect";
-    document.getElementById('wolf-wallet-connect-btn-desktop').innerText = detectedName;
+    document.getElementById('wolf-wallet-connect-btn').innerText = detectedName;
 
-    document.getElementById('wolf-wallet-connect-btn-desktop').onclick = async () => {
+    document.getElementById('wolf-wallet-connect-btn').onclick = async () => {
       try {
         // TODO: Insert your inline wallet connect logic here
         document.getElementById('wolf-wallet-connect-modal').remove();
