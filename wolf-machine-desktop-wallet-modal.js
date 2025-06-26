@@ -25,8 +25,11 @@ function showWolfWalletConnectModalDesktop() {
       <div style="${headerStyle}">
         Connect to your Solana wallet.
       </div>
-      <button id="wolf-wallet-connect-btn-desktop" style="${connectBtnStyle}">Connect Wallet</button>
-      <button id="wolf-wallet-close-btn-desktop" style="${closeBtnStyle}">Close</button>
+      ${
+  walletDetected
+    ? `<button id="wolf-wallet-connect-btn-desktop" style="${connectBtnStyle}">Connect Wallet</button>`
+    : `<button id="wolf-wallet-connect-btn-desktop" style="${connectBtnDisabledStyle}" disabled>No wallet detected</button>`
+}
       <div style="${footerStyle}">
         Powered by Wolf Machine & SWM <span style="${starStyle}">✦</span> Made with LOVE
       </div>
