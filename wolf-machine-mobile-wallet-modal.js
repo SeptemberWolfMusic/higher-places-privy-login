@@ -2,7 +2,7 @@ export function showWolfWalletConnectModal(walletDetected = true) {
   const modalStyle = `
   position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
   background: #FAF7F7EE; display: flex; align-items: center; justify-content: center;
-  z-index: 9999; padding: 1rem; box-sizing: border-box;
+  z-index: 9999; padding: 0; box-sizing: border-box;
 `;
   const cardStyle = `
   background:#97948f;padding:3.2rem 2rem 3rem 2rem;
