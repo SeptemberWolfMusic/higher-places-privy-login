@@ -77,10 +77,9 @@ export function showWolfWalletConnectModal() {
   `;
   document.body.appendChild(modal);
 
-  // Attach connect handler if a wallet is found
-  if (walletProvider) {
-    document.getElementById('wolf-wallet-connect-btn').onclick = connectAnyWallet;
-  }
+// Attach connect handler if a wallet is found
+const btn = document.getElementById('wolf-wallet-connect-btn');
+if (walletProvider && btn) btn.onclick = connectAnyWallet;
 
   // Close handler
   document.getElementById('wolf-wallet-close-btn').onclick = () => {
