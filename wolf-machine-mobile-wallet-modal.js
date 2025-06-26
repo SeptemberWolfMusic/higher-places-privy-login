@@ -25,21 +25,45 @@ export function showWolfWalletConnectModal() {
   const starStyle = `color:#ffd700;font-size:1.05em;`;
   const createLinkStyle = `color:#FAF7F7;text-decoration:underline;margin-top:0.8rem;display:block;font-size:0.85rem;`;
 
-  // Detect wallet provider
+   // Detect wallet provider
   let walletProvider = null;
   if (window.solana && window.solana.isPhantom) walletProvider = "Phantom";
   else if (window.solflare && window.solflare.isSolflare) walletProvider = "Solflare";
   else if (window.WalletConnectSolanaAdapter) walletProvider = "WalletConnect";
 
-  let modal = document.createElement("div");
-  modal.id = "wolf-wallet-connect-modal";
-  modal.setAttribute("style", modalStyle);
+  // Main universal connect logic
+  async function connectAnyWallet() {
+    try {
+      if (window.solana && window.solana.isPhantom) {
+        await window.solana.connect();
+        document.getElementById('wolf-wallet-connect-modal').remove();
+        // Call your after-connect logic here if needed
+        return;
+      }
+      if (window.solflare && window.solflare.isSolflare) {
+        await window.solflare.connect();
+        document.getElementById('wolf-wallet-connect-modal').remove();
+        return;
+      }
+      if (window.WalletConnectSolanaAdapter) {
+        // TODO: Insert WalletConnect logic here
+        document.getElementById('wolf-wallet-connect-modal').remove();
+        return;
+      }
+    } catch (e) {
+      document.getElementById('wolf-wallet-connect-modal').remove();
+      // Optionally show fallback here
+    }
+  }
 
-  // Dynamic button markup
+  // Button markup
   let btnMarkup = walletProvider
     ? `<button id="wolf-wallet-connect-btn" style="${connectBtnStyle}">${walletProvider}</button>`
     : `<button id="wolf-wallet-connect-btn" style="${connectBtnDisabledStyle}" disabled>No wallet detected</button>`;
 
+  let modal = document.createElement("div");
+  modal.id = "wolf-wallet-connect-modal";
+  modal.setAttribute("style", modalStyle);
   modal.innerHTML = `
     <div style="${cardStyle}">
       <div style="${headerStyle}">Connect your Solana wallet.</div>
@@ -53,18 +77,12 @@ export function showWolfWalletConnectModal() {
   `;
   document.body.appendChild(modal);
 
+  // Attach connect handler if a wallet is found
   if (walletProvider) {
-    document.getElementById('wolf-wallet-connect-btn').onclick = async () => {
-      try {
-        // TODO: Inline wallet connect logic
-        document.getElementById('wolf-wallet-connect-modal').remove();
-      } catch (e) {
-        document.getElementById('wolf-wallet-connect-modal').remove();
-        showWolfWalletConnectModal(); // Try again (optionally show error)
-      }
-    };
+    document.getElementById('wolf-wallet-connect-btn').onclick = connectAnyWallet;
   }
 
+  // Close handler
   document.getElementById('wolf-wallet-close-btn').onclick = () => {
     document.getElementById('wolf-wallet-connect-modal').remove();
   };
