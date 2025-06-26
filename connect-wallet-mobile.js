@@ -4,19 +4,10 @@ import { WalletConnectWalletAdapter } from './adapters.js';
 // Wolf Machine – Universal Mobile Wallet Connector
 // github.com/SeptemberWolfMusic  |  (c) 2025 Wolf Machine & SWM 
 
-// NOTE: This file only detects mobile and triggers the modal. 
-// All wallet connect logic now lives in wolf-machine-mobile-wallet-modal.js
-
 (function () {
-  // Detect mobile
-  function isMobile() {
-    return /android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(navigator.userAgent);
-  }
-  if (!isMobile()) return;
-
   // Attach handler to Connect button if present
   document.addEventListener("DOMContentLoaded", function () {
-    var btn = document.getElementById("wallet-flip");
+    const btn = document.getElementById("wallet-flip");
     if (btn) btn.onclick = handleWalletFlip;
   });
 
@@ -33,12 +24,10 @@ import { WalletConnectWalletAdapter } from './adapters.js';
   const WALLETCONNECT_PROJECT_ID = "f6d03a5b9fc3fa717f7ec61c11789111";
   const SOL_NETWORK = "mainnet";
 
-  // Call your modal from the new modal file
   window.handleWalletFlip = function() {
-    showWolfWalletConnectModal(); // function from wolf-machine-mobile-wallet-modal.js
+    showWolfWalletConnectModal(); // from modal JS file
   };
 
-  // After connect, update app state
   function afterWalletConnect() {
     localStorage.setItem("wolf_wallet_address", walletAddress);
     const modal = document.getElementById("wolf-wallet-connect-modal");
@@ -46,7 +35,6 @@ import { WalletConnectWalletAdapter } from './adapters.js';
     if (window.onWolfWalletConnected) window.onWolfWalletConnected(walletAddress);
   }
 
-  // Expose disconnect for manual reset if needed
   window.wolfMachineMobileDisconnect = async function() {
     if (wcAdapter && wcAdapter.disconnect) {
       try { await wcAdapter.disconnect(); } catch {}
@@ -60,7 +48,7 @@ import { WalletConnectWalletAdapter } from './adapters.js';
 
 })();
 
-// --- On-page logger for mobile (shows logs at screen bottom) ---
+// On-page logger for mobile (bottom)
 (function() {
   const logContainer = document.createElement('div');
   logContainer.style.position = 'fixed';
