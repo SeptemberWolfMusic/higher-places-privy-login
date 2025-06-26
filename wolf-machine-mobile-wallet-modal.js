@@ -23,7 +23,7 @@ export function showWolfWalletConnectModal(walletDetected = true) {
     padding:0.55rem 1.2rem;border-radius:10px;font-weight:700;cursor:pointer;border:none;font-size:1rem;display:block;width:auto;max-width:150px;margin:4rem auto 0;`;
   const footerStyle = `margin-top:1.05rem;font-size:.80rem;color:#faf7f7;opacity:0.78;letter-spacing:0.01em;`;
   const starStyle = `color:#ffd700;font-size:1.05em;`;
- const createLinkStyle = `color:#FAF7F7;text-decoration:underline;margin-top:0.8rem;display:block;font-size:0.85rem;`;
+  const createLinkStyle = `color:#FAF7F7;text-decoration:underline;margin-top:0.8rem;display:block;font-size:0.85rem;`;
 
   let modal = document.createElement("div");
   modal.id = "wolf-wallet-connect-modal";
@@ -50,9 +50,9 @@ export function showWolfWalletConnectModal(walletDetected = true) {
     if (window.solana && window.solana.isPhantom) detectedName = "Phantom";
     else if (window.solflare && window.solflare.isSolflare) detectedName = "Solflare";
     else if (window.WalletConnectSolanaAdapter) detectedName = "WalletConnect";
-    document.getElementById('wolf-wallet-connect-btn').innerText = detectedName;
+    document.getElementById('wolf-wallet-connect-btn-desktop').innerText = detectedName;
 
-    document.getElementById('wolf-wallet-connect-btn').onclick = async () => {
+    document.getElementById('wolf-wallet-connect-btn-desktop').onclick = async () => {
       try {
         // TODO: Insert your inline wallet connect logic here
         document.getElementById('wolf-wallet-connect-modal').remove();
