@@ -9,7 +9,7 @@ export function showWolfWalletConnectModal(walletDetected = true) {
   text-align:center; min-height:220px;
 `;
   const headerStyle = `
-    color:#3b2a24;font-size:1.13rem;font-weight:600;margin-bottom:1.1rem;letter-spacing:.01em;`;
+    color:#97948f;font-size:1.13rem;font-weight:600;margin-bottom:0.8rem;letter-spacing:.01em;`;
   const connectBtnStyle = `
     background:#50c7c0;color:#2b1f1a;padding:0.80rem 2.0rem;
     border-radius:13px;font-weight:700;cursor:pointer;border:none;font-size:1.14rem;min-width:180px;display:block;margin:3.5rem auto 0;`;
