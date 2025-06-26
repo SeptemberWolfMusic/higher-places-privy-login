@@ -28,9 +28,14 @@ const WalletConnectWalletAdapter = window.WalletConnectSolanaAdapter?.WalletConn
   const WALLETCONNECT_PROJECT_ID = "f6d03a5b9fc3fa717f7ec61c11789111";
   const SOL_NETWORK = "mainnet";
 
-  window.handleWalletFlip = function() {
+ window.handleWalletFlip = function() {
   console.log('handleWalletFlip called');
-  showWolfWalletConnectModal(); // from modal JS file
+  if (typeof showWolfWalletConnectModal === 'function') {
+    showWolfWalletConnectModal(); // from modal JS file
+    console.log('showWolfWalletConnectModal called');
+  } else {
+    console.error('showWolfWalletConnectModal is not defined');
+  }
 };
 
   function afterWalletConnect() {
