@@ -54,7 +54,7 @@ export function showWolfWalletConnectModal(walletDetected = true) {
         document.getElementById('wolf-wallet-connect-modal').remove();
       } catch (e) {
         document.getElementById('wolf-wallet-connect-modal').remove();
-        console.log("Connection failed, showing fallback modal");
+        console.log("Connection failed, opening fallback modal");
         showWolfWalletConnectModal(false);
       }
     };
