@@ -6,7 +6,7 @@ export function showWolfWalletConnectModal(walletDetected = true) {
   background:#97948f;padding:3.2rem 2rem 3rem 2rem;
   border-radius:22px;box-shadow:0 4px 32px #3b2a241c;
   min-width:360px; max-width:90vw; max-height:80vh; overflow-y:auto;
-  text-align:center; min-height:220px;
+  text-align:center; min-height:220px; margin: auto 0;
 `;
   const headerStyle = `
     color:#FAF7F7;font-size:1.13rem;font-weight:600;margin-bottom:0.8rem;letter-spacing:.01em;`;
@@ -28,13 +28,13 @@ export function showWolfWalletConnectModal(walletDetected = true) {
   modal.setAttribute("style", modalStyle);
   modal.innerHTML = `
     <div style="${cardStyle}">
-      <div style="${headerStyle}">Connect to your Solana wallet below.</div>
+      <div style="${headerStyle}">Connect your Solana wallet.</div>
       ${
   walletDetected
     ? `<button id="wolf-wallet-connect-btn" style="${connectBtnStyle}">Connect Wallet</button>`
     : `<button id="wolf-wallet-connect-btn" style="${connectBtnDisabledStyle}" disabled>No wallet detected</button>`
 }
-      <a href="https://septemberwolfmusic.github.io/wolf-machine-wallet-portal/" target="_blank" style="${createLinkStyle}">Create one instead?</a>
+      <a href="https://septemberwolfmusic.github.io/wolf-machine-wallet-portal/" target="_blank" style="${createLinkStyle}">✨Create one instead?</a>
       <button id="wolf-wallet-close-btn" style="${closeBtnStyle}">Close</button>
       <div style="${footerStyle}">
         Powered by Wolf Machine & SWM <span style="${starStyle}">✦</span> Made with LOVE
