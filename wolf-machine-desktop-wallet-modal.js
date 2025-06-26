@@ -1,7 +1,7 @@
 function showWolfWalletConnectModalDesktop() {
   const modalStyle = `
     position:fixed;top:0;left:0;width:100vw;height:100vh;
-    background:#97948fEE;display:flex;align-items:center;justify-content:center;z-index:9999;`;
+    background:#97948fEE;display:flex;align-items:center;justify-content:center;outline: 2px solid red;z-index:9999;`;
   const cardStyle = `
     background:#97948f;padding:2.6rem 2.6rem 1.5rem 2.6rem;
     border-radius:26px;box-shadow:0 4px 32px #3b2a241c;
