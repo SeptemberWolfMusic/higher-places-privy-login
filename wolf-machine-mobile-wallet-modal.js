@@ -1,14 +1,14 @@
-export function showWolfWalletConnectModal(walletDetected = true) {
+export function showWolfWalletConnectModal() {
   const modalStyle = `
-  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  background: #FAF7F7EE; display: flex; align-items: center; justify-content: center;
-  z-index: 9999; padding: 0; box-sizing: border-box;
-`;
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: #FAF7F7EE; display: flex; align-items: center; justify-content: center;
+    z-index: 9999; padding: 0; box-sizing: border-box;
+  `;
   const cardStyle = `
-  background:#97948f;padding:3.2rem 2rem 3rem 2rem;
-  border-radius:22px;box-shadow:0 4px 32px #3b2a241c;
-  min-width:360px; max-width:90vw; max-height:80vh; overflow-y:auto;
-  text-align:center; min-height:220px; margin: auto;
+    background:#97948f;padding:3.2rem 2rem 3rem 2rem;
+    border-radius:22px;box-shadow:0 4px 32px #3b2a241c;
+    min-width:360px; max-width:90vw; max-height:80vh; overflow-y:auto;
+    text-align:center; min-height:220px; margin: auto;
   `;
   const headerStyle = `
     color:#FAF7F7;font-size:1.13rem;font-weight:600;margin-bottom:0.8rem;letter-spacing:.01em;`;
@@ -25,18 +25,25 @@ export function showWolfWalletConnectModal(walletDetected = true) {
   const starStyle = `color:#ffd700;font-size:1.05em;`;
   const createLinkStyle = `color:#FAF7F7;text-decoration:underline;margin-top:0.8rem;display:block;font-size:0.85rem;`;
 
+  // Detect wallet provider
+  let walletProvider = null;
+  if (window.solana && window.solana.isPhantom) walletProvider = "Phantom";
+  else if (window.solflare && window.solflare.isSolflare) walletProvider = "Solflare";
+  else if (window.WalletConnectSolanaAdapter) walletProvider = "WalletConnect";
+
   let modal = document.createElement("div");
   modal.id = "wolf-wallet-connect-modal";
   modal.setAttribute("style", modalStyle);
-  console.log("walletDetected value:", walletDetected);
+
+  // Dynamic button markup
+  let btnMarkup = walletProvider
+    ? `<button id="wolf-wallet-connect-btn" style="${connectBtnStyle}">${walletProvider}</button>`
+    : `<button id="wolf-wallet-connect-btn" style="${connectBtnDisabledStyle}" disabled>No wallet detected</button>`;
+
   modal.innerHTML = `
     <div style="${cardStyle}">
       <div style="${headerStyle}">Connect your Solana wallet.</div>
-      ${
-  walletDetected
-   ? `<button id="wolf-wallet-connect-btn" style="${connectBtnStyle}">Connect Wallet</button>`
-    : `<button id="wolf-wallet-connect-btn" style="${connectBtnDisabledStyle}" disabled>No wallet detected</button>`
-}
+      ${btnMarkup}
       <a href="https://septemberwolfmusic.github.io/wolf-machine-wallet-portal/" target="_blank" style="${createLinkStyle}">✨Create one instead?</a>
       <button id="wolf-wallet-close-btn" style="${closeBtnStyle}">Close</button>
       <div style="${footerStyle}">
@@ -46,21 +53,14 @@ export function showWolfWalletConnectModal(walletDetected = true) {
   `;
   document.body.appendChild(modal);
 
-  if (walletDetected) {
-    let detectedName = "Connect Wallet";
-    if (window.solana && window.solana.isPhantom) detectedName = "Phantom";
-    else if (window.solflare && window.solflare.isSolflare) detectedName = "Solflare";
-    else if (window.WalletConnectSolanaAdapter) detectedName = "WalletConnect";
-    document.getElementById('wolf-wallet-connect-btn').innerText = detectedName;
-
+  if (walletProvider) {
     document.getElementById('wolf-wallet-connect-btn').onclick = async () => {
       try {
-        // TODO: Insert your inline wallet connect logic here
+        // TODO: Inline wallet connect logic
         document.getElementById('wolf-wallet-connect-modal').remove();
       } catch (e) {
         document.getElementById('wolf-wallet-connect-modal').remove();
-        console.log("Connection failed, opening fallback modal");
-        showWolfWalletConnectModal(false);
+        showWolfWalletConnectModal(); // Try again (optionally show error)
       }
     };
   }
