@@ -9,7 +9,11 @@ import './wolf-machine-mobile-wallet-modal.js'; // <-- Add this line to import t
   // Attach handler to Connect button if present
   document.addEventListener("DOMContentLoaded", function () {
     const btn = document.getElementById("wallet-flip");
-    if (btn) btn.onclick = handleWalletFlip;
+    if (btn) {
+      btn.onclick = handleWalletFlip;
+      console.log('handleWalletFlip attached');
+      if (window.logToScreen) window.logToScreen('handleWalletFlip attached');
+    }
   });
 
   // Logging (optional)
