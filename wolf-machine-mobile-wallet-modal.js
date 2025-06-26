@@ -1,9 +1,9 @@
 export function showWolfWalletConnectModal(walletDetected = true) {
   const modalStyle = `
     position:fixed;top:0;left:0;width:100vw;height:100vh;
-    background:#97948fEE;display:flex;align-items:center;justify-content:center;z-index:9999;`;
+    background:#CAF5FAEE;display:flex;align-items:center;justify-content:center;z-index:9999;`;
   const cardStyle = `
-    background:#3b2a24;padding:3.2rem 2rem 3rem 2rem;
+    background:#97948F;padding:3.2rem 2rem 3rem 2rem;
     border-radius:22px;box-shadow:0 4px 32px #3b2a241c;
     min-width:360px;max-width:90vw;text-align:center;min-height:300px;`;
   const headerStyle = `
