@@ -1,5 +1,6 @@
 alert('MOBILE JS LOADED');
 import { WalletConnectWalletAdapter } from './adapters.js';
+import './wolf-machine-mobile-wallet-modal.js'; // <-- Add this line to import the modal
 
 // Wolf Machine – Universal Mobile Wallet Connector
 // github.com/SeptemberWolfMusic  |  (c) 2025 Wolf Machine & SWM 
