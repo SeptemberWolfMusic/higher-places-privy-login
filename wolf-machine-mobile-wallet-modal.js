@@ -6,7 +6,7 @@ export function showWolfWalletConnectModal(walletDetected = true) {
   background:#97948f;padding:3.2rem 2rem 3rem 2rem;
   border-radius:22px;box-shadow:0 4px 32px #3b2a241c;
   min-width:360px; max-width:90vw; max-height:80vh; overflow-y:auto;
-  text-align:center; min-height:220px; margin: auto 0;
+  text-align:center; min-height:220px; margin: auto;
 `;
   const headerStyle = `
     color:#FAF7F7;font-size:1.13rem;font-weight:600;margin-bottom:0.8rem;letter-spacing:.01em;`;
@@ -17,7 +17,7 @@ export function showWolfWalletConnectModal(walletDetected = true) {
     background:#888;color:#ccc;padding:0.80rem 2.0rem;
     border-radius:13px;font-weight:700;font-size:1.14rem;min-width:180px;display:block;margin:1.5rem auto 0;cursor:not-allowed;`;
   const closeBtnStyle = `
-    margin-top:6rem;background:#50c7c0;color:#2b1f1a;
+    margin-top:4rem;background:#50c7c0;color:#2b1f1a;
     padding:0.55rem 1.2rem;border-radius:10px;font-weight:700;cursor:pointer;border:none;font-size:1rem;display:block;width:auto;max-width:150px;margin:6rem auto 0;`;
   const footerStyle = `margin-top:1.05rem;font-size:.80rem;color:#faf7f7;opacity:0.78;letter-spacing:0.01em;`;
   const starStyle = `color:#ffd700;font-size:1.05em;`;
