@@ -11,10 +11,10 @@ export function showWolfWalletConnectModal(walletDetected = true) {
   const headerStyle = `
     color:#FAF7F7;font-size:1.13rem;font-weight:600;margin-bottom:0.8rem;letter-spacing:.01em;`;
   const connectBtnStyle = `
-    background:#50c7c0;color:#2b1f1a;padding:0.80rem 2.0rem;
+    background:#50c7c0;color:#2b1f1a;padding:0.80rem 1.0rem;
     border-radius:13px;font-weight:700;cursor:pointer;border:none;font-size:1.14rem;min-width:180px;display:block;margin:3.5rem auto 0;`;
   const connectBtnDisabledStyle = `
-    background:#888;color:#ccc;padding:0.80rem 1.0rem;
+    background:#888;color:#ccc;padding:0.80rem 2.0rem;
     border-radius:13px;font-weight:700;font-size:1.14rem;min-width:180px;display:block;margin:1.5rem auto 0;cursor:not-allowed;`;
   const closeBtnStyle = `
     margin-top:3rem;background:#50c7c0;color:#2b1f1a;
