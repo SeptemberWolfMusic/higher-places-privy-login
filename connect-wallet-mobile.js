@@ -30,8 +30,9 @@ import './wolf-machine-mobile-wallet-modal.js'; // <-- Add this line to import t
   const SOL_NETWORK = "mainnet";
 
   window.handleWalletFlip = function() {
-    showWolfWalletConnectModal(); // from modal JS file
-  };
+  console.log('handleWalletFlip called');
+  showWolfWalletConnectModal(); // from modal JS file
+};
 
   function afterWalletConnect() {
     localStorage.setItem("wolf_wallet_address", walletAddress);
