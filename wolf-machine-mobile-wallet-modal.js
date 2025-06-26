@@ -19,7 +19,7 @@ export function showWolfWalletConnectModal(walletDetected = true) {
     padding:0.55rem 1.2rem;border-radius:10px;font-weight:700;cursor:pointer;border:none;font-size:1rem;display:block;width:auto;max-width:150px;margin:6rem auto 0;`;
   const footerStyle = `margin-top:1.05rem;font-size:.80rem;color:#faf7f7;opacity:0.78;letter-spacing:0.01em;`;
   const starStyle = `color:#ffd700;font-size:1.05em;`;
-  const createLinkStyle = `color:#50c7c0;text-decoration:underline;margin-top:1rem;display:block;`;
+  const createLinkStyle = `color:#3b2a24;text-decoration:underline;margin-top:1rem;display:block;`;
 
   let modal = document.createElement("div");
   modal.id = "wolf-wallet-connect-modal";
@@ -28,10 +28,10 @@ export function showWolfWalletConnectModal(walletDetected = true) {
     <div style="${cardStyle}">
       <div style="${headerStyle}">Connect to your Solana wallet below.</div>
       ${
-        walletDetected
-          ? `<button id="wolf-wallet-connect-btn" style="${connectBtnStyle}">Connect Wallet</button>`
-          : `<button id="wolf-wallet-connect-btn" style="${connectBtnDisabledStyle}" disabled>No wallet detected</button>`
-      }
+  walletDetected
+    ? `<button id="wolf-wallet-connect-btn" style="${connectBtnStyle}">Connect Wallet</button>`
+    : `<button id="wolf-wallet-connect-btn" style="${connectBtnDisabledStyle}" disabled>No wallet detected</button>`
+}
       <a href="https://septemberwolfmusic.github.io/wolf-machine-wallet-portal/" target="_blank" style="${createLinkStyle}">Create one instead?</a>
       <button id="wolf-wallet-close-btn" style="${closeBtnStyle}">Close</button>
       <div style="${footerStyle}">
