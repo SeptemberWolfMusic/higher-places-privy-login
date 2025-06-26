@@ -3,17 +3,17 @@ export function showWolfWalletConnectModal(walletDetected = true) {
     position:fixed;top:0;left:0;width:100vw;height:100vh;
     background:#97948fEE;display:flex;align-items:center;justify-content:center;z-index:9999;`;
   const cardStyle = `
-    background:#97948f;padding:2.6rem 2.6rem 1.5rem 2.6rem;
+    background:#97948f;padding:3.8rem 2.6rem 3.5rem 2.6rem;
     border-radius:26px;box-shadow:0 4px 32px #3b2a241c;
-    min-width:400px;max-width:98vw;text-align:center;min-height:220px;`;
+    min-width:400px;max-width:98vw;text-align:center;min-height:320px;`;
   const headerStyle = `
     color:#faf7f7;font-size:1.13rem;font-weight:600;margin-bottom:1.1rem;letter-spacing:.01em;`;
   const connectBtnStyle = `
     background:#50c7c0;color:#2b1f1a;padding:0.80rem 2.0rem;
-    border-radius:13px;font-weight:700;cursor:pointer;border:none;font-size:1.14rem;min-width:180px;`;
+    border-radius:13px;font-weight:700;cursor:pointer;border:none;font-size:1.14rem;min-width:180px;display:block;margin:0 auto;`;
   const closeBtnStyle = `
-    margin-top:1.2rem;background:#50c7c0;color:#2b1f1a;
-    padding:0.7rem 2rem;border-radius:12px;font-weight:700;cursor:pointer;border:none;font-size:1.1rem;`;
+    margin-top:1.8rem;background:#50c7c0;color:#2b1f1a;
+    padding:0.7rem 2rem;border-radius:12px;font-weight:700;cursor:pointer;border:none;font-size:1.1rem;display:block;margin:0 auto;`;
   const footerStyle = `margin-top:1.05rem;font-size:.80rem;color:#faf7f7;opacity:0.78;letter-spacing:0.01em;`;
   const starStyle = `color:#ffd700;font-size:1.05em;`;
 
@@ -39,24 +39,29 @@ export function showWolfWalletConnectModal(walletDetected = true) {
   `;
   document.body.appendChild(modal);
 
-  // Connect wallet handler
+  // Dynamically set connect button label based on detected wallet
   if (walletDetected) {
+    let detectedName = "Connect Wallet";
+    if (window.solana && window.solana.isPhantom) detectedName = "Phantom";
+    else if (window.solflare && window.solflare.isSolflare) detectedName = "Solflare";
+    else if (window.WalletConnectSolanaAdapter) detectedName = "WalletConnect";
+    document.getElementById('wolf-wallet-connect-btn').innerText = detectedName;
+
     document.getElementById('wolf-wallet-connect-btn').onclick = async () => {
-      // Attempt WalletConnect/Phantom/Solflare inline connect here
       try {
-        // (Insert your inline connect logic here, e.g. using WalletConnect adapter)
-        // await connectWalletProviderInline();
-        // On success:
-        // afterWalletConnect(); // <- your post-connection handler
+        // TODO: Insert your inline wallet connect logic here
+        // Example: await connectWalletProviderInline();
+        // On successful connect:
+        // afterWalletConnect(); // Call this if accessible
         document.getElementById('wolf-wallet-connect-modal').remove();
       } catch (e) {
-        // If still no wallet detected after connect attempt, show fallback modal
         document.getElementById('wolf-wallet-connect-modal').remove();
         showWolfWalletConnectModal(false);
       }
     };
   }
-  // Close handler
+
+  // Close button handler
   document.getElementById('wolf-wallet-close-btn').onclick = () => {
     document.getElementById('wolf-wallet-connect-modal').remove();
   };
