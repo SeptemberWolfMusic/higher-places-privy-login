@@ -25,26 +25,13 @@ export function showWolfWalletConnectModal() {
   const starStyle = `color:#ffd700;font-size:1.05em;`;
   const createLinkStyle = `color:#FAF7F7;text-decoration:underline;margin-top:0.8rem;display:block;font-size:0.85rem;`;
 
-   // Detect wallet provider
+     // Detect wallet provider (WalletConnect only for mobile)
   let walletProvider = null;
-  if (window.solana && window.solana.isPhantom) walletProvider = "Phantom";
-  else if (window.solflare && window.solflare.isSolflare) walletProvider = "Solflare";
-  else if (window.WalletConnectSolanaAdapter) walletProvider = "WalletConnect";
+  if (window.WalletConnectSolanaAdapter) walletProvider = "WalletConnect";
 
-  // Main universal connect logic
+  // Main universal connect logic (WalletConnect only)
   async function connectAnyWallet() {
     try {
-      if (window.solana && window.solana.isPhantom) {
-        await window.solana.connect();
-        document.getElementById('wolf-wallet-connect-modal').remove();
-        // Call your after-connect logic here if needed
-        return;
-      }
-      if (window.solflare && window.solflare.isSolflare) {
-        await window.solflare.connect();
-        document.getElementById('wolf-wallet-connect-modal').remove();
-        return;
-      }
       if (window.WalletConnectSolanaAdapter) {
         // TODO: Insert WalletConnect logic here
         document.getElementById('wolf-wallet-connect-modal').remove();
@@ -77,12 +64,11 @@ export function showWolfWalletConnectModal() {
   `;
   document.body.appendChild(modal);
 
-// Attach connect handler if a wallet is found
-const btn = document.getElementById('wolf-wallet-connect-btn');
-if (walletProvider && btn) btn.onclick = connectAnyWallet;
+  // Attach connect handler if a wallet is found
+  const btn = document.getElementById('wolf-wallet-connect-btn');
+  if (walletProvider && btn) btn.onclick = connectAnyWallet;
 
   // Close handler
   document.getElementById('wolf-wallet-close-btn').onclick = () => {
     document.getElementById('wolf-wallet-connect-modal').remove();
   };
-}
