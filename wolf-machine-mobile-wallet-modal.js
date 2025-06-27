@@ -69,6 +69,8 @@ export function showWolfWalletConnectModal() {
   if (walletProvider && btn) btn.onclick = connectAnyWallet;
 
   // Close handler
-  document.getElementById('wolf-wallet-close-btn').onclick = () => {
+    document.getElementById('wolf-wallet-close-btn').onclick = () => {
     document.getElementById('wolf-wallet-connect-modal').remove();
   };
+}
+
