@@ -63,8 +63,7 @@ async function connectAnyWallet() {
   }
 }
 
-  // Button markup
-  let btnMarkup = walletProvider
+    let btnMarkup = walletProvider
     ? `<button id="wolf-wallet-connect-btn" style="${connectBtnStyle}">${walletProvider}</button>`
     : `<button id="wolf-wallet-connect-btn" style="${connectBtnDisabledStyle}" disabled>No wallet detected</button>`;
 
@@ -74,6 +73,7 @@ async function connectAnyWallet() {
   modal.innerHTML = `
     <div style="${cardStyle}">
       <div style="${headerStyle}">Connect your Solana wallet.</div>
+      <div id="connection-error" style="color:red; font-size:0.9rem; margin-bottom:0.4rem; display:none;"></div>
       ${btnMarkup}
       <a href="https://septemberwolfmusic.github.io/wolf-machine-wallet-portal/" target="_blank" style="${createLinkStyle}">✨Create one instead?</a>
       <button id="wolf-wallet-close-btn" style="${closeBtnStyle}">Close</button>
