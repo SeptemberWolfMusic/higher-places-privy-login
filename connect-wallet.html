@@ -336,14 +336,18 @@
 </style>
 
 <script type="module" src="connect-wallet-app.js"></script>
-<!-- Load mobile wallet modal FIRST, then mobile wallet connector ONLY on mobile -->
-<script type="module" src="./wolf-machine-mobile-wallet-modal.js"></script>
+<!-- Load mobile wallet modal FIRST -->
 <script>
   if (/android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(navigator.userAgent)) {
-    const s = document.createElement('script');
-    s.type = 'module';
-    s.src = './connect-wallet-mobile.js';  <!-- update to your mobile filename -->
-    document.body.appendChild(s);
+    const modalScript = document.createElement('script');
+    modalScript.type = 'module';
+    modalScript.src = './wolf-machine-mobile-wallet-modal.js';
+    document.body.appendChild(modalScript);
+
+    const connectScript = document.createElement('script');
+    connectScript.type = 'module';
+    connectScript.src = './connect-wallet-mobile.js';  <!-- update to your mobile filename -->
+    document.body.appendChild(connectScript);
   }
 </script>
 </body>
