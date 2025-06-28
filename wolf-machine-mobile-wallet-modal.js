@@ -30,7 +30,7 @@ export function showWolfWalletConnectModal() {
   let walletProvider = null;
   if (window.WalletConnectSolanaAdapter) walletProvider = "WalletConnect";
 
- // Main universal connect logic (WalletConnect only)
+// Main universal connect logic (WalletConnect only)
 async function connectAnyWallet() {
   try {
     // Instantiate your WalletConnectWallet from core.js
@@ -40,7 +40,11 @@ async function connectAnyWallet() {
     });
 
     const { publicKey } = await wcWallet.connect();
-    // Optional: handle/display publicKey as needed
+
+    if (publicKey) {
+      localStorage.setItem("wolf_wallet_address", publicKey.toString());
+      if (window.onWolfWalletConnected) window.onWolfWalletConnected(publicKey.toString());
+    }
 
     document.getElementById('wolf-wallet-connect-modal').remove();
     return;
