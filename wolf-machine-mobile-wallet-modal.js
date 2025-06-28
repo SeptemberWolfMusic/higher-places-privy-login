@@ -26,9 +26,9 @@ export function showWolfWalletConnectModal() {
   const starStyle = `color:#ffd700;font-size:1.05em;`;
   const createLinkStyle = `color:#FAF7F7;text-decoration:underline;margin-top:0.8rem;display:block;font-size:0.85rem;`;
 
-     // Detect wallet provider (WalletConnect only for mobile)
-  let walletProvider = null;
-  if (window.WalletConnectSolanaAdapter) walletProvider = "WalletConnect";
+    // Detect wallet provider (WalletConnect only for mobile)
+let walletProvider = null;
+if (window.WalletConnectSolanaAdapter) walletProvider = "WalletConnect";
 
 // Main universal connect logic (WalletConnect only)
 async function connectAnyWallet() {
@@ -49,48 +49,42 @@ async function connectAnyWallet() {
     document.getElementById('wolf-wallet-connect-modal').remove();
     return;
   } catch (e) {
-    document.getElementById('wolf-wallet-connect-modal').remove();
-    // Optionally show fallback here
-  }
-}
-    // TODO: Next step—call wcWallet.connect() and handle the flow here
-
-    document.getElementById('wolf-wallet-connect-modal').remove();
-    return;
-  } catch (e) {
-    document.getElementById('wolf-wallet-connect-modal').remove();
-    // Optionally show fallback here
+    // Show error message instead of silently closing modal
+    const errorDiv = document.getElementById('connection-error');
+    if (errorDiv) {
+      errorDiv.textContent = "Connection failed, please try again.";
+      errorDiv.style.display = "block";
+    }
   }
 }
 
-    let btnMarkup = walletProvider
-    ? `<button id="wolf-wallet-connect-btn" style="${connectBtnStyle}">${walletProvider}</button>`
-    : `<button id="wolf-wallet-connect-btn" style="${connectBtnDisabledStyle}" disabled>No wallet detected</button>`;
+// Button markup
+let btnMarkup = walletProvider
+  ? `<button id="wolf-wallet-connect-btn" style="${connectBtnStyle}">${walletProvider}</button>`
+  : `<button id="wolf-wallet-connect-btn" style="${connectBtnDisabledStyle}" disabled>No wallet detected</button>`;
 
-  let modal = document.createElement("div");
-  modal.id = "wolf-wallet-connect-modal";
-  modal.setAttribute("style", modalStyle);
-  modal.innerHTML = `
-    <div style="${cardStyle}">
-      <div style="${headerStyle}">Connect your Solana wallet.</div>
-      <div id="connection-error" style="color:red; font-size:0.9rem; margin-bottom:0.4rem; display:none;"></div>
-      ${btnMarkup}
-      <a href="https://septemberwolfmusic.github.io/wolf-machine-wallet-portal/" target="_blank" style="${createLinkStyle}">✨Create one instead?</a>
-      <button id="wolf-wallet-close-btn" style="${closeBtnStyle}">Close</button>
-      <div style="${footerStyle}">
-        Powered by Wolf Machine & SWM <span style="${starStyle}">✦</span> Made with LOVE
-      </div>
+let modal = document.createElement("div");
+modal.id = "wolf-wallet-connect-modal";
+modal.setAttribute("style", modalStyle);
+modal.innerHTML = `
+  <div style="${cardStyle}">
+    <div style="${headerStyle}">Connect your Solana wallet.</div>
+    <div id="connection-error" style="color:red; font-size:0.9rem; margin-bottom:0.4rem; display:none;"></div>
+    ${btnMarkup}
+    <a href="https://septemberwolfmusic.github.io/wolf-machine-wallet-portal/" target="_blank" style="${createLinkStyle}">✨Create one instead?</a>
+    <button id="wolf-wallet-close-btn" style="${closeBtnStyle}">Close</button>
+    <div style="${footerStyle}">
+      Powered by Wolf Machine & SWM <span style="${starStyle}">✦</span> Made with LOVE
     </div>
-  `;
-  document.body.appendChild(modal);
+  </div>
+`;
+document.body.appendChild(modal);
 
-  // Attach connect handler if a wallet is found
-  const btn = document.getElementById('wolf-wallet-connect-btn');
-  if (walletProvider && btn) btn.onclick = connectAnyWallet;
+// Attach connect handler if a wallet is found
+const btn = document.getElementById('wolf-wallet-connect-btn');
+if (walletProvider && btn) btn.onclick = connectAnyWallet;
 
-  // Close handler
-    document.getElementById('wolf-wallet-close-btn').onclick = () => {
-    document.getElementById('wolf-wallet-connect-modal').remove();
-  };
-}
-
+// Close handler
+document.getElementById('wolf-wallet-close-btn').onclick = () => {
+  document.getElementById('wolf-wallet-connect-modal').remove();
+};
