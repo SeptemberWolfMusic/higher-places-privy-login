@@ -33,7 +33,7 @@ alert('MOBILE JS LOADED');
   const solNamespace = session?.namespaces?.solana;
   const accounts = solNamespace?.accounts || [];
   walletName = accounts.length ? `Wallet: ${accounts[0].split(':')[2].slice(0,6)}...` : null;
-  }
+
   if (typeof showWolfWalletConnectModal === 'function') {
     showWolfWalletConnectModal(walletName);
     console.log('showWolfWalletConnectModal called with', walletName);
