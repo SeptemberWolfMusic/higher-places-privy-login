@@ -16,7 +16,7 @@ window.WalletConnectWallet = class WalletConnectWallet {
 
   async connect() {
     // Use WalletConnect UMD from window
-    this.client = await window.WalletConnect.init({
+    this.client = new window.WalletConnect({ ... });
       relayUrl: 'wss://relay.walletconnect.com',
       projectId: this.options?.projectId || 'your-project-id',
       metadata: {
