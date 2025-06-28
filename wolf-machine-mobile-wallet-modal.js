@@ -88,3 +88,4 @@ if (walletProvider && btn) btn.onclick = connectAnyWallet;
 document.getElementById('wolf-wallet-close-btn').onclick = () => {
   document.getElementById('wolf-wallet-connect-modal').remove();
 };
+}
