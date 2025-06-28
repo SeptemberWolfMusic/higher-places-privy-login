@@ -7,6 +7,7 @@
   <link rel="icon" href="favicon.ico" />
 
   <!-- Node/CommonJS polyfills for browser (full set) -->
+  <!--
   <script>
     window.exports = window.exports || {};
     window.module = window.module || { exports: window.exports };
@@ -24,8 +25,10 @@
       return {};
     };
   </script>
+  -->
 
   <!-- Full Buffer polyfill (hosted locally) -->
+  <!--
   <script src="wolfbuffer.min.js"></script>
   <script>
     if (typeof window.Buffer === "undefined") {
@@ -33,15 +36,16 @@
     }
     window.buffer = window.Buffer;
   </script>
+  -->
 
-  <script src="solana-web3.iife.min.js"></script>
-  <script src="eventemitter3.min.js"></script>
+  <!-- <script src="solana-web3.iife.min.js"></script> -->
+  <!-- <script src="eventemitter3.min.js"></script> -->
 
   <!-- WalletConnect UMD bundle (mobile only, safe for all) -->
- <script src="https://cdn.jsdelivr.net/npm/@walletconnect/client@1.8.0/dist/umd/index.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@walletconnect/client@1.8.0/dist/umd/index.min.js"></script>
 
   <!-- Your wallet adapter bundle -->
-  <script src="wolfbundle.min.js"></script>
+  <!-- <script src="wolfbundle.min.js"></script> -->
 
 </head>
   <style>
