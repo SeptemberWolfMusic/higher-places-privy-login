@@ -26,19 +26,25 @@ alert('MOBILE JS LOADED');
   const WALLETCONNECT_PROJECT_ID = "f6d03a5b9fc3fa717f7ec61c11789111";
   const SOL_NETWORK = "mainnet";
 
-  window.handleWalletFlip = async function() {
+ window.handleWalletFlip = async function() {
   console.log('handleWalletFlip called');
-  let walletName = null;
-  const session = wcAdapter?.client?.session;
-  const solNamespace = session?.namespaces?.solana;
-  const accounts = solNamespace?.accounts || [];
-  walletName = accounts.length ? `Wallet: ${accounts[0].split(':')[2].slice(0,6)}...` : null;
-
-  if (typeof showWolfWalletConnectModal === 'function') {
+  if (!wcAdapter) {
+    wcAdapter = new window.WalletConnectWallet({
+      network: "mainnet",
+      options: { projectId: "f6d03a5b9fc3fa717f7ec61c11789111" }
+    });
+  }
+  try {
+    await wcAdapter.connect();
+    const session = wcAdapter.client.session;
+    const solNamespace = session.namespaces.solana;
+    const accounts = solNamespace.accounts || [];
+    const walletName = accounts.length ? `Wallet: ${accounts[0].split(':')[2].slice(0,6)}...` : null;
     showWolfWalletConnectModal(walletName);
     console.log('showWolfWalletConnectModal called with', walletName);
-  } else {
-    console.error('showWolfWalletConnectModal is not defined');
+  } catch (e) {
+    console.error('Connection failed:', e);
+    showWolfWalletConnectModal(null);
   }
 };
 
