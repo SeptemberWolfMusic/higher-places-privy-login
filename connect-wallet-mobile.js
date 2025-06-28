@@ -28,11 +28,15 @@ const WalletConnectWalletAdapter = window.WalletConnectSolanaAdapter?.WalletConn
   const WALLETCONNECT_PROJECT_ID = "f6d03a5b9fc3fa717f7ec61c11789111";
   const SOL_NETWORK = "mainnet";
 
- window.handleWalletFlip = function() {
+ window.handleWalletFlip = async function() {
   console.log('handleWalletFlip called');
+  let walletName = null;
+  if (wcAdapter && wcAdapter.publicKey) {
+    walletName = "Connected Wallet"; // replace with actual wallet name if available
+  }
   if (typeof showWolfWalletConnectModal === 'function') {
-    showWolfWalletConnectModal(); // from modal JS file
-    console.log('showWolfWalletConnectModal called');
+    showWolfWalletConnectModal(walletName);
+    console.log('showWolfWalletConnectModal called with', walletName);
   } else {
     console.error('showWolfWalletConnectModal is not defined');
   }
