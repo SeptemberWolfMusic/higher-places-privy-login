@@ -64,24 +64,29 @@ export class WalletConnectWallet {
     this.publicKey = null;
   }
 
-  async signTransaction(transaction) {
-    if (!this.client) throw new Error('Wallet not connected');
-    // send request via WalletConnect JSON-RPC
-    const serialized = transaction.serializeMessage().toString('base64');
-    const signedSerialized = await this.client.request({
-      topic: this.client.session.topic,
-      chainId: this.network === 'devnet' ? 'solana:devnet' : 'solana:mainnet',
-      request: {
-        method: 'solana_signTransaction',
-        params: { message: serialized }
-      }
-    });
-    // deserialize signed transaction back
-    // (handle accordingly, here just example)
-    // You'll need to implement this fully as per WalletConnect spec
-    throw new Error('signTransaction needs full implementation');
-  }
+ async signTransaction(transaction) {
+  if (!this.client) throw new Error('Wallet not connected');
 
+  // Serialize transaction message as base64 string
+  const serialized = transaction.serializeMessage().toString('base64');
+
+  // Send signTransaction request via WalletConnect
+  const result = await this.client.request({
+    topic: this.client.session.topic,
+    chainId: this.network === 'devnet' ? 'solana:devnet' : 'solana:mainnet',
+    request: {
+      method: "solana_signTransaction",
+      params: { transaction: serialized }
+    }
+  });
+
+  // Decode the returned base64 transaction
+  const signedTxBytes = Uint8Array.from(atob(result.transaction), c => c.charCodeAt(0));
+  // Rebuild the Transaction object (using Solana web3.js)
+  const signedTx = Transaction.from(signedTxBytes);
+
+  return signedTx;
+}
   async signAndSendTransaction(transaction) {
   if (!this.client) throw new Error('Wallet not connected');
 
