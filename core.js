@@ -1,9 +1,9 @@
-// core.js — minimal inline WalletConnect wallet wrapper
+// core.js — minimal inline WalletConnect wallet wrapper (browser-only)
 
-import { WalletConnectClient } from '@walletconnect/client'; // your version
-import { PublicKey, Transaction } from '@solana/web3.js';
+// No imports needed; all dependencies available via window (script tags)
 
-export class WalletConnectWallet {
+// Attach WalletConnectWallet to window for modal JS to access
+window.WalletConnectWallet = class WalletConnectWallet {
   client;
   publicKey = null;
   network;
@@ -15,8 +15,8 @@ export class WalletConnectWallet {
   }
 
   async connect() {
-    this.client = await WalletConnectClient.init({
-      // required client config here (e.g. relayUrl, metadata, projectId)
+    // Use WalletConnect UMD from window
+    this.client = await window.WalletConnect.default.init({
       relayUrl: 'wss://relay.walletconnect.com',
       projectId: this.options?.projectId || 'your-project-id',
       metadata: {
@@ -30,7 +30,6 @@ export class WalletConnectWallet {
     // create or restore session
     if (!this.client.session) {
       const { uri, approval } = await this.client.connect({
-        // chain namespaces config here
         requiredNamespaces: {
           solana: {
             methods: ['solana_signTransaction', 'solana_signMessage', 'solana_signAndSendTransaction'],
@@ -39,10 +38,8 @@ export class WalletConnectWallet {
           }
         }
       });
-
-      // Show URI in your UI if needed, but we want inline only — handle in UI.
-
-      await approval(); // wait for user to approve connection
+      // Inline only—no UI for QR, approval() pauses until wallet approves
+      await approval();
     }
 
     // grab publicKey from session namespaces
@@ -53,7 +50,7 @@ export class WalletConnectWallet {
 
     // account format: solana:<network>:<pubkey>
     const pubkeyString = account.split(':')[2];
-    this.publicKey = new PublicKey(pubkeyString);
+    this.publicKey = new window.solanaWeb3.PublicKey(pubkeyString);
 
     return { publicKey: this.publicKey };
   }
@@ -64,52 +61,53 @@ export class WalletConnectWallet {
     this.publicKey = null;
   }
 
- async signTransaction(transaction) {
-  if (!this.client) throw new Error('Wallet not connected');
+  async signTransaction(transaction) {
+    if (!this.client) throw new Error('Wallet not connected');
 
-  // Serialize transaction message as base64 string
-  const serialized = transaction.serializeMessage().toString('base64');
+    // Serialize transaction message as base64 string
+    const serialized = transaction.serializeMessage().toString('base64');
 
-  // Send signTransaction request via WalletConnect
-  const result = await this.client.request({
-    topic: this.client.session.topic,
-    chainId: this.network === 'devnet' ? 'solana:devnet' : 'solana:mainnet',
-    request: {
-      method: "solana_signTransaction",
-      params: { transaction: serialized }
-    }
-  });
-
-  // Decode the returned base64 transaction
-  const signedTxBytes = Uint8Array.from(atob(result.transaction), c => c.charCodeAt(0));
-  // Rebuild the Transaction object (using Solana web3.js)
-  const signedTx = Transaction.from(signedTxBytes);
-
-  return signedTx;
-}
-  async signAndSendTransaction(transaction) {
-  if (!this.client) throw new Error('Wallet not connected');
-
-  // Serialize transaction as base64 string
-  const serialized = transaction.serialize({
-    requireAllSignatures: false, 
-    verifySignatures: false
-  }).toString('base64');
-
-  // Send signAndSendTransaction request via WalletConnect
-  const result = await this.client.request({
-    topic: this.client.session.topic,
-    chainId: this.network === 'devnet' ? 'solana:devnet' : 'solana:mainnet',
-    request: {
-      method: "solana_signAndSendTransaction",
-      params: {
-        transaction: serialized,
-        sendOptions: { preflightCommitment: "finalized" }
+    // Send signTransaction request via WalletConnect
+    const result = await this.client.request({
+      topic: this.client.session.topic,
+      chainId: this.network === 'devnet' ? 'solana:devnet' : 'solana:mainnet',
+      request: {
+        method: "solana_signTransaction",
+        params: { transaction: serialized }
       }
-    }
-  });
+    });
 
-  // Return the transaction signature (txid)
-  return result.signature;
-}
-}
+    // Decode the returned base64 transaction
+    const signedTxBytes = Uint8Array.from(atob(result.transaction), c => c.charCodeAt(0));
+    // Rebuild the Transaction object (using Solana web3.js)
+    const signedTx = window.solanaWeb3.Transaction.from(signedTxBytes);
+
+    return signedTx;
+  }
+
+  async signAndSendTransaction(transaction) {
+    if (!this.client) throw new Error('Wallet not connected');
+
+    // Serialize transaction as base64 string
+    const serialized = transaction.serialize({
+      requireAllSignatures: false, 
+      verifySignatures: false
+    }).toString('base64');
+
+    // Send signAndSendTransaction request via WalletConnect
+    const result = await this.client.request({
+      topic: this.client.session.topic,
+      chainId: this.network === 'devnet' ? 'solana:devnet' : 'solana:mainnet',
+      request: {
+        method: "solana_signAndSendTransaction",
+        params: {
+          transaction: serialized,
+          sendOptions: { preflightCommitment: "finalized" }
+        }
+      }
+    });
+
+    // Return the transaction signature (txid)
+    return result.signature;
+  }
+};
