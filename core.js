@@ -15,17 +15,17 @@ window.WalletConnectWallet = class WalletConnectWallet {
   }
 
   async connect() {
-    // Use WalletConnect UMD from window
-    this.client = new window.WalletConnect({ ... });
-      relayUrl: 'wss://relay.walletconnect.com',
-      projectId: this.options?.projectId || 'your-project-id',
-      metadata: {
-        name: 'Wolf Machine',
-        description: 'Wolf Machine Universal Mobile Wallet Connector',
-        url: 'https://septemberwolfmusic.github.io',
-        icons: []
-      }
-    });
+  // Use WalletConnect UMD from window
+  this.client = new window.WalletConnect({
+    relayUrl: 'wss://relay.walletconnect.com',
+    projectId: this.options?.projectId || 'your-project-id',
+    metadata: {
+      name: 'Wolf Machine',
+      description: 'Wolf Machine Universal Mobile Wallet Connector',
+      url: 'https://septemberwolfmusic.github.io',
+      icons: []
+    }
+  });
 
     // create or restore session
     if (!this.client.session) {
