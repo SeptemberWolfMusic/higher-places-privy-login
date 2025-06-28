@@ -1,4 +1,4 @@
-export function showWolfWalletConnectModal() {
+function showWolfWalletConnectModal() {
   const modalStyle = `
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
     background: #FAF7F7EE; display: flex; align-items: center; justify-content: center;
@@ -33,7 +33,7 @@ if (window.WalletConnectSolanaAdapter) walletProvider = "WalletConnect";
 async function connectAnyWallet() {
   try {
     // Instantiate your WalletConnectWallet from core.js
-    const wcWallet = new window.WalletConnectWallet({...})
+    const wcWallet = new window.WalletConnectWallet({
       network: "mainnet",
       options: { projectId: "f6d03a5b9fc3fa717f7ec61c11789111" }
     });
@@ -87,4 +87,6 @@ if (walletProvider && btn) btn.onclick = connectAnyWallet;
 document.getElementById('wolf-wallet-close-btn').onclick = () => {
   document.getElementById('wolf-wallet-connect-modal').remove();
 };
-}
+
+// Attach function to window for global access
+window.showWolfWalletConnectModal = showWolfWalletConnectModal;
