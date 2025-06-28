@@ -112,3 +112,4 @@ export class WalletConnectWallet {
   // Return the transaction signature (txid)
   return result.signature;
 }
+}
