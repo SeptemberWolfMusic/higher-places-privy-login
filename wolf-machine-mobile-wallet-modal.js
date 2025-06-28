@@ -27,7 +27,7 @@ function showWolfWalletConnectModal() {
 
     // Detect wallet provider (WalletConnect only for mobile)
 let walletProvider = null;
-if (window.WalletConnectSolanaAdapter) walletProvider = "WalletConnect";
+if (window.WalletConnect && window.WalletConnect.default) walletProvider = "WalletConnect";
 
 // Main universal connect logic (WalletConnect only)
 async function connectAnyWallet() {
