@@ -1,6 +1,5 @@
 alert('MOBILE JS LOADED');
 const WalletConnectWalletAdapter = window.WalletConnectSolanaAdapter?.WalletConnectWalletAdapter;
-import { showWolfWalletConnectModal } from './wolf-machine-mobile-wallet-modal.js';
 
 // Wolf Machine – Universal Mobile Wallet Connector
 // github.com/SeptemberWolfMusic  |  (c) 2025 Wolf Machine & SWM 
