@@ -30,19 +30,24 @@ export function showWolfWalletConnectModal() {
   let walletProvider = null;
   if (window.WalletConnectSolanaAdapter) walletProvider = "WalletConnect";
 
-  // Main universal connect logic (WalletConnect only)
-  async function connectAnyWallet() {
-    try {
-      if (window.WalletConnectSolanaAdapter) {
-        // TODO: Insert WalletConnect logic here
-        document.getElementById('wolf-wallet-connect-modal').remove();
-        return;
-      }
-    } catch (e) {
-      document.getElementById('wolf-wallet-connect-modal').remove();
-      // Optionally show fallback here
-    }
+ // Main universal connect logic (WalletConnect only)
+async function connectAnyWallet() {
+  try {
+    // Instantiate your WalletConnectWallet from core.js
+    const wcWallet = new WalletConnectWallet({
+      network: "mainnet",
+      options: { projectId: "f6d03a5b9fc3fa717f7ec61c11789111" }
+    });
+
+    // TODO: Next step—call wcWallet.connect() and handle the flow here
+
+    document.getElementById('wolf-wallet-connect-modal').remove();
+    return;
+  } catch (e) {
+    document.getElementById('wolf-wallet-connect-modal').remove();
+    // Optionally show fallback here
   }
+}
 
   // Button markup
   let btnMarkup = walletProvider
