@@ -83,8 +83,27 @@ export class WalletConnectWallet {
   }
 
   async signAndSendTransaction(transaction) {
-    if (!this.client) throw new Error('Wallet not connected');
-    // Similar to signTransaction, but also sends transaction on chain
-    throw new Error('signAndSendTransaction needs full implementation');
-  }
+  if (!this.client) throw new Error('Wallet not connected');
+
+  // Serialize transaction as base64 string
+  const serialized = transaction.serialize({
+    requireAllSignatures: false, 
+    verifySignatures: false
+  }).toString('base64');
+
+  // Send signAndSendTransaction request via WalletConnect
+  const result = await this.client.request({
+    topic: this.client.session.topic,
+    chainId: this.network === 'devnet' ? 'solana:devnet' : 'solana:mainnet',
+    request: {
+      method: "solana_signAndSendTransaction",
+      params: {
+        transaction: serialized,
+        sendOptions: { preflightCommitment: "finalized" }
+      }
+    }
+  });
+
+  // Return the transaction signature (txid)
+  return result.signature;
 }
