@@ -7,47 +7,21 @@
   <link rel="icon" href="favicon.ico" />
 
   <!-- Node/CommonJS polyfills for browser (full set) -->
-  <!--
-  <script>
-    window.exports = window.exports || {};
-    window.module = window.module || { exports: window.exports };
-    window.inherits = window.inherits || function () {};
-    window.require = window.require || function(module) {
-      if (module === 'buffer') return { Buffer: window.Buffer };
-      if (module === 'inherits') return { default: window.inherits, __esModule: true };
-      if (module === 'events') return { EventEmitter: window.EventEmitter || function(){} };
-      if (module === 'pino' || module === 'sonic-boom') return function(){};
-      // Polyfill all Node modules to empty object for UMD compatibility
-      if (module === 'fs' || module === 'path' || module === 'os' ||
-          module === 'http' || module === 'https' || module === 'stream' ||
-          module === 'zlib' || module === 'assert' || module === 'worker_threads' ||
-          module === 'module' || module === 'url' || module === 'crypto') return {};
-      return {};
-    };
-  </script>
-  -->
+  <!-- (keep commented out unless needed) -->
 
   <!-- Full Buffer polyfill (hosted locally) -->
-  <!--
-  <script src="wolfbuffer.min.js"></script>
-  <script>
-    if (typeof window.Buffer === "undefined") {
-      window.Buffer = buffer.Buffer;
-    }
-    window.buffer = window.Buffer;
-  </script>
-  -->
+  <!-- (keep commented out unless needed) -->
 
- <script src="solana-web3.iife.min.js"></script>
+  <script src="solana-web3.iife.min.js"></script>
   <!-- <script src="eventemitter3.min.js"></script> -->
 
-  <!-- WalletConnect UMD bundle (mobile only, safe for all) -->
-  <script src="https://cdn.jsdelivr.net/npm/@walletconnect/client@1.8.0/dist/umd/index.min.js"></script>
+  <!-- WalletConnect UMD and core.js REMOVED -->
 
-  <script src="core.js"></script>
-  <!-- Your wallet adapter bundle -->
+  <!-- Add your wallet adapter bundle here if needed -->
   <!-- <script src="wolfbundle.min.js"></script> -->
 
+  <!-- Add your connect-wallet-mobile.js below -->
+  <script src="connect-wallet-mobile.js"></script>
 </head>
   <style>
     body {
