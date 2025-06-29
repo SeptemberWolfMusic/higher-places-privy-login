@@ -46,25 +46,25 @@ alert('MOBILE JS LOADED');
     }
     // ...add more wallets here as needed
 
-    if (provider) {
-      try {
-        const connectResult = await provider.connect();
-        walletAddress = connectResult.publicKey
-          ? connectResult.publicKey.toString()
-          : provider.publicKey?.toString() || '';
-        // Show modal with detected wallet name
-        showWolfWalletConnectModal(walletName);
-        // (Optional) Update your UI here with walletAddress.
-        console.log('Connected:', walletName, walletAddress);
-        // ---- SIGN/SEND LOGIC GOES HERE AS NEEDED ----
-        // Example: let signedTx = await provider.signAndSendTransaction(transaction);
-      } catch (e) {
-        console.error('Wallet connect error:', e);
-        showWolfWalletConnectModal(null); // show error/fallback modal
-      }
-    } else {
-      showWolfWalletConnectModal(null); // no wallet detected
-    }
+   if (provider) {
+  try {
+    const connectResult = await provider.connect();
+    walletAddress = connectResult.publicKey
+      ? connectResult.publicKey.toString()
+      : provider.publicKey?.toString() || '';
+    // Show modal (no argument)
+    showWolfWalletConnectModal();
+    // (Optional) Update your UI here with walletAddress.
+    console.log('Connected:', walletName, walletAddress);
+    // ---- SIGN/SEND LOGIC GOES HERE AS NEEDED ----
+    // Example: let signedTx = await provider.signAndSendTransaction(transaction);
+  } catch (e) {
+    console.error('Wallet connect error:', e);
+    showWolfWalletConnectModal(); // show error/fallback modal
+  }
+} else {
+  showWolfWalletConnectModal(); // no wallet detected
+}
   };
 
   function afterWalletConnect() {
