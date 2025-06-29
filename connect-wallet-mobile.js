@@ -20,62 +20,66 @@ alert('MOBILE JS LOADED');
     } catch {}
   }
 
- // Main state
-let walletAddress = "";
-
-window.handleWalletFlip = async function() {
-  console.log('handleWalletFlip called');
-  let walletName = null;
+  // Main state
+  let walletAddress = "";
   let provider = null;
-  if (window.phantom && window.phantom.solana && window.phantom.solana.isPhantom) {
-    provider = window.phantom.solana;
-    walletName = "Phantom";
-  } else if (window.solflare && window.solflare.isSolflare) {
-    provider = window.solflare;
-    walletName = "Solflare";
-  } else if (window.backpack && window.backpack.solana) {
-    provider = window.backpack.solana;
-    walletName = "Backpack";
-  } else if (window.solana && window.solana.isTrust) {
-    provider = window.solana;
-    walletName = "Trust Wallet";
-  } else if (window.solana && window.solana.isExodus) {
-    provider = window.solana;
-    walletName = "Exodus";
-  }
-  // ...add more wallets here as needed
 
-  if (provider) {
-    try {
-      const connectResult = await provider.connect();
-      walletAddress = connectResult.publicKey
-        ? connectResult.publicKey.toString()
-        : provider.publicKey?.toString() || '';
-      showWolfWalletConnectModal(walletName);
-      // You may want to update your UI with walletAddress here.
-      console.log('Connected:', walletName, walletAddress);
-    } catch (e) {
-      console.error('Wallet connect error:', e);
-      showWolfWalletConnectModal(null); // show error/fallback modal
+  window.handleWalletFlip = async function() {
+    console.log('handleWalletFlip called');
+    let walletName = null;
+    provider = null;
+    if (window.phantom && window.phantom.solana && window.phantom.solana.isPhantom) {
+      provider = window.phantom.solana;
+      walletName = "Phantom";
+    } else if (window.solflare && window.solflare.isSolflare) {
+      provider = window.solflare;
+      walletName = "Solflare";
+    } else if (window.backpack && window.backpack.solana) {
+      provider = window.backpack.solana;
+      walletName = "Backpack";
+    } else if (window.solana && window.solana.isTrust) {
+      provider = window.solana;
+      walletName = "Trust Wallet";
+    } else if (window.solana && window.solana.isExodus) {
+      provider = window.solana;
+      walletName = "Exodus";
     }
-  } else {
-    showWolfWalletConnectModal(null); // no wallet detected
+    // ...add more wallets here as needed
+
+    if (provider) {
+      try {
+        const connectResult = await provider.connect();
+        walletAddress = connectResult.publicKey
+          ? connectResult.publicKey.toString()
+          : provider.publicKey?.toString() || '';
+        // Show modal with detected wallet name
+        showWolfWalletConnectModal(walletName);
+        // (Optional) Update your UI here with walletAddress.
+        console.log('Connected:', walletName, walletAddress);
+        // ---- SIGN/SEND LOGIC GOES HERE AS NEEDED ----
+        // Example: let signedTx = await provider.signAndSendTransaction(transaction);
+      } catch (e) {
+        console.error('Wallet connect error:', e);
+        showWolfWalletConnectModal(null); // show error/fallback modal
+      }
+    } else {
+      showWolfWalletConnectModal(null); // no wallet detected
+    }
+  };
+
+  function afterWalletConnect() {
+    localStorage.setItem("wolf_wallet_address", walletAddress);
+    const modal = document.getElementById("wolf-wallet-connect-modal");
+    if (modal) modal.remove();
+    if (window.onWolfWalletConnected) window.onWolfWalletConnected(walletAddress);
   }
-};
 
-function afterWalletConnect() {
-  localStorage.setItem("wolf_wallet_address", walletAddress);
-  const modal = document.getElementById("wolf-wallet-connect-modal");
-  if (modal) modal.remove();
-  if (window.onWolfWalletConnected) window.onWolfWalletConnected(walletAddress);
-}
-
-window.wolfMachineMobileDisconnect = async function() {
-  walletAddress = "";
-  localStorage.removeItem("wolf_wallet_address");
-  log("Disconnected all mobile wallet sessions.");
-  if (window.onWolfWalletDisconnected) window.onWolfWalletDisconnected();
-};
+  window.wolfMachineMobileDisconnect = async function() {
+    walletAddress = "";
+    localStorage.removeItem("wolf_wallet_address");
+    log("Disconnected all mobile wallet sessions.");
+    if (window.onWolfWalletDisconnected) window.onWolfWalletDisconnected();
+  };
 
 })();
 
