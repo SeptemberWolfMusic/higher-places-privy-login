@@ -20,51 +20,62 @@ alert('MOBILE JS LOADED');
     } catch {}
   }
 
-  // Main state
-  let walletAddress = "";
-  let wcAdapter = null;
-  const WALLETCONNECT_PROJECT_ID = "f6d03a5b9fc3fa717f7ec61c11789111";
-  const SOL_NETWORK = "mainnet";
+ // Main state
+let walletAddress = "";
 
- window.handleWalletFlip = async function() {
+window.handleWalletFlip = async function() {
   console.log('handleWalletFlip called');
-  if (!wcAdapter) {
-    wcAdapter = new window.WalletConnectWallet({
-      network: "mainnet",
-      options: { projectId: "f6d03a5b9fc3fa717f7ec61c11789111" }
-    });
+  let walletName = null;
+  let provider = null;
+  if (window.phantom && window.phantom.solana && window.phantom.solana.isPhantom) {
+    provider = window.phantom.solana;
+    walletName = "Phantom";
+  } else if (window.solflare && window.solflare.isSolflare) {
+    provider = window.solflare;
+    walletName = "Solflare";
+  } else if (window.backpack && window.backpack.solana) {
+    provider = window.backpack.solana;
+    walletName = "Backpack";
+  } else if (window.solana && window.solana.isTrust) {
+    provider = window.solana;
+    walletName = "Trust Wallet";
+  } else if (window.solana && window.solana.isExodus) {
+    provider = window.solana;
+    walletName = "Exodus";
   }
-  try {
-    await wcAdapter.connect();
-    const session = wcAdapter.client.session;
-    const solNamespace = session.namespaces.solana;
-    const accounts = solNamespace.accounts || [];
-    const walletName = accounts.length ? `Wallet: ${accounts[0].split(':')[2].slice(0,6)}...` : null;
-    showWolfWalletConnectModal(walletName);
-    console.log('showWolfWalletConnectModal called with', walletName);
-  } catch (e) {
-    console.error('Connection failed:', e);
-    showWolfWalletConnectModal(null);
+  // ...add more wallets here as needed
+
+  if (provider) {
+    try {
+      const connectResult = await provider.connect();
+      walletAddress = connectResult.publicKey
+        ? connectResult.publicKey.toString()
+        : provider.publicKey?.toString() || '';
+      showWolfWalletConnectModal(walletName);
+      // You may want to update your UI with walletAddress here.
+      console.log('Connected:', walletName, walletAddress);
+    } catch (e) {
+      console.error('Wallet connect error:', e);
+      showWolfWalletConnectModal(null); // show error/fallback modal
+    }
+  } else {
+    showWolfWalletConnectModal(null); // no wallet detected
   }
 };
 
-  function afterWalletConnect() {
-    localStorage.setItem("wolf_wallet_address", walletAddress);
-    const modal = document.getElementById("wolf-wallet-connect-modal");
-    if (modal) modal.remove();
-    if (window.onWolfWalletConnected) window.onWolfWalletConnected(walletAddress);
-  }
+function afterWalletConnect() {
+  localStorage.setItem("wolf_wallet_address", walletAddress);
+  const modal = document.getElementById("wolf-wallet-connect-modal");
+  if (modal) modal.remove();
+  if (window.onWolfWalletConnected) window.onWolfWalletConnected(walletAddress);
+}
 
-  window.wolfMachineMobileDisconnect = async function() {
-    if (wcAdapter && wcAdapter.disconnect) {
-      try { await wcAdapter.disconnect(); } catch {}
-    }
-    localStorage.removeItem("walletConnectSession");
-    localStorage.removeItem("wolf_wallet_address");
-    walletAddress = "";
-    log("Disconnected all mobile wallet sessions.");
-    if (window.onWolfWalletDisconnected) window.onWolfWalletDisconnected();
-  };
+window.wolfMachineMobileDisconnect = async function() {
+  walletAddress = "";
+  localStorage.removeItem("wolf_wallet_address");
+  log("Disconnected all mobile wallet sessions.");
+  if (window.onWolfWalletDisconnected) window.onWolfWalletDisconnected();
+};
 
 })();
 
