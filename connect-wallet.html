@@ -316,8 +316,8 @@
   }
 </style>
 
+<button id="wallet-flip" style="display:none;">Connect Wallet</button>
 <script type="module" src="connect-wallet-app.js"></script>
-<!-- Load mobile wallet modal FIRST -->
 <script>
   if (/android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(navigator.userAgent)) {
     const modalScript = document.createElement('script');
@@ -326,16 +326,11 @@
     modalScript.onload = () => {
       const connectScript = document.createElement('script');
       connectScript.type = 'module';
-      connectScript.src = './connect-wallet-mobile.js';  <!-- update to your mobile filename -->
+      connectScript.src = './connect-wallet-mobile.js';
       document.body.appendChild(connectScript);
     };
     document.body.appendChild(modalScript);
   }
 </script>
-<button id="wallet-flip" style="display:none;">Connect Wallet</button>
 </body>
 </html>
-
-
-
-
