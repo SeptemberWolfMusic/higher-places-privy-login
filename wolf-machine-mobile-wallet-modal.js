@@ -89,8 +89,9 @@ modal.innerHTML = `
   </div>
 `;
 document.body.appendChild(modal);
+console.log("modal appended");
 
-// Copy link on tap and show 'Copied' briefly
+  // Copy link on tap and show 'Copied' briefly
 const copyLinkDiv = document.getElementById("copy-link");
 copyLinkDiv.onclick = () => {
   if (navigator.clipboard && navigator.clipboard.writeText) {
