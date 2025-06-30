@@ -24,7 +24,7 @@ function showWolfWalletConnectModal() {
     cursor:pointer; user-select:none; box-shadow:0 2px 10px #0001;
   `;
   const closeBtnStyle = `
-    margin-top:2rem;background:#50c7c0;color:#2b1f1a;
+    margin-top:0rem;background:#50c7c0;color:#2b1f1a;
     padding:0.55rem 1.2rem;border-radius:10px;font-weight:700;cursor:pointer;border:none;font-size:1rem;display:block;width:auto;max-width:150px;margin:4rem auto 0;
   `;
   const footerStyle = `
@@ -46,8 +46,8 @@ modal.innerHTML = `
     </div>
    <div id="create-link" style="
   font-size:1rem; font-weight:400; color:#FAF7F7; text-align:left; 
-  margin-top: -6px; margin-bottom:0.15rem; cursor:pointer; padding-bottom: 6px;
-  display: inline-block; width: max-content; text-indent: -2px;
+  margin-top: -8px; margin-bottom:0.15rem; cursor:pointer; padding-bottom: 6px;
+  display: inline-block; width: max-content; text-indent: -6px;
   ">
   ✨<span style="text-decoration: underline;">Create one instead?</span>
 </div>
