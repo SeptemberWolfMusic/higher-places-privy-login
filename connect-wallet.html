@@ -316,9 +316,7 @@
   }
 </style>
 
-<div class="btn-center">
-  <button id="wallet-flip-mobile" style="display:none;">Connect Wallet</button>
-</div>
+<button id="wallet-flip" style="display:none;">Connect Wallet</button>
 <script type="module" src="connect-wallet-app.js"></script>
 <script>
   if (/android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(navigator.userAgent)) {
@@ -333,21 +331,6 @@
     };
     document.body.appendChild(modalScript);
   }
-
-  // Show correct button per device
-  document.addEventListener('DOMContentLoaded', () => {
-    const isMobile = /android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(navigator.userAgent);
-    const desktopBtn = document.querySelector('button[onclick="handleWalletFlip()"]');
-    const mobileBtn = document.getElementById('wallet-flip-mobile');
-
-    if (isMobile) {
-      if (desktopBtn) desktopBtn.style.display = 'none';
-      if (mobileBtn) mobileBtn.style.display = 'block';
-    } else {
-      if (desktopBtn) desktopBtn.style.display = 'block';
-      if (mobileBtn) mobileBtn.style.display = 'none';
-    }
-  });
 </script>
 </body>
 </html>
