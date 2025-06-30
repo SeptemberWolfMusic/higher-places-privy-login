@@ -316,7 +316,7 @@
   }
 </style>
 
-<button id="wallet-flip" style="display:none;">Connect Wallet</button>
+<button id="wallet-flip-mobile" style="display:none;">Connect Wallet</button>
 <script type="module" src="connect-wallet-app.js"></script>
 <script>
   if (/android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(navigator.userAgent)) {
@@ -336,7 +336,7 @@
   document.addEventListener('DOMContentLoaded', () => {
     const isMobile = /android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(navigator.userAgent);
     const desktopBtn = document.querySelector('button[onclick="handleWalletFlip()"]');
-    const mobileBtn = document.getElementById('wallet-flip');
+    const mobileBtn = document.getElementById('wallet-flip-mobile');
 
     if (isMobile) {
       if (desktopBtn) desktopBtn.style.display = 'none';
