@@ -10,30 +10,17 @@
       (window.backpack?.solana && window.backpack.solana) ||
       null;
 
-    if (!provider && !isWalletProvider) {
-      console.log("should open modal (page load)");
+    const btn = document.getElementById("wallet-flip");
+if (btn) {
+  btn.style.display = "block";
+  btn.onclick = async () => {
+    if (provider) {
+      await provider.connect();
+    } else {
+      console.log("should open modal (button click)");
       showWolfWalletConnectModal();
     }
-
-    const btn = document.getElementById("wallet-flip");
-    if (btn) {
-      btn.style.display = "block";
-      btn.onclick = async () => {
-        if (provider) {
-          await provider.connect();
-        } else {
-          console.log("should open modal (button click)");
-          showWolfWalletConnectModal();
-        }
-      };
-    }
- // NEW: setTimeout at very end for reliability
-    setTimeout(() => {
-      if (!provider && !isWalletProvider) {
-        console.log("should open modal (setTimeout)");
-        showWolfWalletConnectModal();
-      }
-    }, 300);
-
+  };
+}
   });
 })();
