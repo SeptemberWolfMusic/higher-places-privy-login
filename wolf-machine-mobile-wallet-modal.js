@@ -34,19 +34,23 @@ function showWolfWalletConnectModal() {
     color:#ffd700;font-size:1.05em;
   `;
 
-  const siteLink = "https://www.wolfmachinewalletportal.com/connect-wallet.html";
+ const siteLink = "https://www.wolfmachinewalletportal.com/connect-wallet.html";
 
 const modal = document.createElement("div");
 modal.id = "wolf-wallet-connect-modal";
 modal.setAttribute("style", modalStyle);
 modal.innerHTML = `
   <div style="${cardStyle}">
-    <div style="font-size:1.4rem; font-weight:700; color:#FAF7F7; text-align:center; margin-bottom:0.3rem;">
+    <div style="font-size:1.4rem; font-weight:700; color:#FAF7F7; text-align:center; margin-bottom:0.15rem;">
       No wallet detected.
     </div>
-    <div style="font-size:1rem; font-weight:400; color:#FAF7F7; text-align:center; margin-bottom:1.2rem; cursor:pointer;" id="create-link">
-      ✨ Create one instead?
+    <div id="create-link" style="
+      font-size:1rem; font-weight:400; color:#FAF7F7; text-align:center; 
+      margin-bottom:0.3rem; cursor:pointer; border-bottom: 1px solid #FAF7F7; padding-bottom: 4px;
+      ">
+      ✨Create one instead?
     </div>
+    <div style="text-align:center; margin-bottom:0.8rem; font-size:1rem; color:#FAF7F7;">or</div>
     <div style="font-size:1.2rem; font-weight:600; color:#FAF7F7; margin-bottom:0.3rem; text-align:center;">
       Connect your Solana wallet.
     </div>
@@ -58,14 +62,14 @@ modal.innerHTML = `
       background:#fff7da; 
       color:#1c1c1c; 
       font-size:1rem; 
-      padding:0.3rem 0.6rem; 
-      border-radius:10px; 
+      padding:0.2rem 0.5rem; 
+      border-radius:6px; 
       border:1.4px solid #ffe88e; 
       font-family: monospace; 
       cursor:pointer; 
       user-select:none; 
       box-shadow:0 2px 10px #0001;
-      max-width: 100%;
+      max-width: 300px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -85,13 +89,31 @@ document.body.appendChild(modal);
 // Copy link on tap and show 'Copied' briefly
 const copyLinkDiv = document.getElementById("copy-link");
 copyLinkDiv.onclick = () => {
-  navigator.clipboard.writeText(siteLink).then(() => {
-    const originalText = copyLinkDiv.textContent;
-    copyLinkDiv.textContent = "Copied!";
-    setTimeout(() => {
-      copyLinkDiv.textContent = originalText;
-    }, 1500);
-  });
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(siteLink).then(() => {
+      const originalText = copyLinkDiv.textContent;
+      copyLinkDiv.textContent = "Copied!";
+      setTimeout(() => {
+        copyLinkDiv.textContent = originalText;
+      }, 1500);
+    }).catch(() => alert('Failed to copy'));
+  } else {
+    // fallback for older browsers
+    const textArea = document.createElement("textarea");
+    textArea.value = siteLink;
+    document.body.appendChild(textArea);
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      copyLinkDiv.textContent = "Copied!";
+      setTimeout(() => {
+        copyLinkDiv.textContent = siteLink;
+      }, 1500);
+    } catch {
+      alert('Failed to copy');
+    }
+    document.body.removeChild(textArea);
+  }
 };
 
 // Create one link opens new tab
