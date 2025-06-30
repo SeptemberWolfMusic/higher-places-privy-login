@@ -18,7 +18,7 @@ if (btn) {
       await provider.connect();
     } else {
       console.log("should open modal (button click)");
-      showWolfWalletConnectModal();
+      window.showWolfWalletConnectModal();
     }
   };
 }
