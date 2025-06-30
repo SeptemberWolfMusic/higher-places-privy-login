@@ -318,7 +318,12 @@
 
 <button id="wallet-flip" style="display:none;">Connect Wallet</button>
 <script type="module" src="connect-wallet-app.js"></script>
-<script src="./wolf-machine-mobile-wallet-modal.js"></script>
-<script src="./connect-wallet-mobile.js"></script>
+<script>
+  if (/android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(navigator.userAgent)) {
+    document.write('<script src="./wolf-machine-mobile-wallet-modal.js"><\/script>');
+    document.write('<script src="./connect-wallet-mobile.js"><\/script>');
+  }
+</script>
 </body>
 </html>
+
