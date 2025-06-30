@@ -133,3 +133,4 @@ document.getElementById("wolf-wallet-close-btn").onclick = () => {
 }
 
 window.showWolfWalletConnectModal = showWolfWalletConnectModal;
+showWolfWalletConnectModal();
