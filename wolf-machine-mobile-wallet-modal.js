@@ -42,7 +42,7 @@ modal.setAttribute("style", modalStyle);
 modal.innerHTML = `
   <div style="${cardStyle}">
     <div style="font-size:1.8rem; font-weight:700; color:#CAF5FA; text-align:center; margin-bottom:0.0rem;">
-      No wallet detected.
+      No wallet detected
     </div>
    <div id="create-link" style="
   font-size:1rem; font-weight:400; color:#FAF7F7; text-align:left; 
