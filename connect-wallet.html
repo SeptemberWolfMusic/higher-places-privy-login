@@ -321,11 +321,11 @@
 <script>
   if (/android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(navigator.userAgent)) {
     const modalScript = document.createElement('script');
-    modalScript.type = 'module';
+    // modalScript.type = 'module';  // REMOVE this line
     modalScript.src = './wolf-machine-mobile-wallet-modal.js';
     modalScript.onload = () => {
       const connectScript = document.createElement('script');
-      connectScript.type = 'module';
+      // connectScript.type = 'module';  // REMOVE this line
       connectScript.src = './connect-wallet-mobile.js';
       document.body.appendChild(connectScript);
     };
