@@ -6,6 +6,7 @@
   document.addEventListener("DOMContentLoaded", () => {
   const btn = document.getElementById("wallet-flip");
   if (btn) {
+    console.log('Connect handler attached');
     btn.onclick = async () => {
    const provider =
   (window.phantom?.solana?.isPhantom && window.phantom.solana) ||
