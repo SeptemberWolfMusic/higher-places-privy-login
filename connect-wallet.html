@@ -323,16 +323,18 @@
     const modalScript = document.createElement('script');
     modalScript.type = 'module';
     modalScript.src = './wolf-machine-mobile-wallet-modal.js';
+    modalScript.onload = () => {
+      const connectScript = document.createElement('script');
+      connectScript.type = 'module';
+      connectScript.src = './connect-wallet-mobile.js';  <!-- update to your mobile filename -->
+      document.body.appendChild(connectScript);
+    };
     document.body.appendChild(modalScript);
-
-    const connectScript = document.createElement('script');
-    connectScript.type = 'module';
-    connectScript.src = './connect-wallet-mobile.js';  <!-- update to your mobile filename -->
-    document.body.appendChild(connectScript);
   }
 </script>
 </body>
 </html>
+
 
 
 
