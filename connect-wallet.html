@@ -318,20 +318,7 @@
 
 <button id="wallet-flip" style="display:none;">Connect Wallet</button>
 <script type="module" src="connect-wallet-app.js"></script>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  if (/android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(navigator.userAgent)) {
-    const modalScript = document.createElement('script');
-    modalScript.src = './wolf-machine-mobile-wallet-modal.js';
-    modalScript.onload = () => {
-      const connectScript = document.createElement('script');
-      connectScript.src = './connect-wallet-mobile.js';
-      document.body.appendChild(connectScript);
-    };
-    document.body.appendChild(modalScript);
-  }
-});
-</script>
+<script src="./wolf-machine-mobile-wallet-modal.js"></script>
+<script src="./connect-wallet-mobile.js"></script>
 </body>
 </html>
-
