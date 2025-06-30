@@ -1,4 +1,3 @@
-alert('MOBILE JS LOADED');
 // Wolf Machine – Universal Mobile Wallet Connector (Production, paste-only)
 // github.com/SeptemberWolfMusic  |  (c) 2025 Wolf Machine & SWM 
 
