@@ -10,19 +10,17 @@
       (window.backpack?.solana && window.backpack.solana) ||
       null;
 
-    const btn = document.getElementById("wallet-flip");
-if (btn) {
-  btn.style.display = "block";
-  btn.onclick = async () => {
+   const btn = document.getElementById("wallet-flip");
+   if (btn) {
+   btn.style.display = "block";
+   btn.onclick = async () => {
     console.log('Connect Wallet button clicked');
-    // Only show modal if NO wallet providers detected
     if (
       !(window.phantom?.solana?.isPhantom || window.solflare?.isSolflare || window.backpack?.solana)
     ) {
       console.log("should open modal (button click, no wallet found)");
       window.showWolfWalletConnectModal();
     } else {
-      // Try to connect to detected provider
       if (window.phantom?.solana?.isPhantom) {
         await window.phantom.solana.connect();
       } else if (window.solflare?.isSolflare) {
