@@ -53,7 +53,7 @@ modal.innerHTML = `
   </div>
     <div style="text-align:center; margin-bottom:0.8rem; font-size:1rem; color:#FAF7F7;">or</div>
     <div style="font-size:1.2rem; font-weight:600; color:#FAF7F7; margin-bottom:0.3rem; text-align:center;">
-      Connect your Solana wallet.
+      Connect your Solana wallet:
     </div>
     <div style="font-size:0.9rem; font-weight:400; color:#FAF7F7; margin-bottom:1rem; text-align:center;">
       Paste this link into your Wallet's URL browser to continue.
