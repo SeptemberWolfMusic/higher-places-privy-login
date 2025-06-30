@@ -45,12 +45,12 @@ modal.innerHTML = `
       No wallet detected.
     </div>
    <div id="create-link" style="
-  font-size:1rem; font-weight:400; color:#FAF7F7; text-align:center; 
+  font-size:1rem; font-weight:400; color:#FAF7F7; text-align:left; 
   margin-top:0; margin-bottom:0.15rem; cursor:pointer; padding-bottom: 4px;
-  display: inline-block;
+  display: inline-block; width: max-content; padding-left: 4px;
   ">
   ✨<span style="text-decoration: underline;">Create one instead?</span>
-  </div>
+</div>
     <div style="text-align:center; margin-bottom:0.8rem; font-size:1rem; color:#FAF7F7;">or</div>
     <div style="font-size:1.2rem; font-weight:600; color:#FAF7F7; margin-bottom:0.3rem; text-align:center;">
       Connect your Solana wallet:
