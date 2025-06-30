@@ -47,7 +47,7 @@ modal.innerHTML = `
    <div id="create-link" style="
   font-size:1rem; font-weight:400; color:#FAF7F7; text-align:left; 
   margin-top: -8px; margin-bottom:0.15rem; cursor:pointer; padding-bottom: 6px;
-  display: inline-block; width: max-content; text-indent: -6px;
+  display: inline-block; width: max-content; text-indent: -8px;
   ">
   ✨<span style="text-decoration: underline;">Create one instead?</span>
 </div>
@@ -62,7 +62,7 @@ modal.innerHTML = `
       display:inline-block; 
       background:#fff7da; 
       color:#1c1c1c; 
-      font-size:0.70rem; 
+      font-size:0.72rem; 
       padding:0.15rem 0.3rem; 
       border-radius:6px; 
       border:1.4px solid #ffe88e; 
