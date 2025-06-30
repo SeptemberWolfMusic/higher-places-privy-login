@@ -9,9 +9,12 @@
       (window.solflare?.isSolflare && window.solflare) ||
       (window.backpack?.solana && window.backpack.solana) ||
       null;
+
     if (!provider && !isWalletProvider) {
+      console.log("should open modal (page load)");
       showWolfWalletConnectModal();
     }
+
     const btn = document.getElementById("wallet-flip");
     if (btn) {
       btn.style.display = "block";
@@ -19,6 +22,7 @@
         if (provider) {
           await provider.connect();
         } else {
+          console.log("should open modal (button click)");
           showWolfWalletConnectModal();
         }
       };
