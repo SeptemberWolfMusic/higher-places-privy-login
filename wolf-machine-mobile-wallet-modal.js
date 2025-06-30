@@ -56,7 +56,7 @@ modal.innerHTML = `
   ✨<span style="text-decoration: underline;">Create one instead?</span>
 </div>
     <div style="text-align:center; margin-top:0.8rem; margin-bottom:0.8rem; font-size:1rem; color:#FAF7F7;">or</div>
-    <div style="font-size:1.8rem; font-weight:600; color:#FAF7F7; margin-bottom:0.3rem; text-align:center;">
+    <div style="font-size:1.4rem; font-weight:600; color:#FAF7F7; margin-bottom:0.3rem; text-align:center;">
       Connect your Solana wallet:
     </div>
     <div style="font-size:1.0rem; font-weight:400; color:#FAF7F7; margin-bottom:1rem; text-align:center;">
