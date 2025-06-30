@@ -14,6 +14,7 @@
 if (btn) {
   btn.style.display = "block";
   btn.onclick = async () => {
+    console.log('Connect Wallet button clicked');
     if (provider) {
       await provider.connect();
     } else {
