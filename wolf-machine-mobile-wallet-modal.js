@@ -1,5 +1,14 @@
-console.log("modal script loaded")
+console.log("modal script loaded");
 alert('modal loaded');
+
+const ua = navigator.userAgent.toLowerCase();
+if (ua.includes("phantom") || ua.includes("solflare") || ua.includes("backpack")) {
+  // In wallet provider browser, do NOT open modal, return immediately
+  console.log("Wallet provider browser detected, not opening modal");
+} else {
+  showWolfWalletConnectModal();
+}
+
 function showWolfWalletConnectModal() {
   console.log('showWolfWalletConnectModal CALLED');
   const modalStyle = `
@@ -133,4 +142,4 @@ document.getElementById("wolf-wallet-close-btn").onclick = () => {
 }
 
 window.showWolfWalletConnectModal = showWolfWalletConnectModal;
-showWolfWalletConnectModal();
+
