@@ -41,7 +41,7 @@ modal.id = "wolf-wallet-connect-modal";
 modal.setAttribute("style", modalStyle);
 modal.innerHTML = `
   <div style="${cardStyle}">
-    <div style="font-size:1.8rem; font-weight:700; color:#3b2a24; text-align:center; margin-bottom:0.1rem;">
+    <div style="font-size:1.8rem; font-weight:700; color:#50c7c0; text-align:center; margin-bottom:0.1rem;">
       No wallet detected.
     </div>
    <div id="create-link" style="
