@@ -62,7 +62,7 @@ modal.innerHTML = `
       display:inline-block; 
       background:#fff7da; 
       color:#1c1c1c; 
-      font-size:0.69rem; 
+      font-size:0.70rem; 
       padding:0.15rem 0.3rem; 
       border-radius:6px; 
       border:1.4px solid #ffe88e; 
