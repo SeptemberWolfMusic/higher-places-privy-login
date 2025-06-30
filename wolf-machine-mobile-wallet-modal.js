@@ -41,14 +41,15 @@ modal.id = "wolf-wallet-connect-modal";
 modal.setAttribute("style", modalStyle);
 modal.innerHTML = `
   <div style="${cardStyle}">
-    <div style="font-size:1.4rem; font-weight:700; color:#FAF7F7; text-align:center; margin-bottom:0.15rem;">
+    <div style="font-size:1.4rem; font-weight:700; color:#FAF7F7; text-align:center; margin-bottom:0.1rem;">
       No wallet detected.
     </div>
     <div id="create-link" style="
       font-size:1rem; font-weight:400; color:#FAF7F7; text-align:center; 
-      margin-bottom:0.3rem; cursor:pointer; border-bottom: 1px solid #FAF7F7; padding-bottom: 4px;
+      margin-top:0; margin-bottom:0.25rem; cursor:pointer; border-bottom: 1px solid #FAF7F7; padding-bottom: 4px;
+      display: inline-block;
       ">
-      ✨Create one instead?
+      ✨ Create one instead?
     </div>
     <div style="text-align:center; margin-bottom:0.8rem; font-size:1rem; color:#FAF7F7;">or</div>
     <div style="font-size:1.2rem; font-weight:600; color:#FAF7F7; margin-bottom:0.3rem; text-align:center;">
@@ -61,8 +62,8 @@ modal.innerHTML = `
       display:inline-block; 
       background:#fff7da; 
       color:#1c1c1c; 
-      font-size:1rem; 
-      padding:0.2rem 0.5rem; 
+      font-size:0.85rem; 
+      padding:0.15rem 0.5rem; 
       border-radius:6px; 
       border:1.4px solid #ffe88e; 
       font-family: monospace; 
@@ -90,7 +91,7 @@ document.body.appendChild(modal);
 const copyLinkDiv = document.getElementById("copy-link");
 copyLinkDiv.onclick = () => {
   if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(siteLink).then(() => {
+    navigator.clipboard.writeText(siteLink.trim()).then(() => {
       const originalText = copyLinkDiv.textContent;
       copyLinkDiv.textContent = "Copied!";
       setTimeout(() => {
@@ -100,7 +101,7 @@ copyLinkDiv.onclick = () => {
   } else {
     // fallback for older browsers
     const textArea = document.createElement("textarea");
-    textArea.value = siteLink;
+    textArea.value = siteLink.trim();
     document.body.appendChild(textArea);
     textArea.select();
     try {
