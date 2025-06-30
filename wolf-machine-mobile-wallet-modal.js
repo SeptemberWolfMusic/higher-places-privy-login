@@ -60,7 +60,7 @@ modal.innerHTML = `
       Connect your Solana wallet:
     </div>
     <div style="font-size:0.9rem; font-weight:400; color:#FAF7F7; margin-bottom:1rem; text-align:center;">
-      Paste this link into your Wallet's URL browser to continue.
+      Tap to copy the link & paste it into your Wallet's URL browser to continue.
     </div>
     <div id="copy-link" style="
       display:inline-block; 
