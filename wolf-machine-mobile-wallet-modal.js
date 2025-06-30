@@ -36,49 +36,73 @@ function showWolfWalletConnectModal() {
 
   const siteLink = "https://www.wolfmachinewalletportal.com/connect-wallet.html";
 
-  const modal = document.createElement("div");
-  modal.id = "wolf-wallet-connect-modal";
-  modal.setAttribute("style", modalStyle);
-  modal.innerHTML = `
-    <div style="${cardStyle}">
-      <div style="${instructionStyle}">
-        No wallet detected.
-        <span id="create-link" style="${createLinkStyle}">✨ Create one instead?</span>
-      </div>
-      <div style="margin-bottom:1rem;">
-        Connect your Solana wallet.<br>
-        Paste this link into your Wallet's URL browser to continue.
-      </div>
-      <div id="copy-link" style="${urlBoxStyle}" title="Tap to copy">${siteLink}</div>
-      <button id="wolf-wallet-close-btn" style="${closeBtnStyle}">Close</button>
-      <div style="${footerStyle}">
-        Powered by Wolf Machine & SWM <span style="${starStyle}">✦</span> Made with LOVE
-      </div>
+const modal = document.createElement("div");
+modal.id = "wolf-wallet-connect-modal";
+modal.setAttribute("style", modalStyle);
+modal.innerHTML = `
+  <div style="${cardStyle}">
+    <div style="font-size:1.4rem; font-weight:700; color:#FAF7F7; text-align:center; margin-bottom:0.3rem;">
+      No wallet detected.
     </div>
-  `;
-  document.body.appendChild(modal);
+    <div style="font-size:1rem; font-weight:400; color:#FAF7F7; text-align:center; margin-bottom:1.2rem; cursor:pointer;" id="create-link">
+      ✨ Create one instead?
+    </div>
+    <div style="font-size:1.2rem; font-weight:600; color:#FAF7F7; margin-bottom:0.3rem; text-align:center;">
+      Connect your Solana wallet.
+    </div>
+    <div style="font-size:0.9rem; font-weight:400; color:#FAF7F7; margin-bottom:1rem; text-align:center;">
+      Paste this link into your Wallet's URL browser to continue.
+    </div>
+    <div id="copy-link" style="
+      display:inline-block; 
+      background:#fff7da; 
+      color:#1c1c1c; 
+      font-size:1rem; 
+      padding:0.3rem 0.6rem; 
+      border-radius:10px; 
+      border:1.4px solid #ffe88e; 
+      font-family: monospace; 
+      cursor:pointer; 
+      user-select:none; 
+      box-shadow:0 2px 10px #0001;
+      max-width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin: 0 auto 1.5rem auto;
+      text-align: center;
+      "
+      title="Tap to copy"
+    >${siteLink}</div>
+    <button id="wolf-wallet-close-btn" style="${closeBtnStyle}">Close</button>
+    <div style="${footerStyle}">
+      Powered by Wolf Machine & SWM <span style="${starStyle}">✦</span> Made with LOVE
+    </div>
+  </div>
+`;
+document.body.appendChild(modal);
 
-  // Copy link on tap and show 'Copied' briefly
-  const copyLinkDiv = document.getElementById("copy-link");
-  copyLinkDiv.onclick = () => {
-    navigator.clipboard.writeText(siteLink).then(() => {
-      const originalText = copyLinkDiv.textContent;
-      copyLinkDiv.textContent = "Copied!";
-      setTimeout(() => {
-        copyLinkDiv.textContent = originalText;
-      }, 1500);
-    });
-  };
+// Copy link on tap and show 'Copied' briefly
+const copyLinkDiv = document.getElementById("copy-link");
+copyLinkDiv.onclick = () => {
+  navigator.clipboard.writeText(siteLink).then(() => {
+    const originalText = copyLinkDiv.textContent;
+    copyLinkDiv.textContent = "Copied!";
+    setTimeout(() => {
+      copyLinkDiv.textContent = originalText;
+    }, 1500);
+  });
+};
 
-  // Create one link opens new tab
-  document.getElementById("create-link").onclick = () => {
-    window.open("https://septemberwolfmusic.github.io/wolf-machine-wallet-portal/", "_blank");
-  };
+// Create one link opens new tab
+document.getElementById("create-link").onclick = () => {
+  window.open("https://septemberwolfmusic.github.io/wolf-machine-wallet-portal/", "_blank");
+};
 
-  // Close button
-  document.getElementById("wolf-wallet-close-btn").onclick = () => {
-    document.getElementById("wolf-wallet-connect-modal").remove();
-  };
+// Close button
+document.getElementById("wolf-wallet-close-btn").onclick = () => {
+  document.getElementById("wolf-wallet-connect-modal").remove();
+};
 }
 
 window.showWolfWalletConnectModal = showWolfWalletConnectModal;
