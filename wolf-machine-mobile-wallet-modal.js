@@ -1,3 +1,4 @@
+alert('modal loaded');
 function showWolfWalletConnectModal() {
   console.log('showWolfWalletConnectModal CALLED');
   const modalStyle = `
