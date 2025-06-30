@@ -3,10 +3,10 @@
 
 (function () {
   // Attach handler to Connect button if present
-  document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("DOMContentLoaded", () => {
   const btn = document.getElementById("wallet-flip");
   if (btn) {
-    btn.onclick = async function() {
+    btn.onclick = async () => {
       const provider =
         (window.phantom && window.phantom.solana && window.phantom.solana.isPhantom && window.phantom.solana) ||
         (window.solflare && window.solflare.isSolflare && window.solflare) ||
@@ -15,15 +15,11 @@
         (window.solana && window.solana.isExodus && window.solana);
 
       if (provider) {
-        try {
-          await provider.connect();
-          // Optionally trigger post-connect logic here
-        } catch {
-          showWolfWalletConnectModal();
-        }
+        await provider.connect(); // no modal fallback here
       } else {
         showWolfWalletConnectModal();
       }
     };
   }
 });
+
