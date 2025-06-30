@@ -27,5 +27,13 @@
         }
       };
     }
+ // NEW: setTimeout at very end for reliability
+    setTimeout(() => {
+      if (!provider && !isWalletProvider) {
+        console.log("should open modal (setTimeout)");
+        showWolfWalletConnectModal();
+      }
+    }, 300);
+
   });
 })();
