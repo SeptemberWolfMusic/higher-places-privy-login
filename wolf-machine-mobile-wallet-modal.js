@@ -24,7 +24,7 @@ function showWolfWalletConnectModal() {
     cursor:pointer; user-select:none; box-shadow:0 2px 10px #0001;
   `;
   const closeBtnStyle = `
-    margin-top:3rem;background:#50c7c0;color:#2b1f1a;
+    margin-top:2rem;background:#50c7c0;color:#2b1f1a;
     padding:0.55rem 1.2rem;border-radius:10px;font-weight:700;cursor:pointer;border:none;font-size:1rem;display:block;width:auto;max-width:150px;margin:4rem auto 0;
   `;
   const footerStyle = `
