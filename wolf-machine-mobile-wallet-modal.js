@@ -1,3 +1,4 @@
+console.log("modal script loaded")
 alert('modal loaded');
 function showWolfWalletConnectModal() {
   console.log('showWolfWalletConnectModal CALLED');
