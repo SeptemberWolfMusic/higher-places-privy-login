@@ -14,6 +14,11 @@
     if (btn) {
       btn.style.display = "block";
       btn.onclick = async () => {
+        // Always handle Phantom browser connect directly in their browser
+        if (window.solana?.isPhantom) {
+          await window.solana.connect();
+          return;
+        }
         console.log('Connect Wallet button clicked');
         if (!provider && !isWalletProvider) {
           console.log("should open modal (button click, no wallet found, not in wallet browser)");
