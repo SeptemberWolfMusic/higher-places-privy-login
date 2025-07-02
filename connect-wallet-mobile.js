@@ -11,27 +11,10 @@
     if (btn) {
       btn.style.display = "block";
       btn.onclick = null;
-      btn.addEventListener("click", async function(event) {
+      btn.addEventListener("click", function(event) {
         event.preventDefault();
-        if (!isMobile && isPhantom && window.solana && window.solana.connect) {
-          try {
-            await window.solana.connect();
-          } catch {
-            alert("Phantom connection canceled.");
-          }
-        } else if (!isMobile && isSolflare && window.solflare && window.solflare.connect) {
-          try {
-            await window.solflare.connect();
-          } catch {
-            alert("Solflare connection canceled.");
-          }
-        } else if (!isMobile && isBackpack && window.backpack && window.backpack.connect) {
-          try {
-            await window.backpack.connect();
-          } catch {
-            alert("Backpack connection canceled.");
-          }
-        } else if (typeof window.showWolfWalletConnectModal === "function") {
+        // On mobile, always open modal; no auto-connect attempts
+        if (typeof window.showWolfWalletConnectModal === "function") {
           window.showWolfWalletConnectModal();
         }
       });
