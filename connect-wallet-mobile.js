@@ -6,7 +6,7 @@
     const isBackpack = ua.includes("backpack");
     const isWalletProvider = isPhantom || isSolflare || isBackpack;
 
-    const btn = document.getElementById("wallet-flip");
+    const btn = document.getElementById("wallet-flip-mobile");
     if (btn) {
       btn.style.display = "block";
       btn.onclick = null; // Remove previous (inline) handlers
