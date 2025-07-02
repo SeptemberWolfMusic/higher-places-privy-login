@@ -9,7 +9,9 @@
     const btn = document.getElementById("wallet-flip");
     if (btn) {
       btn.style.display = "block";
-      btn.onclick = () => {
+      btn.onclick = null; // Remove previous (inline) handlers
+      btn.addEventListener("click", function(event) {
+        event.preventDefault();
         if (isPhantom && window.solana && window.solana.connect) {
           window.solana.connect();
         } else if (isSolflare && window.solflare && window.solflare.connect) {
@@ -19,7 +21,7 @@
         } else {
           window.showWolfWalletConnectModal();
         }
-      };
+      });
     }
 
     // Hide "Create Wallet" paragraph in wallet browsers
