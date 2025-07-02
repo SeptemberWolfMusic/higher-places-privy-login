@@ -22,11 +22,11 @@
       };
     }
 
-    // Hide "Create Wallet" link in wallet browsers
+    // Hide "Create Wallet" paragraph in wallet browsers
     if (isWalletProvider) {
-      const createWalletLink = document.getElementById("create-wallet-link");
-      if (createWalletLink) {
-        createWalletLink.style.display = "none";
+      const createWalletLine = document.querySelector(".link-line");
+      if (createWalletLine) {
+        createWalletLine.style.display = "none";
       }
     }
   });
