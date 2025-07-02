@@ -6,7 +6,7 @@ function isMobile() {
 document.getElementById("wallet-display").style.display = "none";
 document.getElementById("email-section").style.display = "none";
 document.getElementById("purchase-section").style.display = "none";
-document.getElementById("wallet-flip").innerText = "Connect Wallet";
+document.getElementById("wallet-flip-desktop").innerText = "Connect Wallet";
 
 // --- OLD MOBILE PHANTOM HANDLER COMMENTED OUT ---
 // document.addEventListener("DOMContentLoaded", async function() {
@@ -121,7 +121,7 @@ function afterWalletConnect() {
   document.getElementById("wallet-display").style.display = "block";
   document.getElementById("email-section").style.display = "block";
   document.getElementById("purchase-section").style.display = "block";
-  document.getElementById("wallet-flip").innerText = "Disconnect";
+  document.getElementById("wallet-flip-desktop").innerText = "Disconnect";
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -157,7 +157,7 @@ async function disconnectWallet() {
   document.getElementById("wallet-display").style.display = "none";
   document.getElementById("email-section").style.display = "none";
   document.getElementById("purchase-section").style.display = "none";
-  document.getElementById("wallet-flip").innerText = "Connect Wallet";
+  document.getElementById("wallet-flip-desktop").innerText = "Connect Wallet";
   window.location.reload();
 }
 
