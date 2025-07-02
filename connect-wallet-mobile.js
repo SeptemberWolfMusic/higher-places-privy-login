@@ -21,5 +21,13 @@
         }
       };
     }
+
+    // Hide "Create Wallet" link in wallet browsers
+    if (isWalletProvider) {
+      const createWalletLink = document.getElementById("create-wallet-link");
+      if (createWalletLink) {
+        createWalletLink.style.display = "none";
+      }
+    }
   });
 })();
