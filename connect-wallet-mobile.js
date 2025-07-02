@@ -1,16 +1,10 @@
 (function () {
   document.addEventListener("DOMContentLoaded", () => {
     const ua = navigator.userAgent.toLowerCase();
-    const isMobile = /iphone|ipad|ipod|android|blackberry|mini|windows\sce|palm/i.test(ua);
     const isPhantom = ua.includes("phantom");
     const isSolflare = ua.includes("solflare");
     const isBackpack = ua.includes("backpack");
     const isWalletProvider = isPhantom || isSolflare || isBackpack;
-
-    // Only run on mobile OR any wallet provider browser (even on desktop)
-    if (!(isMobile || isWalletProvider)) {
-      return; // Exit on regular desktop browsers
-    }
 
     const btn = document.getElementById("wallet-flip");
     if (btn) {
