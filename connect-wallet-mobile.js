@@ -1,9 +1,9 @@
 (function () {
   document.addEventListener("DOMContentLoaded", () => {
-    const ua = navigator.userAgent.toLowerCase();
-    const isPhantom = ua.includes("phantom");
-    const isSolflare = ua.includes("solflare");
-    const isBackpack = ua.includes("backpack");
+    // Accurate wallet provider detection using global objects
+    const isPhantom = typeof window.solana === "object" && window.solana.isPhantom === true;
+    const isSolflare = typeof window.solflare === "object" && window.solflare.isSolflare === true;
+    const isBackpack = typeof window.backpack === "object";
     const isWalletProvider = isPhantom || isSolflare || isBackpack;
 
     const btn = document.getElementById("wallet-flip-mobile");
