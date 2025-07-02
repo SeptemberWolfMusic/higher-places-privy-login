@@ -233,7 +233,8 @@
   <div class="section">
     <h2>&nbsp;Welcome✨</h2>
     <div class="btn-center">
-     <button id="wallet-flip" onclick="handleWalletFlip()">Connect Wallet</button>
+    <button id="wallet-flip-desktop" onclick="handleWalletFlip()">Connect Wallet</button>
+   <button id="wallet-flip-mobile" style="display:none;">Connect Wallet</button>
     </div>
     <p class="link-line">
       Don’t have a wallet? <a href="https://septemberwolfmusic.github.io/wolf-machine-wallet-portal/">Create One Instead</a>
@@ -316,7 +317,6 @@
   }
 </style>
 
-<button id="wallet-flip" style="display:none;">Connect Wallet</button>
 <script type="module" src="connect-wallet-app.js"></script>
 <script>
   if (/android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(navigator.userAgent)) {
@@ -324,5 +324,23 @@
     document.write('<script src="./connect-wallet-mobile.js"><\/script>');
   }
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const ua = navigator.userAgent.toLowerCase();
+  const isMobile = /android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(ua);
+
+  const desktopBtn = document.getElementById("wallet-flip-desktop");
+  const mobileBtn = document.getElementById("wallet-flip-mobile");
+
+  if (isMobile) {
+    if (desktopBtn) desktopBtn.style.display = "none";
+    if (mobileBtn) mobileBtn.style.display = "block";
+  } else {
+    if (desktopBtn) desktopBtn.style.display = "block";
+    if (mobileBtn) mobileBtn.style.display = "none";
+  }
+});
+</script>
 </body>
 </html>
+
