@@ -233,7 +233,7 @@
   <div class="section">
     <h2>&nbsp;Welcome✨</h2>
     <div class="btn-center">
-     <button id="wallet-flip" style="display:none;" onclick="handleWalletFlip()">Connect Wallet</button>
+     <button id="wallet-flip" onclick="handleWalletFlip()">Connect Wallet</button>
     </div>
     <p class="link-line">
       Don’t have a wallet? <a href="https://septemberwolfmusic.github.io/wolf-machine-wallet-portal/">Create One Instead</a>
@@ -308,7 +308,7 @@
     z-index: 10;
     box-shadow: 0 0 5px rgba(0,0,0,0.1);
   }
-  .btn-center {
+   .btn-center {
     text-align: center;
   }
  .section {
@@ -316,17 +316,13 @@
   }
 </style>
 
-<button id="wallet-flip" style="display:none;" onclick="handleWalletFlip()">Connect Wallet</button>
+<button id="wallet-flip" style="display:none;">Connect Wallet</button>
 <script type="module" src="connect-wallet-app.js"></script>
-<script src="./wolf-machine-mobile-wallet-modal.js"></script>
-<script src="./connect-wallet-mobile.js"></script>
 <script>
-function handleWalletFlip() {
-  if (typeof window.showWolfWalletConnectModal === "function") {
-    window.showWolfWalletConnectModal();
+  if (/android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(navigator.userAgent)) {
+    document.write('<script src="./wolf-machine-mobile-wallet-modal.js"><\/script>');
+    document.write('<script src="./connect-wallet-mobile.js"><\/script>');
   }
-}
 </script>
 </body>
 </html>
-
