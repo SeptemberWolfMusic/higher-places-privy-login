@@ -10,17 +10,29 @@
     if (btn) {
       btn.style.display = "block";
       btn.onclick = null; // Remove previous (inline) handlers
-      btn.addEventListener("click", function(event) {
+      btn.addEventListener("click", async function(event) {
         event.preventDefault();
         if (isPhantom && window.solana && window.solana.connect) {
-          window.solana.connect();
+          try {
+            await window.solana.connect();
+          } catch {
+            alert("Phantom connection canceled.");
+          }
         } else if (isSolflare && window.solflare && window.solflare.connect) {
-          window.solflare.connect();
+          try {
+            await window.solflare.connect();
+          } catch {
+            alert("Solflare connection canceled.");
+          }
         } else if (isBackpack && window.backpack && window.backpack.connect) {
-          window.backpack.connect();
-        } if (typeof window.showWolfWalletConnectModal === "function") {
-        window.showWolfWalletConnectModal();
-       }
+          try {
+            await window.backpack.connect();
+          } catch {
+            alert("Backpack connection canceled.");
+          }
+        } else if (typeof window.showWolfWalletConnectModal === "function") {
+          window.showWolfWalletConnectModal();
+        }
       });
     }
 
