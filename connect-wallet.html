@@ -316,11 +316,17 @@
   }
 </style>
 
-<button id="wallet-flip" style="display:none;">Connect Wallet</button>
+<button id="wallet-flip" style="display:none;" onclick="handleWalletFlip()">Connect Wallet</button>
 <script type="module" src="connect-wallet-app.js"></script>
 <script src="./wolf-machine-mobile-wallet-modal.js"></script>
 <script src="./connect-wallet-mobile.js"></script>
+<script>
+function handleWalletFlip() {
+  if (typeof window.showWolfWalletConnectModal === "function") {
+    window.showWolfWalletConnectModal();
+  }
+}
+</script>
 </body>
 </html>
-
 
