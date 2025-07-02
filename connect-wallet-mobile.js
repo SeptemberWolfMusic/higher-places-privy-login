@@ -4,9 +4,15 @@
     if (btn) {
       btn.style.display = "block";
       btn.onclick = null;
-      btn.addEventListener("click", function(event) {
+      btn.addEventListener("click", async function(event) {
         event.preventDefault();
-        if (typeof window.showWolfWalletConnectModal === "function") {
+        if (window.solana && window.solana.isPhantom && window.solana.connect) {
+          try {
+            await window.solana.connect();
+          } catch {
+            alert("Phantom connection canceled.");
+          }
+        } else if (typeof window.showWolfWalletConnectModal === "function") {
           window.showWolfWalletConnectModal();
         }
       });
