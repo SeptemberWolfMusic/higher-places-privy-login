@@ -18,9 +18,9 @@
           window.solflare.connect();
         } else if (isBackpack && window.backpack && window.backpack.connect) {
           window.backpack.connect();
-        } else {
-          window.showWolfWalletConnectModal();
-        }
+        } if (typeof window.showWolfWalletConnectModal === "function") {
+        window.showWolfWalletConnectModal();
+       }
       });
     }
 
