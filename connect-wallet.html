@@ -319,12 +319,6 @@
 
 <script type="module" src="connect-wallet-app.js"></script>
 <script>
-  if (/android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(navigator.userAgent)) {
-    document.write('<script src="./wolf-machine-mobile-wallet-modal.js"><\/script>');
-    document.write('<script src="./connect-wallet-mobile.js"><\/script>');
-  }
-</script>
-<script>
 document.addEventListener("DOMContentLoaded", function() {
   const ua = navigator.userAgent.toLowerCase();
   const isMobile = /android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(ua);
