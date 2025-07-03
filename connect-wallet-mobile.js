@@ -1,13 +1,16 @@
 (function () {
   document.addEventListener("DOMContentLoaded", () => {
+    const ua = navigator.userAgent.toLowerCase();
+    // Detect if inside Phantom's in-app browser specifically
+    const isPhantomInApp = ua.includes("phantom") && window.navigator.userAgent.includes("Phantom");
     const btn = document.getElementById("wallet-flip-mobile");
     if (btn) {
       btn.style.display = "block";
       btn.onclick = null;
       btn.addEventListener("click", async function(event) {
         event.preventDefault();
-        // One-line direct connect for Phantom browser only
-        if (window.solana && window.solana.isPhantom && window.solana.connect) {
+        // Only connect directly if truly inside Phantom's own browser
+        if (isPhantomInApp && window.solana && window.solana.isPhantom && window.solana.connect) {
           await window.solana.connect();
         } else if (typeof window.showWolfWalletConnectModal === "function") {
           window.showWolfWalletConnectModal();
