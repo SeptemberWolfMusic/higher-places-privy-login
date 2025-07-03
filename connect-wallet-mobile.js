@@ -5,18 +5,18 @@
     const isPhantomInApp = ua.includes("phantom") && window.navigator.userAgent.includes("Phantom");
     const btn = document.getElementById("wallet-flip-mobile");
     if (btn) {
-      btn.style.display = "block";
-      btn.onclick = null;
-      btn.addEventListener("click", async function(event) {
-        event.preventDefault();
-        // Only connect directly if truly inside Phantom's own browser
-        if (isPhantomInApp && window.solana && window.solana.isPhantom && window.solana.connect) {
-          await window.solana.connect();
-        } else if (typeof window.showWolfWalletConnectModal === "function") {
-          window.showWolfWalletConnectModal();
-        }
-      });
+  // Do not set style.display here; main HTML JS controls visibility
+  btn.onclick = null;
+  btn.addEventListener("click", async function(event) {
+    event.preventDefault();
+    // Only connect directly if truly inside Phantom's own browser
+    if (isPhantomInApp && window.solana && window.solana.isPhantom && window.solana.connect) {
+      await window.solana.connect();
+    } else if (typeof window.showWolfWalletConnectModal === "function") {
+      window.showWolfWalletConnectModal();
     }
+  });
+}
 
     // Hide "Create Wallet" link in wallet browsers
     const isPhantom = typeof window.solana === "object" && window.solana.isPhantom === true;
