@@ -10,11 +10,11 @@
   btn.addEventListener("click", async function(event) {
     event.preventDefault();
     // Only connect directly if truly inside Phantom's own browser
-    if (isPhantomInApp && window.solana && window.solana.isPhantom && window.solana.connect) {
-      await window.solana.connect();
-    } else if (typeof window.showWolfWalletConnectModal === "function") {
-      window.showWolfWalletConnectModal();
-    }
+   if (window.solana && window.solana.isPhantom && window.solana.connect) {
+  await window.solana.connect();
+} else if (typeof window.showWolfWalletConnectModal === "function") {
+  window.showWolfWalletConnectModal();
+}
   });
 }
 
