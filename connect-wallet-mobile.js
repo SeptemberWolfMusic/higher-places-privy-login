@@ -11,10 +11,16 @@
         event.preventDefault();
         if (isPhantomInApp && window.solana && window.solana.isPhantom && window.solana.connect) {
           await window.solana.connect();
+          walletAddress = window.solana.publicKey.toString();
+          afterWalletConnect();
         } else if (isSolflareInApp && window.solflare && window.solflare.isSolflare && window.solflare.connect) {
           await window.solflare.connect();
+          walletAddress = window.solflare.publicKey.toString();
+          afterWalletConnect();
         } else if (isBackpackInApp && window.backpack && window.backpack.connect) {
           await window.backpack.connect();
+          walletAddress = window.backpack.publicKey.toString();
+          afterWalletConnect();
         } else if (typeof window.showWolfWalletConnectModal === "function") {
           window.showWolfWalletConnectModal();
         }
