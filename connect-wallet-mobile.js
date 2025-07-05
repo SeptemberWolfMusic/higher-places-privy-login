@@ -15,7 +15,12 @@
     }
     buyerName = name;
     buyerEmail = email;
+
     alert("✅ Email saved!");
+
+    // Enable purchase button immediately
+    const purchaseBtn = document.getElementById("solPurchaseBtn");
+    if (purchaseBtn) purchaseBtn.disabled = false;
 
     const video = document.getElementById("preview-video");
     if (video) {
@@ -71,5 +76,9 @@
       if (submitEmailDesktop) submitEmailDesktop.style.display = "block";
       if (submitEmailMobile) submitEmailMobile.style.display = "none";
     }
+
+    // Initially disable purchase button
+    const purchaseBtn = document.getElementById("solPurchaseBtn");
+    if (purchaseBtn) purchaseBtn.disabled = true;
   });
 })();
