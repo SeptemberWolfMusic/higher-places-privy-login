@@ -289,7 +289,7 @@ async function sendSol() {
     const transaction = new Transaction().add(transferInstruction, memoInstruction);
 
     // --- Refresh the blockhash right before sending ---
-    const { blockhash } = await connection.getRecentBlockhash();
+    const { blockhash } = await connection.getLatestBlockhash();
     transaction.recentBlockhash = blockhash;
     transaction.feePayer = senderPublicKey;
 
