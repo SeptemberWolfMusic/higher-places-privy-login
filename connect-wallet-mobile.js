@@ -20,7 +20,7 @@
 
     // Enable purchase button immediately
     const purchaseBtn = document.getElementById("solPurchaseBtn");
-    if (purchaseBtn) purchaseBtn.disabled = false;
+   if (isMobile && purchaseBtn) purchaseBtn.disabled = true;
 
     const video = document.getElementById("preview-video");
     if (video) {
