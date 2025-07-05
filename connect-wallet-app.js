@@ -108,8 +108,14 @@ async function handleWalletFlip() {
   //   return;
   // }
 
-  // Default: Show Wolf Wallet paste/connect modal
-  // showWolfWalletConnectModal();
+  // Desktop with no wallet: show alert instead of modal
+if (!isMobile() && !window.solana && !window.solflare && !window.walletConnectProvider) {
+  alert("No wallet detected. Open in your wallet enabled browser to continue.");
+  return;
+}
+
+// Default: Show Wolf Wallet paste/connect modal
+// showWolfWalletConnectModal();
 }
 window.handleWalletFlip = handleWalletFlip;
 function afterWalletConnect() {
