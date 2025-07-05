@@ -166,7 +166,7 @@ function submitEmailAndScroll() {
   const name = document.getElementById("name").value.trim();
   const email = document.getElementById("email").value.trim();
 
-  if (!email) {
+  if (!email || !email.includes("@") || !email.includes(".")) {
     alert("❌ Please enter a valid email.");
     return;
   }
