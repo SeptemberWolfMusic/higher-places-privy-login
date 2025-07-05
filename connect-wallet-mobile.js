@@ -1,4 +1,29 @@
 (function () {
+  // Email validation for mobile
+  window.submitEmailAndScrollMobile = function() {
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+
+    // Basic email validation
+    if (!email || !email.includes("@") || !email.includes(".")) {
+      alert("❌ Please enter a valid email.");
+      return;
+    }
+    if (!window.walletAddress) {
+      alert("❌ Please connect your wallet before submitting.");
+      return;
+    }
+    buyerName = name;
+    buyerEmail = email;
+    alert("✅ Email saved! You can now proceed to purchase.");
+
+    const video = document.getElementById("preview-video");
+    if (video) {
+      const scrollTarget = video.offsetTop + video.offsetHeight * 0.4;
+      window.scrollTo({ top: scrollTarget, behavior: "smooth" });
+    }
+  };
+
   document.addEventListener("DOMContentLoaded", () => {
     const ua = navigator.userAgent.toLowerCase();
     const isPhantomInApp = ua.includes("phantom") && window.navigator.userAgent.includes("Phantom");
