@@ -334,7 +334,7 @@ async function sendSol() {
 
   } catch (err) {
     console.error(err);
-    alert("❌ Payment or logging failed: " + err.message);
+    alert("Session timed out, please try again.");
   }
 }
 
