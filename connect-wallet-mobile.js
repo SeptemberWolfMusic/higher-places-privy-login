@@ -15,7 +15,7 @@
     }
     buyerName = name;
     buyerEmail = email;
-    alert("✅ Email saved! You can now proceed to purchase.");
+    alert("✅ Email saved!");
 
     const video = document.getElementById("preview-video");
     if (video) {
