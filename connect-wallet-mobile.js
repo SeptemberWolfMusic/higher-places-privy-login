@@ -1,30 +1,4 @@
 (function () {
-  // Email validation for mobile
-  window.submitEmailAndScrollMobile = function() {
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-
-    // Basic email validation
-    if (!email || !email.includes("@") || !email.includes(".")) {
-      alert("❌ Please enter a valid email.");
-      return;
-    }
-    if (!window.walletAddress) {
-      alert("❌ Please connect your wallet before submitting.");
-      return;
-    }
-    buyerName = name;
-    buyerEmail = email;
-
-    alert("✅ Email saved!");
-
-    const video = document.getElementById("preview-video");
-    if (video) {
-      const scrollTarget = video.offsetTop + video.offsetHeight * 0.4;
-      window.scrollTo({ top: scrollTarget, behavior: "smooth" });
-    }
-  };
-
   document.addEventListener("DOMContentLoaded", () => {
     const ua = navigator.userAgent.toLowerCase();
     const isMobile = /android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(ua);
@@ -59,18 +33,6 @@
     if (isPhantomInApp || isSolflareInApp || isBackpackInApp) {
       const createWalletLine = document.querySelector(".link-line");
       if (createWalletLine) createWalletLine.style.display = "none";
-    }
-
-    // Toggle email submit buttons by device
-    const submitEmailDesktop = document.getElementById("submit-email");
-    const submitEmailMobile = document.getElementById("submit-email-mobile");
-
-    if (isMobile) {
-      if (submitEmailDesktop) submitEmailDesktop.style.display = "none";
-      if (submitEmailMobile) submitEmailMobile.style.display = "block";
-    } else {
-      if (submitEmailDesktop) submitEmailDesktop.style.display = "block";
-      if (submitEmailMobile) submitEmailMobile.style.display = "none";
     }
   });
 })();
