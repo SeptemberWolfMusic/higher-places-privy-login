@@ -216,7 +216,7 @@ async function sendSol() {
     alert("❌ Please connect your wallet first.");
     return;
   }
-  if (!buyerEmail || !buyerEmail.includes("@") || !buyerEmail.includes(".")) {
+  if (!buyerEmail) {
     alert("❌ Please enter a valid email.");
     return;
   }
