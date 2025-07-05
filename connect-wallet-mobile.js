@@ -18,10 +18,6 @@
 
     alert("✅ Email saved!");
 
-    // Enable purchase button immediately
-    const purchaseBtn = document.getElementById("solPurchaseBtn");
-   if (isMobile && purchaseBtn) purchaseBtn.disabled = true;
-
     const video = document.getElementById("preview-video");
     if (video) {
       const scrollTarget = video.offsetTop + video.offsetHeight * 0.4;
@@ -76,9 +72,5 @@
       if (submitEmailDesktop) submitEmailDesktop.style.display = "block";
       if (submitEmailMobile) submitEmailMobile.style.display = "none";
     }
-
-    // Initially disable purchase button
-    const purchaseBtn = document.getElementById("solPurchaseBtn");
-    if (purchaseBtn) purchaseBtn.disabled = true;
   });
 })();
