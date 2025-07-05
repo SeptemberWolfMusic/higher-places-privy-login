@@ -26,9 +26,11 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     const ua = navigator.userAgent.toLowerCase();
+    const isMobile = /android|iphone|ipad|ipod|opera mini|iemobile|mobile/i.test(ua);
     const isPhantomInApp = ua.includes("phantom") && window.navigator.userAgent.includes("Phantom");
     const isSolflareInApp = ua.includes("solflare") && window.navigator.userAgent.includes("Solflare");
     const isBackpackInApp = ua.includes("backpack") && window.navigator.userAgent.includes("Backpack");
+
     const btn = document.getElementById("wallet-flip-mobile");
     if (btn) {
       btn.onclick = null;
@@ -56,6 +58,18 @@
     if (isPhantomInApp || isSolflareInApp || isBackpackInApp) {
       const createWalletLine = document.querySelector(".link-line");
       if (createWalletLine) createWalletLine.style.display = "none";
+    }
+
+    // Toggle email submit buttons by device
+    const submitEmailDesktop = document.getElementById("submit-email");
+    const submitEmailMobile = document.getElementById("submit-email-mobile");
+
+    if (isMobile) {
+      if (submitEmailDesktop) submitEmailDesktop.style.display = "none";
+      if (submitEmailMobile) submitEmailMobile.style.display = "block";
+    } else {
+      if (submitEmailDesktop) submitEmailDesktop.style.display = "block";
+      if (submitEmailMobile) submitEmailMobile.style.display = "none";
     }
   });
 })();
