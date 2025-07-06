@@ -30,7 +30,7 @@ if (!flow_id) {
     );
   localStorage.setItem('flow_id', flow_id);
 }
-alert(window.solana && window.solana.isPhantom);
+
 window.walletAddress = "";
 let buyerName = "";
 let buyerEmail = "";
