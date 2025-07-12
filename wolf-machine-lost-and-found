@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wolf Machine Lost & Found</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: #181818;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: 'Inter', Arial, sans-serif;
+    }
+    .lost-found-box {
+      background: #97948F;
+      padding: 2rem 2.5rem 1.5rem 2.5rem;
+      border-radius: 2rem;
+      box-shadow: 0 6px 32px rgba(0,0,0,0.17);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 340px;
+      max-width: 92vw;
+    }
+    .lf-title {
+      color: #FAF7F7;
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 1.2rem;
+      text-align: center;
+    }
+    .lf-label {
+      color: #FAF7F7;
+      font-size: 1rem;
+      margin-bottom: 0.25rem;
+      text-align: left;
+      width: 100%;
+    }
+    .lf-input {
+      width: 100%;
+      padding: 0.8rem;
+      border-radius: 1rem;
+      border: none;
+      margin-bottom: 1.1rem;
+      font-size: 1rem;
+      background: #FAF7F7;
+      color: #252525;
+      box-sizing: border-box;
+      outline: none;
+      font-family: inherit;
+      transition: box-shadow 0.16s;
+    }
+    .lf-input:focus {
+      box-shadow: 0 0 0 2px #47D6C7;
+    }
+    .lf-btn {
+      width: 100%;
+      background: #47D6C7;
+      color: #252525;
+      font-size: 1.15rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 1.3rem;
+      padding: 0.85rem 0;
+      margin-top: 0.2rem;
+      cursor: pointer;
+      transition: background 0.14s;
+      letter-spacing: 1px;
+    }
+    .lf-btn:hover {
+      background: #36bfb0;
+    }
+    .footer {
+      margin-top: 2.4rem;
+      font-size: 1.07rem;
+      color: #FAF7F7;
+      text-align: center;
+      font-weight: 400;
+      letter-spacing: 0.4px;
+      opacity: 0.93;
+      user-select: none;
+    }
+    .star {
+      color: #FFD700;
+      font-size: 1.15em;
+      margin: 0 0.23em;
+      vertical-align: middle;
+    }
+    @media (max-width: 400px) {
+      .lost-found-box {
+        min-width: 97vw;
+        padding: 1.1rem 0.5rem 1rem 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="lost-found-box">
+    <div class="lf-title">Lost &amp; Found</div>
+    <div class="lf-label">Enter your purchase wallet below</div>
+    <input class="lf-input" id="wallet" type="text" placeholder="Paste your wallet address" autocomplete="off">
+    <div class="lf-label" style="margin-top:0.35rem;">Enter a new email below</div>
+    <input class="lf-input" id="email" type="email" placeholder="your@email.com" autocomplete="off">
+    <button class="lf-btn" id="searchBtn">Search</button>
+  </div>
+  <div class="footer">
+    Powered by Wolf Machine &amp; SWM <span class="star">✦</span> Made with LOVE
+  </div>
+  <script>
+    document.getElementById('searchBtn').onclick = async function() {
+      const wallet = document.getElementById('wallet').value.trim();
+      const email = document.getElementById('email').value.trim();
+
+      if (!wallet || !email) {
+        alert('Please enter both your wallet and a new email.');
+        return;
+      }
+
+      // Replace with your live endpoint
+      const endpoint = 'https://xlbquzoalvwmtjadteft.functions.supabase.co/functions/v1/ses_bounce_resend_edge';
+
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ wallet, email })
+        });
+        const data = await res.json();
+
+        if (res.ok && data && data.found) {
+          alert('Your confirmation email is on the way!');
+        } else {
+          alert('No match found');
+        }
+      } catch (e) {
+        alert('Something went wrong. Please try again later.');
+      }
+    }
+  </script>
+</body>
+</html>
