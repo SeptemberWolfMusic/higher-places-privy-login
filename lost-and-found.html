@@ -18,26 +18,19 @@
       height: 100vh;
       font-family: 'Inter', Arial, sans-serif;
     }
-   .lost-found-box {
-  background: #97948F;
-  padding: 1.5rem 2.1rem 1.2rem 2.1rem;
-  border-radius: 1.2rem;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.15);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 270px;
-  max-width: 370px;
-  box-sizing: border-box;
-  margin: 0 auto;
-}
-@media (max-width: 500px) {
-  .lost-found-box {
-    min-width: 80vw;
-    max-width: 96vw;
-    padding: 1.1rem 0.7rem 1rem 0.7rem;
-  }
-}
+    .lost-found-box {
+      background: #97948F;
+      padding: 1.5rem 2.1rem 1.2rem 2.1rem;
+      border-radius: 1.2rem;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 310px;
+      max-width: 430px;
+      box-sizing: border-box;
+      margin: 0 auto;
+    }
     .lf-title {
       color: #CAF5FA;
       font-size: 1.45rem;
@@ -46,6 +39,7 @@
       margin-bottom: 1.2rem;
       text-align: center;
       user-select: none;
+      text-indent: -8px;
     }
     .lf-label {
       color: #FAF7F7;
@@ -112,7 +106,9 @@
     }
     @media (max-width: 500px) {
       .lost-found-box {
-        min-width: 92vw;
+        width: 96vw;
+        max-width: 380px;
+        min-width: unset;
         padding: 1.1rem 0.7rem 1rem 0.7rem;
       }
       .lf-title {
@@ -139,7 +135,7 @@
 </head>
 <body>
   <div class="lost-found-box">
-    <div class="lf-title">✨ Lost &amp; Found</div>
+    <div class="lf-title">✨Lost &amp; Found</div>
     <div class="lf-label">Enter your purchase wallet below</div>
     <input class="lf-input" id="wallet" type="text" placeholder="Paste your wallet address" autocomplete="off">
     <div class="lf-label" style="margin-top:0.18rem;">Enter a new email below</div>
