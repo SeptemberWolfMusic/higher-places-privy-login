@@ -50,7 +50,7 @@ function showWolfWalletConnectModal() {
         Connect your Solana wallet:
       </div>
       <div style="font-size:1.0rem; font-weight:400; color:#FAF7F7; margin-bottom:1rem; text-align:center;">
-        Tap to copy the link & paste it into your Wallet's URL browser to continue.
+        Tap the link & paste it into your Wallet's URL browser to continue.
       </div>
       <div id="copy-link" style="
         display:inline-block; 
