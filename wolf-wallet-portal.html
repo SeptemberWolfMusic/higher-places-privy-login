@@ -36,7 +36,7 @@
       font-size: 1.45rem;
       font-weight: 400;
       letter-spacing: 0.5px;
-      margin-bottom: 1.2rem;
+      margin-bottom: 0.4rem;
       text-align: center;
       user-select: none;
       text-indent: -14px;
@@ -147,7 +147,6 @@
       margin: 0 0.16em;
       vertical-align: middle;
     }
-    /* --- Mobile Styles --- */
     @media (max-width: 500px) {
       .load-wallet-box {
         max-width: 98vw;
@@ -185,15 +184,15 @@
 <body>
   <div class="load-wallet-box">
     <div class="lw-title" style="margin-bottom:0.4rem;">✨ Wolf Wallet Portal</div>
-   <div style="text-align:center; font-size:1.01rem; color:#CAF5FA; margin-bottom:2.1rem; font-weight:400;">
-    View Balance, NFTs, or Send SOL
-   </div>
-   <div style="text-align:center; color:#FAF7F7; font-size:0.98rem; margin-bottom:0.36rem;">
-  Paste or enter your 12-word seed phrase below
-</div>
-<div style="text-align:center; color:#3b2a24; font-size:0.86rem; opacity:0.82; margin-bottom:1.1rem;">
-  (Never use this on untrusted sites or devices)
-   </div>
+    <div style="text-align:center; font-size:1.01rem; color:#CAF5FA; margin-bottom:2.1rem; font-weight:400;">
+      View Balance, NFTs, or Send SOL
+    </div>
+    <div style="text-align:center; color:#FAF7F7; font-size:0.98rem; margin-bottom:0.36rem;">
+      Paste or enter your 12-word seed phrase below
+    </div>
+    <div style="text-align:center; color:#3b2a24; font-size:0.86rem; opacity:0.82; margin-bottom:1.1rem;">
+      (Never use this on untrusted sites or devices)
+    </div>
     <textarea class="lw-textarea" id="seed" placeholder="Enter all 12-words in order" autocomplete="off" spellcheck="false"></textarea>
     <button class="lw-btn" id="loadBtn">View Wallet</button>
     
@@ -208,13 +207,73 @@
     <div class="lw-label">Amount (SOL)</div>
     <input class="lw-input" id="amount" type="number" step="0.0001" min="0" placeholder="0.0">
     <button class="lw-btn" id="sendBtn" disabled>Send SOL</button>
-  <span id="addSolInfo" style="margin-left:10px; cursor:pointer; color:#3b2a24; font-size:0.90rem;" title="To add SOL, 'receive' from any exchange or wallet to your Wolf Wallet address.">Add SOL?</span>
+    <span id="addSolInfo" style="margin-left:10px; cursor:pointer; color:#3b2a24; font-size:0.90rem;" title="To add SOL, 'receive' from any exchange or wallet to your Wolf Wallet address.">Add SOL?</span>
   </div>
- <div class="footer">
-  <a href="https://www.septemberwolfmusic.com" target="_blank" style="color:#3b2a24; text-decoration:none;">
-    Powered by Wolf Machine &amp; SWM <span class="star">✦</span> Made with LOVE
-  </a>
-</div>
-<!-- Scripts for solana-web3.js, Helius, and send logic go here in next steps -->
+  <div class="footer">
+    <a href="https://www.septemberwolfmusic.com" target="_blank" style="color:#3b2a24; text-decoration:none;">
+      Powered by Wolf Machine &amp; SWM <span class="star">✦</span> Made with LOVE
+    </a>
+  </div>
+
+  <script src="solana-web3.iife.min.js"></script>
+  
+ <!-- PASTE TWEETNACL.JS HERE -->
+<!-- PASTE BIP39/WORDLIST HERE -->
+
+  <script>
+  // Your wallet portal logic goes here as sent previously
+  const DEVNET_URL = "https://api.devnet.solana.com";
+  document.getElementById('loadBtn').onclick = async function() {
+    const seedPhrase = document.getElementById('seed').value.trim().toLowerCase().replace(/\s+/g, ' ');
+    const balanceSection = document.getElementById('balanceSection');
+    const nftSection = document.getElementById('nftSection');
+    const sendBtn = document.getElementById('sendBtn');
+    balanceSection.style.display = 'none';
+    nftSection.style.display = 'none';
+    sendBtn.disabled = true;
+
+    const words = seedPhrase.split(' ');
+    if (words.length !== 12) {
+      balanceSection.style.display = 'block';
+      balanceSection.style.color = "#e06262";
+      balanceSection.textContent = "Please enter a valid 12-word seed phrase.";
+      return;
+    }
+
+    let keypair;
+    try {
+      const seed = await mnemonicToSeed(seedPhrase);
+      keypair = seedToKeypair(seed);
+    } catch (err) {
+      balanceSection.style.display = 'block';
+      balanceSection.style.color = "#e06262";
+      balanceSection.textContent = "Error deriving wallet. Double-check your seed phrase.";
+      return;
+    }
+
+    const pubkey = base58encode(keypair.publicKey);
+
+    balanceSection.style.display = 'block';
+    balanceSection.style.color = "#50c7c0";
+    balanceSection.innerHTML = `
+      <span style="color:#3b2a24; font-size:0.91rem;">Wallet Address:</span>
+      <span style="font-family:monospace; font-size:0.97rem; color:#50c7c0;">${pubkey}</span>
+      <br>
+      <span id="solBalance" style="color:#50c7c0; font-size:1.09rem;">Checking SOL balance...</span>
+    `;
+
+    try {
+      const conn = new solanaWeb3.Connection(DEVNET_URL);
+      const bal = await conn.getBalance(new solanaWeb3.PublicKey(pubkey));
+      document.getElementById('solBalance').textContent = `Balance: ◎${(bal / solanaWeb3.LAMPORTS_PER_SOL).toFixed(4)} SOL`;
+      sendBtn.disabled = false;
+    } catch (err) {
+      document.getElementById('solBalance').textContent = "Error fetching balance.";
+      sendBtn.disabled = true;
+      return;
+    }
+  };
+  </script>
+
 </body>
 </html>
