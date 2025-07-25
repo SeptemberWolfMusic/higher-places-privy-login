@@ -359,5 +359,61 @@ balanceSection.innerHTML = `
   }
 };
 </script>
+<script>
+// --- SEND SOL LOGIC ---
+document.getElementById('sendBtn').onclick = async function() {
+  const recipient = document.getElementById('recipient').value.trim();
+  const amount = parseFloat(document.getElementById('amount').value.trim());
+  const seedPhrase = document.getElementById('seed').value.trim().toLowerCase().replace(/\s+/g, ' ');
+
+  const balanceSection = document.getElementById('balanceSection');
+
+  // Simple checks
+  if (!recipient || isNaN(amount) || amount <= 0) {
+    balanceSection.style.display = 'block';
+    balanceSection.style.color = "#e06262";
+    balanceSection.textContent = "Unable to send. Please check the recipient wallet address and try again.";
+    return;
+  }
+
+  // Derive sender keypair again
+  let keypair;
+  try {
+    const seed = await mnemonicToSeed(seedPhrase);
+    keypair = seedToKeypair(seed);
+  } catch (err) {
+    balanceSection.style.display = 'block';
+    balanceSection.style.color = "#e06262";
+    balanceSection.textContent = "Unable to send. Please check the recipient wallet address and try again.";
+    return;
+  }
+
+  // Create transaction
+  try {
+    const conn = new solanaWeb3.Connection(DEVNET_URL);
+    const txn = new solanaWeb3.Transaction().add(
+      solanaWeb3.SystemProgram.transfer({
+        fromPubkey: new solanaWeb3.PublicKey(base58encode(keypair.publicKey)),
+        toPubkey: new solanaWeb3.PublicKey(recipient),
+        lamports: Math.floor(amount * solanaWeb3.LAMPORTS_PER_SOL)
+      })
+    );
+    const signature = await conn.sendTransaction(txn, [keypair]);
+    await conn.confirmTransaction(signature);
+
+    balanceSection.style.display = 'block';
+    balanceSection.style.color = "#4fdb8c";
+    balanceSection.textContent = "SOL Sent!";
+
+    // Optionally, update balance after sending
+    const bal = await conn.getBalance(new solanaWeb3.PublicKey(base58encode(keypair.publicKey)));
+    document.getElementById('solBalance').textContent = `Balance: ◎${(bal / solanaWeb3.LAMPORTS_PER_SOL).toFixed(4)} SOL`;
+  } catch (err) {
+    balanceSection.style.display = 'block';
+    balanceSection.style.color = "#e06262";
+    balanceSection.textContent = "Unable to send. Please check the recipient wallet address and try again.";
+  }
+};
+</script>
 </body>
 </html>
