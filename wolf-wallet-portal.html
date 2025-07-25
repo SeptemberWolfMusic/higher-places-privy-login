@@ -220,7 +220,7 @@
     <div class="lw-label">Amount (SOL)</div>
     <input class="lw-input" id="amount" type="number" step="0.0001" min="0" placeholder="0.0">
     <button class="lw-btn" id="sendBtn" disabled>Send SOL</button>
-    <div id="sendMsg" style="margin-top:0.9rem; font-size:0.95rem; min-height:1.2em;"></div>
+    <div id="sendMsg" style="margin-top:0.9rem; font-size:0.88rem; min-height:1.2em;"></div>
 
     <!-- Footer moved inside the box -->
     <div class="footer">
@@ -371,9 +371,9 @@ document.getElementById('sendBtn').onclick = async function() {
 
   // Simple checks
   if (!recipient || isNaN(amount) || amount <= 0) {
-    balanceSection.style.display = 'block';
-    balanceSection.style.color = "#e06262";
-    balanceSection.textContent = "Unable to send. Please check the recipient wallet address and try again.";
+    sendMsg.style.display = 'block';
+    sendMsg.style.color = "#e06262";
+    sendMsg.textContent = "Unable to send. Please check the recipient wallet address and try again.";
     return;
   }
 
@@ -383,9 +383,9 @@ document.getElementById('sendBtn').onclick = async function() {
     const seed = await mnemonicToSeed(seedPhrase);
     keypair = seedToKeypair(seed);
   } catch (err) {
-    balanceSection.style.display = 'block';
-    balanceSection.style.color = "#e06262";
-    balanceSection.textContent = "Unable to send. Please check the recipient wallet address and try again.";
+    sendMsg.style.display = 'block';
+    sendMsg.style.color = "#e06262";
+    sendMsg.textContent = "Unable to send. Please check the recipient wallet address and try again.";
     return;
   }
 
@@ -402,17 +402,17 @@ document.getElementById('sendBtn').onclick = async function() {
     const signature = await conn.sendTransaction(txn, [keypair]);
     await conn.confirmTransaction(signature);
 
-    balanceSection.style.display = 'block';
-    balanceSection.style.color = "#4fdb8c";
-    balanceSection.textContent = "SOL Sent!";
+    sendMsg.style.display = 'block';
+    sendMsg.style.color = "#4fdb8c";
+    sendMsg.textContent = "SOL Sent!";
 
     // Optionally, update balance after sending
     const bal = await conn.getBalance(new solanaWeb3.PublicKey(base58encode(keypair.publicKey)));
     document.getElementById('solBalance').textContent = `Balance: ◎${(bal / solanaWeb3.LAMPORTS_PER_SOL).toFixed(4)} SOL`;
   } catch (err) {
-    balanceSection.style.display = 'block';
-    balanceSection.style.color = "#e06262";
-    balanceSection.textContent = "Unable to send. Please check the recipient wallet address and try again.";
+    sendMsg.style.display = 'block';
+    sendMsg.style.color = "#e06262";
+    sendMsg.textContent = "Unable to send. Please check the recipient wallet address and try again.";
   }
 };
 </script>
