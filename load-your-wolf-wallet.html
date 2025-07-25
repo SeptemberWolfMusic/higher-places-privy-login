@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wolf Machine ✨ Load Your Wolf Wallet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: #FAF7F7;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: 'Inter', Arial, sans-serif;
+    }
+    .load-wallet-box {
+      background: #97948F;
+      padding: 1.5rem 2.1rem 2.2rem 2.1rem;
+      border-radius: 1.2rem;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 420px;
+      max-width: 500px;
+      box-sizing: border-box;
+      margin: 0 auto;
+    }
+    .lw-title {
+      color: #CAF5FA;
+      font-size: 1.45rem;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+      margin-bottom: 1.2rem;
+      text-align: center;
+      user-select: none;
+      text-indent: -14px;
+    }
+    .lw-label {
+      color: #FAF7F7;
+      font-size: 0.9rem;
+      margin-bottom: 0.18rem;
+      text-align: left;
+      width: 100%;
+      font-weight: 400;
+    }
+    .lw-input, .lw-textarea {
+      width: 100%;
+      padding: 0.68rem 0.9rem;
+      border-radius: 0.82rem;
+      border: none;
+      margin-bottom: 1.05rem;
+      font-size: 0.7rem;
+      background: #FAF7F7;
+      color: #3b2a24;
+      box-sizing: border-box;
+      outline: none;
+      font-family: inherit;
+      transition: box-shadow 0.13s;
+    }
+    .lw-textarea {
+      min-height: 2.5rem;
+      max-height: 5.5rem;
+      resize: vertical;
+    }
+    .lw-input:focus, .lw-textarea:focus {
+      box-shadow: 0 0 0 2px #50c7c0;
+    }
+    .lw-btn {
+      background: #50c7c0;
+      color: #3b2a24;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 1rem;
+      padding: 0.53rem 1.4rem;
+      margin-top: 0.08rem;
+      cursor: pointer;
+      letter-spacing: 0.8px;
+      transition: background 0.13s, color 0.13s;
+      width: auto;
+      min-width: 110px;
+      align-self: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .lw-btn:hover {
+      background: #3b2a24;
+      color: #50c7c0;
+      border: 1.5px solid #50c7c0;
+    }
+    .balance-section {
+      width: 100%;
+      color: #50c7c0;
+      font-size: 1.15rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+      text-align: center;
+      display: none;
+    }
+    .nft-section {
+      width: 100%;
+      margin-top: 0.6rem;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+    }
+    .nft-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.65rem;
+    }
+    .nft-card {
+      background: #FAF7F7;
+      color: #3b2a24;
+      border-radius: 0.8rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      padding: 0.3rem 0.7rem 0.7rem 0.7rem;
+      font-size: 0.85rem;
+      text-align: center;
+      width: 125px;
+      word-break: break-word;
+    }
+    .nft-card img {
+      max-width: 90px;
+      border-radius: 0.5rem;
+      margin-bottom: 0.24rem;
+    }
+    .footer {
+      margin-top: 1.4rem;
+      font-size: 0.90rem;
+      color: #3b2a24;
+      text-align: center;
+      font-weight: 400;
+      letter-spacing: 0.18px;
+      opacity: 0.85;
+      user-select: none;
+    }
+    .star {
+      color: #FFD700;
+      font-size: 1.1em;
+      margin: 0 0.16em;
+      vertical-align: middle;
+    }
+    /* --- Mobile Styles --- */
+    @media (max-width: 500px) {
+      .load-wallet-box {
+        max-width: 98vw;
+        min-width: 320px;
+        padding: 1.1rem 0.7rem 1.5rem 0.7rem;
+      }
+      .lw-title {
+        font-size: 1.03rem;
+      }
+      .lw-label {
+        text-align: left;
+        padding-left: 36px;
+        font-size: 0.80rem;
+      }
+      .lw-input, .lw-textarea {
+        font-size: 0.60rem;
+        padding: 0.42rem 0.7rem;
+        width: 95%;
+        max-width: 260px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .lw-btn {
+        font-size: 0.93rem;
+        padding: 0.35rem 1rem;
+        min-width: 87px;
+      }
+      .footer {
+        font-size: 0.78rem;
+        margin-top: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="load-wallet-box">
+    <div class="lw-title">✨ Load Your Wolf Wallet</div>
+    <div class="lw-label">Paste or enter your 12-word seed phrase below <span style="color:#FFD700;">(Never share this on untrusted sites)</span></div>
+    <textarea class="lw-textarea" id="seed" placeholder="Enter 12-word seed phrase" autocomplete="off" spellcheck="false"></textarea>
+    <button class="lw-btn" id="loadBtn">Load Wallet</button>
+    
+    <div class="balance-section" id="balanceSection"></div>
+    <div class="nft-section" id="nftSection">
+      <div class="lw-label" style="color:#CAF5FA;">Your NFTs</div>
+      <div class="nft-list" id="nftList"></div>
+    </div>
+    
+    <div class="lw-label" style="margin-top:1.2rem;">Recipient Wallet Address</div>
+    <input class="lw-input" id="recipient" type="text" placeholder="Paste destination address" autocomplete="off">
+    <div class="lw-label">Amount (SOL)</div>
+    <input class="lw-input" id="amount" type="number" step="0.0001" min="0" placeholder="0.0">
+    <button class="lw-btn" id="sendBtn" disabled>Send</button>
+  </div>
+ <div class="footer">
+  <a href="https://www.septemberwolfmusic.com" target="_blank" style="color:#3b2a24; text-decoration:none;">
+    Powered by Wolf Machine &amp; SWM <span class="star">✦</span> Made with LOVE
+  </a>
+</div>
+<!-- Scripts for solana-web3.js, Helius, and send logic go here in next steps -->
+</body>
+</html>
