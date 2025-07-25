@@ -225,62 +225,109 @@ const WORDLIST = [
 ];
 </script> 
 
-  <script>
-  // Your wallet portal logic goes here as sent previously
-  const DEVNET_URL = "https://api.devnet.solana.com";
-  document.getElementById('loadBtn').onclick = async function() {
-    const seedPhrase = document.getElementById('seed').value.trim().toLowerCase().replace(/\s+/g, ' ');
-    const balanceSection = document.getElementById('balanceSection');
-    const nftSection = document.getElementById('nftSection');
-    const sendBtn = document.getElementById('sendBtn');
-    balanceSection.style.display = 'none';
-    nftSection.style.display = 'none';
-    sendBtn.disabled = true;
+ <script>
+/* --- WALLET HELPERS: REQUIRED FOR SEED/KEYPAIR/ADDRESS DERIVATION --- */
 
-    const words = seedPhrase.split(' ');
-    if (words.length !== 12) {
-      balanceSection.style.display = 'block';
-      balanceSection.style.color = "#e06262";
-      balanceSection.textContent = "Please enter a valid 12-word seed phrase.";
-      return;
+// Helper: PBKDF2-HMAC-SHA512 (simple, using SubtleCrypto)
+async function mnemonicToSeed(mnemonic, password = '') {
+  let enc = new TextEncoder();
+  let salt = 'mnemonic' + password;
+  let key = await window.crypto.subtle.importKey(
+    'raw', enc.encode(mnemonic), {name: 'PBKDF2'}, false, ['deriveBits']
+  );
+  let derived = await window.crypto.subtle.deriveBits({
+    name: 'PBKDF2',
+    salt: enc.encode(salt),
+    iterations: 2048,
+    hash: 'SHA-512'
+  }, key, 512);
+  return new Uint8Array(derived);
+}
+
+// Helper: Derive Solana ed25519 keypair from seed (first 32 bytes)
+function seedToKeypair(seed) {
+  let seed32 = seed.slice(0, 32);
+  return nacl.sign.keyPair.fromSeed(seed32);
+}
+
+// Base58 encode for Solana addresses
+const ALPHABET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+function base58encode(buffer) {
+  let x = Array.from(buffer);
+  let answer = [];
+  while (x.length) {
+    let num = 0;
+    let newx = [];
+    for (let b of x) {
+      num = num * 256 + b;
     }
-
-    let keypair;
-    try {
-      const seed = await mnemonicToSeed(seedPhrase);
-      keypair = seedToKeypair(seed);
-    } catch (err) {
-     balanceSection.style.display = 'block';
-     balanceSection.style.color = "#e06262";
-     balanceSection.style.fontSize = "0.90rem";
-     balanceSection.style.marginTop = "0.8rem";
-     balanceSection.textContent = "Could not load wallet. Please check your 12 words and try again.";
-      return;
+    while (num) {
+      answer.push(ALPHABET[num % 58]);
+      num = Math.floor(num / 58);
     }
+    if (answer.length === 0) answer.push(ALPHABET[0]);
+    return answer.reverse().join('');
+  }
+  return '';
+}
 
-    const pubkey = base58encode(keypair.publicKey);
+/* --- WALLET PORTAL LOGIC STARTS HERE --- */
 
+const DEVNET_URL = "https://api.devnet.solana.com";
+document.getElementById('loadBtn').onclick = async function() {
+  const seedPhrase = document.getElementById('seed').value.trim().toLowerCase().replace(/\s+/g, ' ');
+  const balanceSection = document.getElementById('balanceSection');
+  const nftSection = document.getElementById('nftSection');
+  const sendBtn = document.getElementById('sendBtn');
+  balanceSection.style.display = 'none';
+  nftSection.style.display = 'none';
+  sendBtn.disabled = true;
+
+  const words = seedPhrase.split(' ');
+  if (words.length !== 12) {
     balanceSection.style.display = 'block';
-    balanceSection.style.color = "#50c7c0";
-    balanceSection.innerHTML = `
-      <span style="color:#3b2a24; font-size:0.91rem;">Wallet Address:</span>
-      <span style="font-family:monospace; font-size:0.97rem; color:#50c7c0;">${pubkey}</span>
-      <br>
-      <span id="solBalance" style="color:#50c7c0; font-size:1.09rem;">Checking SOL balance...</span>
-    `;
+    balanceSection.style.color = "#e06262";
+    balanceSection.style.fontSize = "0.90rem";
+    balanceSection.style.marginTop = "0.8rem";
+    balanceSection.textContent = "Please enter a valid 12-word seed phrase.";
+    return;
+  }
 
-    try {
-      const conn = new solanaWeb3.Connection(DEVNET_URL);
-      const bal = await conn.getBalance(new solanaWeb3.PublicKey(pubkey));
-      document.getElementById('solBalance').textContent = `Balance: ◎${(bal / solanaWeb3.LAMPORTS_PER_SOL).toFixed(4)} SOL`;
-      sendBtn.disabled = false;
-    } catch (err) {
-      document.getElementById('solBalance').textContent = "Error fetching balance.";
-      sendBtn.disabled = true;
-      return;
-    }
-  };
-  </script>
+  let keypair;
+  try {
+    const seed = await mnemonicToSeed(seedPhrase);
+    keypair = seedToKeypair(seed);
+  } catch (err) {
+    balanceSection.style.display = 'block';
+    balanceSection.style.color = "#e06262";
+    balanceSection.style.fontSize = "0.90rem";
+    balanceSection.style.marginTop = "0.8rem";
+    balanceSection.textContent = "Could not load wallet. Please check your 12 words and try again.";
+    return;
+  }
 
+  const pubkey = base58encode(keypair.publicKey);
+
+  balanceSection.style.display = 'block';
+  balanceSection.style.color = "#50c7c0";
+  balanceSection.innerHTML = `
+    <span style="color:#3b2a24; font-size:0.91rem;">Wallet Address:</span>
+    <span style="font-family:monospace; font-size:0.97rem; color:#50c7c0;">${pubkey}</span>
+    <br>
+    <span id="solBalance" style="color:#50c7c0; font-size:1.09rem;">Checking SOL balance...</span>
+  `;
+
+  try {
+    const conn = new solanaWeb3.Connection(DEVNET_URL);
+    const bal = await conn.getBalance(new solanaWeb3.PublicKey(pubkey));
+    document.getElementById('solBalance').textContent = `Balance: ◎${(bal / solanaWeb3.LAMPORTS_PER_SOL).toFixed(4)} SOL`;
+    sendBtn.disabled = false;
+  } catch (err) {
+    document.getElementById('solBalance').textContent = "Error fetching balance.";
+    sendBtn.disabled = true;
+    return;
+  }
+};
+</script>
 </body>
 </html>
