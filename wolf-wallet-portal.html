@@ -317,44 +317,43 @@ document.getElementById('loadBtn').onclick = async function() {
   }
 
   try {
-  const seed = await mnemonicToSeed(seedPhrase);
-  keypair = nacl.sign.keyPair.fromSeed(seed.slice(0, 32));
-  console.log('keypair:', keypair); 
-  solanaWeb3.Keypair.fromSecretKey(new Uint8Array(keypair.secretKey))
-  console.log("Loaded keypair pubkey:", base58encode(keypair.publicKey));
-  console.log("Loaded solanaKeypair pubkey:", solanaKeypair.publicKey.toBase58());
-} catch (err) {
-  balanceSection.style.display = 'block';
-  balanceSection.style.color = "#e06262";
-  balanceSection.style.fontSize = "0.90rem";
-  balanceSection.style.marginTop = "0.8rem";
-  balanceSection.textContent = "Could not load wallet. Please check your 12 words and try again.";
-  return;
-}
+    const seed = await mnemonicToSeed(seedPhrase);
+    keypair = nacl.sign.keyPair.fromSeed(seed.slice(0, 32));
+    solanaKeypair = solanaWeb3.Keypair.fromSecretKey(new Uint8Array(keypair.secretKey));
+    console.log("Loaded keypair pubkey:", base58encode(keypair.publicKey));
+    console.log("Loaded solanaKeypair pubkey:", solanaKeypair.publicKey.toBase58());
+  } catch (err) {
+    balanceSection.style.display = 'block';
+    balanceSection.style.color = "#e06262";
+    balanceSection.style.fontSize = "0.90rem";
+    balanceSection.style.marginTop = "0.8rem";
+    balanceSection.textContent = "Could not load wallet. Please check your 12 words and try again.";
+    return;
+  }
   const pubkey = base58encode(keypair.publicKey);
 
   balanceSection.style.display = 'block';
-balanceSection.style.color = "#50c7c0";
-balanceSection.innerHTML = `
-  <div style="
-    background:#3b2a24;
-    border-radius:0.7rem;
-    box-shadow:0 1px 3px rgba(0,0,0,0.09);
-    padding:0.95rem 0.6rem 0.85rem 0.6rem;
-    margin:0.45rem 0 0.2rem 0;
-    text-align:center;
-    max-width:100vw;
-    overflow-x:auto;
-    ">
-    <span style="color:#CAF5FA; font-size:0.91rem; display:block; margin-bottom:0.37rem;">Wallet Address:</span>
-    <span style="font-family:monospace; font-size:0.88rem; color:#CAF5FA; word-break:break-all; display:block; max-width:93vw; margin:0 auto 0.31rem auto;">
-      ${pubkey}
-    </span>
-    <span id="solBalance" style="color:#CAF5FA; font-size:0.88rem; display:block; margin-top:0.15rem;">
-      Checking SOL balance...
-    </span>
-  </div>
-`;
+  balanceSection.style.color = "#50c7c0";
+  balanceSection.innerHTML = `
+    <div style="
+      background:#3b2a24;
+      border-radius:0.7rem;
+      box-shadow:0 1px 3px rgba(0,0,0,0.09);
+      padding:0.95rem 0.6rem 0.85rem 0.6rem;
+      margin:0.45rem 0 0.2rem 0;
+      text-align:center;
+      max-width:100vw;
+      overflow-x:auto;
+      ">
+      <span style="color:#CAF5FA; font-size:0.91rem; display:block; margin-bottom:0.37rem;">Wallet Address:</span>
+      <span style="font-family:monospace; font-size:0.88rem; color:#CAF5FA; word-break:break-all; display:block; max-width:93vw; margin:0 auto 0.31rem auto;">
+        ${pubkey}
+      </span>
+      <span id="solBalance" style="color:#CAF5FA; font-size:0.88rem; display:block; margin-top:0.15rem;">
+        Checking SOL balance...
+      </span>
+    </div>
+  `;
 
   try {
     const conn = new solanaWeb3.Connection(DEVNET_URL);
