@@ -414,6 +414,7 @@ document.getElementById('sendBtn').onclick = async function() {
     const bal = await conn.getBalance(new solanaWeb3.PublicKey(base58encode(keypair.publicKey)));
     document.getElementById('solBalance').textContent = `Balance: ◎${(bal / solanaWeb3.LAMPORTS_PER_SOL).toFixed(4)} SOL`;
   } catch (err) {
+    console.error('Send SOL error:', err);
     sendMsg.style.display = 'block';
     sendMsg.style.color = "#e06262";
     sendMsg.textContent = "Unable to send. Please check the recipient wallet address and try again.";
