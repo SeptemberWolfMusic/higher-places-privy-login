@@ -387,18 +387,18 @@ document.getElementById('sendBtn').onclick = async function() {
   }
 
   // Derive sender keypair again
-  let keypair, solanaKeypair;
+let keypair, solanaKeypair;
 try {
   const seed = await mnemonicToSeed(seedPhrase);
   keypair = seedToKeypair(seed);
-  solanaKeypair = naclToSolanaKeypair(keypair);
+  solanaKeypair = solanaWeb3.Keypair.fromSecretKey(new Uint8Array(keypair.secretKey));
 } catch (err) {
-    console.error('Send SOL error:', err);
-    sendMsg.style.display = 'block';
-    sendMsg.style.color = "#e06262";
-    sendMsg.textContent = "Unable to send. Please check the recipient wallet address and try again.";
-    return;
-  }
+  console.error('Send SOL error:', err);
+  sendMsg.style.display = 'block';
+  sendMsg.style.color = "#e06262";
+  sendMsg.textContent = "Unable to send. Please check the recipient wallet address and try again.";
+  return;
+}
 
   // Create transaction
   try {
