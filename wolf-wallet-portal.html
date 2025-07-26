@@ -410,6 +410,7 @@ try {
         lamports: Math.floor(amount * solanaWeb3.LAMPORTS_PER_SOL)
       })
     );
+    console.log("Signer pubkey:", solanaKeypair.publicKey.toBase58());
     const signature = await conn.sendTransaction(txn, [solanaKeypair]);
     await conn.confirmTransaction(signature);
 
