@@ -299,7 +299,6 @@ let solanaKeypair = null;
 
 const DEVNET_URL = "https://api.devnet.solana.com";
 document.getElementById('loadBtn').onclick = async function() {
-  console.log("Current solanaKeypair pubkey at load:", solanaKeypair?.publicKey?.toBase58());
   seedPhrase = document.getElementById('seed').value.trim().toLowerCase().replace(/\s+/g, ' ');
   const balanceSection = document.getElementById('balanceSection');
   const nftSection = document.getElementById('nftSection');
@@ -322,6 +321,7 @@ document.getElementById('loadBtn').onclick = async function() {
     const seed = await mnemonicToSeed(seedPhrase);
     keypair = nacl.sign.keyPair.fromSeed(seed.slice(0, 32));
     solanaKeypair = solanaWeb3.Keypair.fromSecretKey(new Uint8Array(keypair.secretKey));
+    console.log("Current solanaKeypair pubkey at load:", solanaKeypair.publicKey.toBase58());
     console.log("keypair.publicKey bytes:", Array.from(keypair.publicKey));
     console.log("solanaKeypair.publicKey bytes:", Array.from(solanaKeypair.publicKey.toBytes()));   
     console.log("Loaded solanaKeypair pubkey:", solanaKeypair.publicKey.toBase58());
