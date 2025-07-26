@@ -405,7 +405,7 @@ try {
     const conn = new solanaWeb3.Connection(DEVNET_URL);
     const txn = new solanaWeb3.Transaction().add(
       solanaWeb3.SystemProgram.transfer({
-        fromPubkey: new solanaWeb3.PublicKey(base58encode(keypair.publicKey)),
+        fromPubkey: solanaKeypair.publicKey,
         toPubkey: new solanaWeb3.PublicKey(recipient),
         lamports: Math.floor(amount * solanaWeb3.LAMPORTS_PER_SOL)
       })
