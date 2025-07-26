@@ -375,6 +375,12 @@ document.getElementById('sendBtn').onclick = async function() {
   const amount = parseFloat(document.getElementById('amount').value.trim());
   const sendMsg = document.getElementById('sendMsg');
 
+  // RE-DERIVE keypair inside send function to avoid stale/global mismatch
+const seedPhrase = document.getElementById('seed').value.trim().toLowerCase().replace(/\s+/g, ' ');
+const seed = await mnemonicToSeed(seedPhrase);
+const keypair = nacl.sign.keyPair.fromSeed(seed.slice(0, 32));
+const solanaKeypair = solanaWeb3.Keypair.fromSecretKey(new Uint8Array(keypair.secretKey));
+  
   // Simple checks
   if (!recipient || isNaN(amount) || amount <= 0) {
     sendMsg.style.display = 'block';
