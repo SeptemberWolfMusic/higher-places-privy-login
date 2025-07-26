@@ -318,7 +318,6 @@ document.getElementById('loadBtn').onclick = async function() {
     const seed = await mnemonicToSeed(seedPhrase);
     keypair = seedToKeypair(seed);
   } catch (err) {
-    console.error('Send SOL error:', err);
     balanceSection.style.display = 'block';
     balanceSection.style.color = "#e06262";
     balanceSection.style.fontSize = "0.90rem";
@@ -387,6 +386,7 @@ document.getElementById('sendBtn').onclick = async function() {
     const seed = await mnemonicToSeed(seedPhrase);
     keypair = seedToKeypair(seed);
   } catch (err) {
+    console.error('Send SOL error:', err);
     sendMsg.style.display = 'block';
     sendMsg.style.color = "#e06262";
     sendMsg.textContent = "Unable to send. Please check the recipient wallet address and try again.";
