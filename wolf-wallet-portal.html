@@ -418,7 +418,7 @@ try {
     sendMsg.textContent = "SOL Sent!";
 
     // Optionally, update balance after sending
-    const bal = await conn.getBalance(new solanaWeb3.PublicKey(base58encode(keypair.publicKey)));
+    const bal = await conn.getBalance(solanaKeypair.publicKey);
     document.getElementById('solBalance').textContent = `Balance: ◎${(bal / solanaWeb3.LAMPORTS_PER_SOL).toFixed(4)} SOL`;
   } catch (err) {
     console.error('Send SOL error:', err);
