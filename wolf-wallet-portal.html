@@ -291,6 +291,7 @@ function base58encode(buffer) {
   }
   return '';
 }
+let seedPhrase = "";
 let keypair = null;
 let solanaKeypair = null;
 
@@ -298,7 +299,7 @@ let solanaKeypair = null;
 
 const DEVNET_URL = "https://api.devnet.solana.com";
 document.getElementById('loadBtn').onclick = async function() {
-  const seedPhrase = document.getElementById('seed').value.trim().toLowerCase().replace(/\s+/g, ' ');
+  seedPhrase = document.getElementById('seed').value.trim().toLowerCase().replace(/\s+/g, ' ');
   const balanceSection = document.getElementById('balanceSection');
   const nftSection = document.getElementById('nftSection');
   const sendBtn = document.getElementById('sendBtn');
@@ -373,12 +374,6 @@ document.getElementById('sendBtn').onclick = async function() {
   const recipient = document.getElementById('recipient').value.trim();
   const amount = parseFloat(document.getElementById('amount').value.trim());
   const sendMsg = document.getElementById('sendMsg');
-
-  // RE-DERIVE keypair inside send function to avoid stale/global mismatch
-const seedPhrase = document.getElementById('seed').value.trim().toLowerCase().replace(/\s+/g, ' ');
-const seed = await mnemonicToSeed(seedPhrase);
-const keypair = nacl.sign.keyPair.fromSeed(seed.slice(0, 32));
-const solanaKeypair = solanaWeb3.Keypair.fromSecretKey(new Uint8Array(keypair.secretKey));
   
   // Simple checks
   if (!recipient || isNaN(amount) || amount <= 0) {
