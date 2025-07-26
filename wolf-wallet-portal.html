@@ -318,19 +318,18 @@ document.getElementById('loadBtn').onclick = async function() {
 
   try {
   const seed = await mnemonicToSeed(seedPhrase);
-  keypair = seedToKeypair(seed);
-  solanaKeypair = solanaWeb3.Keypair.fromSecretKey(new Uint8Array(keypair.secretKey));
+  const keypair = nacl.sign.keyPair.fromSeed(seed.slice(0, 32));
+  const solanaKeypair = solanaWeb3.Keypair.fromSecretKey(new Uint8Array(keypair.secretKey));
   console.log("Loaded keypair pubkey:", base58encode(keypair.publicKey));
   console.log("Loaded solanaKeypair pubkey:", solanaKeypair.publicKey.toBase58());
-  } catch (err) {
-    balanceSection.style.display = 'block';
-    balanceSection.style.color = "#e06262";
-    balanceSection.style.fontSize = "0.90rem";
-    balanceSection.style.marginTop = "0.8rem";
-    balanceSection.textContent = "Could not load wallet. Please check your 12 words and try again.";
-    return;
-  }
-
+} catch (err) {
+  balanceSection.style.display = 'block';
+  balanceSection.style.color = "#e06262";
+  balanceSection.style.fontSize = "0.90rem";
+  balanceSection.style.marginTop = "0.8rem";
+  balanceSection.textContent = "Could not load wallet. Please check your 12 words and try again.";
+  return;
+}
   const pubkey = base58encode(keypair.publicKey);
 
   balanceSection.style.display = 'block';
