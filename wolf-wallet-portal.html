@@ -299,6 +299,7 @@ let solanaKeypair = null;
 
 const DEVNET_URL = "https://api.devnet.solana.com";
 document.getElementById('loadBtn').onclick = async function() {
+  console.log("Current solanaKeypair pubkey at load:", solanaKeypair?.publicKey?.toBase58());
   seedPhrase = document.getElementById('seed').value.trim().toLowerCase().replace(/\s+/g, ' ');
   const balanceSection = document.getElementById('balanceSection');
   const nftSection = document.getElementById('nftSection');
@@ -372,6 +373,7 @@ document.getElementById('loadBtn').onclick = async function() {
 <script>
 // --- SEND SOL LOGIC ---
 document.getElementById('sendBtn').onclick = async function() {
+  console.log("Current solanaKeypair pubkey at send:", solanaKeypair?.publicKey?.toBase58());
   const recipient = document.getElementById('recipient').value.trim();
   const amount = parseFloat(document.getElementById('amount').value.trim());
   const sendMsg = document.getElementById('sendMsg');
