@@ -373,8 +373,6 @@ balanceSection.innerHTML = `
 document.getElementById('sendBtn').onclick = async function() {
   const recipient = document.getElementById('recipient').value.trim();
   const amount = parseFloat(document.getElementById('amount').value.trim());
-  const seedPhrase = document.getElementById('seed').value.trim().toLowerCase().replace(/\s+/g, ' ');
-
   const sendMsg = document.getElementById('sendMsg');
 
   // Simple checks
