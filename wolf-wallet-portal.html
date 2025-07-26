@@ -319,6 +319,7 @@ document.getElementById('loadBtn').onclick = async function() {
   try {
   const seed = await mnemonicToSeed(seedPhrase);
   const keypair = nacl.sign.keyPair.fromSeed(seed.slice(0, 32));
+  console.log('keypair:', keypair); 
   const solanaKeypair = solanaWeb3.Keypair.fromSecretKey(new Uint8Array(keypair.secretKey));
   console.log("Loaded keypair pubkey:", base58encode(keypair.publicKey));
   console.log("Loaded solanaKeypair pubkey:", solanaKeypair.publicKey.toBase58());
