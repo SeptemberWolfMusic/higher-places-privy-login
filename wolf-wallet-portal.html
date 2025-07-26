@@ -318,6 +318,7 @@ document.getElementById('loadBtn').onclick = async function() {
     const seed = await mnemonicToSeed(seedPhrase);
     keypair = seedToKeypair(seed);
   } catch (err) {
+    console.error('Send SOL error:', err);
     balanceSection.style.display = 'block';
     balanceSection.style.color = "#e06262";
     balanceSection.style.fontSize = "0.90rem";
