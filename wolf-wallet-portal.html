@@ -296,6 +296,8 @@ function base58encode(buffer) {
   }
   return '';
 }
+let keypair = null;
+let solanaKeypair = null;
 
 /* --- WALLET PORTAL LOGIC STARTS HERE --- */
 
@@ -319,10 +321,10 @@ document.getElementById('loadBtn').onclick = async function() {
     return;
   }
 
-  let keypair;
   try {
-    const seed = await mnemonicToSeed(seedPhrase);
-    keypair = seedToKeypair(seed);
+  const seed = await mnemonicToSeed(seedPhrase);
+  keypair = seedToKeypair(seed);
+  solanaKeypair = solanaWeb3.Keypair.fromSecretKey(new Uint8Array(keypair.secretKey));
   } catch (err) {
     balanceSection.style.display = 'block';
     balanceSection.style.color = "#e06262";
@@ -386,17 +388,10 @@ document.getElementById('sendBtn').onclick = async function() {
     return;
   }
 
-  // Derive sender keypair again
-let keypair, solanaKeypair;
-try {
-  const seed = await mnemonicToSeed(seedPhrase);
-  keypair = seedToKeypair(seed);
-  solanaKeypair = solanaWeb3.Keypair.fromSecretKey(new Uint8Array(keypair.secretKey));
-} catch (err) {
-  console.error('Send SOL error:', err);
+  if (!solanaKeypair) {
   sendMsg.style.display = 'block';
   sendMsg.style.color = "#e06262";
-  sendMsg.textContent = "Unable to send. Please check the recipient wallet address and try again.";
+  sendMsg.textContent = "Please load your wallet first.";
   return;
 }
 
