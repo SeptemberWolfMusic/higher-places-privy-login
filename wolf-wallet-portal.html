@@ -320,7 +320,7 @@ document.getElementById('loadBtn').onclick = async function() {
   try {
   const seed = await mnemonicToSeed(seedPhrase);
   keypair = seedToKeypair(seed);
-  solanaKeypair = solanaWeb3.Keypair.fromSeed(seed.slice(0, 32));
+  solanaKeypair = solanaWeb3.Keypair.fromSecretKey(new Uint8Array(keypair.secretKey));
   console.log("Loaded keypair pubkey:", base58encode(keypair.publicKey));
   console.log("Loaded solanaKeypair pubkey:", solanaKeypair.publicKey.toBase58());
   } catch (err) {
