@@ -269,7 +269,13 @@ function seedToKeypair(seed) {
   let seed32 = seed.slice(0, 32);
   return nacl.sign.keyPair.fromSeed(seed32);
 }
-
+function seedToKeypair(seed) {
+  let seed32 = seed.slice(0, 32);
+  return nacl.sign.keyPair.fromSeed(seed32);
+}
+function naclToSolanaKeypair(naclKP) {
+  return solanaWeb3.Keypair.fromSecretKey(new Uint8Array([...naclKP.secretKey]));
+}
 // Base58 encode for Solana addresses
 const ALPHABET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
 function base58encode(buffer) {
@@ -381,11 +387,12 @@ document.getElementById('sendBtn').onclick = async function() {
   }
 
   // Derive sender keypair again
-  let keypair;
-  try {
-    const seed = await mnemonicToSeed(seedPhrase);
-    keypair = seedToKeypair(seed);
-  } catch (err) {
+  let keypair, solanaKeypair;
+try {
+  const seed = await mnemonicToSeed(seedPhrase);
+  keypair = seedToKeypair(seed);
+  solanaKeypair = naclToSolanaKeypair(keypair);
+} catch (err) {
     console.error('Send SOL error:', err);
     sendMsg.style.display = 'block';
     sendMsg.style.color = "#e06262";
