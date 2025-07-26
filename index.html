@@ -644,7 +644,7 @@ async function generateWallet() {
   const keypair = seedToKeypair(seed);
 
   // Solana address (publicKey)
-  walletAddress = base58encode(keypair.publicKey);
+  walletAddress = solanaWeb3.Keypair.fromSecretKey(keypair.secretKey).publicKey.toBase58();
   // Seed phrase (mnemonic)
   seedPhrase = mnemonic;
   seedArray = seedPhrase.split(" ");
