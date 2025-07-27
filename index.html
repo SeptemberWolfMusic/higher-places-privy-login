@@ -721,36 +721,36 @@ async function continueToPurchase() {
   const prevName = localStorage.getItem('user_name') || '';
   const prevWallet = localStorage.getItem('wallet_address') || '';
   const prevSeed = localStorage.getItem('seed_phrase') || '';
-  let flowID = localStorage.getItem('flow_id') || '';
-
+  // let flowID = localStorage.getItem('flow_id') || '';
+  
   // Check if we need a new flow_id (only if none exists, or info changed AND status=complete)
-  let mustMakeNewFlow = false;
-  let status = null;
-  if (flowID) {
-    // Check status live
-    try {
-      const res = await fetch(`https://xlbquzoalvwmtjadteft.supabase.co/rest/v1/create_log?flow_id=eq.${flowID}`, {
-        headers: {
-          "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhsYnF1em9hbHZ3bXRqYWR0ZWZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3Mjg4MjEsImV4cCI6MjA2NDMwNDgyMX0.mwSXeQIXJ8FgGtmcqDTnAFchcTXdnLWpCqkcj_3rnXU"
-        }
-      });
-      const rows = await res.json();
-      status = rows[0]?.status || null;
-      // If flow is complete or info changed, make new flowID
-      if (status === 'complete' || prevEmail !== email || prevName !== name || prevWallet !== wallet || prevSeed !== seed) {
-        mustMakeNewFlow = true;
-      }
-    } catch {
-      mustMakeNewFlow = false; // Fallback: safer to reuse flow_id
-    }
-  } else {
-    mustMakeNewFlow = true;
-  }
+// let mustMakeNewFlow = false;
+// let status = null;
+// if (flowID) {
+//   // Check status live
+//   try {
+//     const res = await fetch(`https://xlbquzoalvwmtjadteft.supabase.co/rest/v1/create_log?flow_id=eq.${flowID}`, {
+//       headers: {
+//         "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhsYnF1em9hbHZ3bXRqYWR0ZWZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3Mjg4MjEsImV4cCI6MjA2NDMwNDgyMX0.mwSXeQIXJ8FgGtmcqDTnAFchcTXdnLWpCqkcj_3rnXU"
+//       }
+//     });
+     // const rows = await res.json();
+// status = rows[0]?.status || null;
+// // If flow is complete or info changed, make new flowID
+// if (status === 'complete' || prevEmail !== email || prevName !== name || prevWallet !== wallet || prevSeed !== seed) {
+//   mustMakeNewFlow = true;
+// }
+// } catch {
+//   mustMakeNewFlow = false; // Fallback: safer to reuse flow_id
+// }
+// } else {
+//   mustMakeNewFlow = true;
+// }
 
-  if (mustMakeNewFlow) {
-    flowID = crypto.randomUUID();
-    localStorage.setItem('flow_id', flowID);
-  }
+// if (mustMakeNewFlow) {
+//   flowID = crypto.randomUUID();
+//   localStorage.setItem('flow_id', flowID);
+// }
 
   // Save latest fields
   saveSessionFields();
