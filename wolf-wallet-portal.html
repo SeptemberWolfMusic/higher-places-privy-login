@@ -425,6 +425,9 @@ try {
   solBalanceEl.style.display = 'none';
   void solBalanceEl.offsetHeight; // trigger reflow
   solBalanceEl.style.display = 'block';
+
+  // Reset amount input to prevent accidental double send
+  document.getElementById('amount').value = "0.0";
 } catch (err) {
   document.getElementById('solBalance').textContent = "Error fetching balance.";
   sendBtn.disabled = true;
