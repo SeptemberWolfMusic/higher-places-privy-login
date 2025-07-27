@@ -333,7 +333,7 @@ document.getElementById('loadBtn').onclick = async function() {
     balanceSection.textContent = "Could not load wallet. Please check your 12 words and try again.";
     return;
   }
-  const pubkey = base58encode(keypair.publicKey);
+  const pubkey = solanaKeypair.publicKey.toBase58();
 
   balanceSection.style.display = 'block';
   balanceSection.style.color = "#50c7c0";
